@@ -2,4 +2,4 @@
 
 It is about my template files,rather simple.
 
-&copy<leftcopy.chx@gmail.com>
+&copy <leftcopy.chx@gmail.com>
