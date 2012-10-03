@@ -1,0 +1,386 @@
+%The beamer class automatically loads some other LATEX packages, including
+% xcolor, amsmath, amsthm, calc, geometry, hyperref, extsizes.
+%color predefined:red, blue, green, cyan, magenta, yellow, black, darkgray, gray,
+%lightgray, orange, violet, purple, brown
+\documentclass[11pt]{beamer}
+%\documentclass[pdf]{beamer}
+%aspectratio=1610
+%default font size 11pt;8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt
+%used to print as article
+% \documentclass[]{article}
+% \usepackage{beamerarticle}
+
+%Antibes, Bergen, Berkeley, Berlin, Boadilla, Copenhagen, Darmstadt, Dresden,
+%Frankfurt, Goettingen, Hannover, Ilmenau, Juanlespins, Madrid, Malmoe,
+%Marburg, Montpellier, Paloalto, Pittsburgh, Rochester, Singapore, Warsaw
+%\usetheme[compress]{Singapore} %title at the top-middle
+%\usecolortheme{freewilly}
+\usetheme{Boadilla}
+% \beamertemplatetransparentcoveredhigh
+% \beamertemplatetransparentcovereddynamicmedium
+
+\usepackage[T1]{fontenc}
+% 	\mode<article> % 仅应用于article版本
+% 	{
+% 	\usepackage{beamerbasearticle}
+% 	\usepackage{fullpage}
+% 	\usepackage{hyperref}
+% 	}
+
+%font theme
+%\usefonttheme[onlymath]{serif}
+% \usefonttheme{structureitalicserif}
+% \usefonttheme{structurebold}
+% \usefonttheme{structuresmallcapsserif}
+% \usepackage{lucidaso} % Lucida Bright (SO Version)
+\usefonttheme[onlymath]{serif}
+%\usepackage[small]{eulervm} % Euler VM for math font
+%\usepackage{helvet}
+
+
+%color themes:albatross crane beetle dove fly seagull wolverine beaver
+% \usecolortheme{fly}
+%Outer color themes:whale, seahorse, dolphin
+\usecolortheme{whale}
+% Inner color themes: lily, orchid,rose
+\usecolortheme{orchid}
+
+%rectangles circles inmargin rounded
+ \useinnertheme{rectangles}
+%\useinnertheme[shadow]{rounded} % 对 box 的设置: 圆角、有阴影.
+%infolines miniframes shadow sidebar c smoothtree split tree progressbar
+\useoutertheme{progressbar}
+
+%define colors
+%\setbeamercolor{uppercol}{fg=white,bg=blue}%
+\setbeamercolor{lowercol}{fg=black,bg=gray}%
+\xdefinecolor{lavendar}{rgb}{0.8,0.6,1}
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\colorlet{structure}{green!60!black}
+%redefine structure color
+%\usecolortheme[named=yellow]{structure}
+%redefine alert color
+%\setbeamercolor{alerted text}{fg=cyan}
+
+
+
+\setbeamertemplate{headline}[default]
+
+%\beamertemplateshadingbackground{blue!5}{yellow!10}
+\setbeamertemplate{background canvas}[vertical
+shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
+\setbeamertemplate{sidebar canvas
+left}[horizontal shading][left=white!40!black,right=black]
+\setbeamertemplate{navigation symbols}{}
+\mode<beamer>{\setbeamertemplate{blocks}[rounded][shadow=true]}
+%transparent,highly dynamic,dynamic,
+\setbeamercovered{invisible}
+\setbeamercolor{body}{fg=blue!80, bg=black!20}
+\setbeamercolor{head}{fg=blue,bg=blue!30}
+
+\setbeamerfont{title}{shape=\slshape,family=\ttfamily,series=\bfseries}
+
+\beamertemplateballitem
+
+\usepackage{pifont}
+%\usepackage{textcomp}
+
+%\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+
+
+\usepackage{graphicx}
+
+%shadowbox,fbox,Ovalbox,ovalbox,doublebox
+\usepackage{fancybox}
+\usepackage{multimedia}
+\usepackage{listings}
+\usepackage{boxedminipage}
+% \usepackage{babel}
+%\usepackage{enumitem}
+\usepackage{array}
+
+\lstset{
+    %行号
+    numbers=left,
+    %背景框
+    framexleftmargin=10mm,
+    frame=none,
+    captionpos=b,
+   %背景色
+   %backgroundcolor=\color[rgb]{1,1,0.76},
+   %backgroundcolor=\color[RGB]{245,245,244},
+   %样式
+   keywordstyle=\bf\color{blue},
+   identifierstyle=\bf\color{black!90},
+   numberstyle=\color[RGB]{0,192,192}\tiny,
+   commentstyle=\it\color[RGB]{0,96,96},
+   stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},
+   %显示空格
+   showstringspaces=false
+   }
+
+
+\title[template]{A Beginner's Beamer Template}
+\subtitle[Share]{Just Share It}
+\author[Hongxu Chen et al.]{Hongxu Chen\inst{1} \and Ch\'en H\'ong X\`u\inst{2}}
+\institute[MIT and SJTU]{
+\inst{1}Department of Computer Science and Technology\\ Minghang Institute of
+Science and Technology \and \inst{2}School of Software\\
+Shanghai Jiaotong University}
+\logo{\includegraphics[scale=.25]{sjtu_name_darkblue.png}}
+\subject{Test Generation, Regression Testing}
+\date[2012]{\today}
+
+\AtBeginSection[]{ % 在每个Section前都会加入的Frame
+\frame<handout:0>{
+\frametitle{Outline}
+\tableofcontents[current,currentsubsection,shaded]
+}
+\addtocounter{framenumber}{-1}%
+}
+
+\hypersetup{pdfpagemode={FullScreen}}
+%\hypersetup{pdfstartview={FitH}}
+
+\begin{document}
+\frame{\titlepage}
+%\frame{\maketitle}
+
+\part{BASICS}
+\frame{\partpage}
+
+\section{items}
+
+\begin{frame}[<+-|alert@+>]
+\frametitle{\secname}
+\begin{itemize}
+  \item[\ding{43}]The previous page is partpage
+  \item[\ding{45}]This frame title is \secname
+  \begin{enumerate}[I]
+    \item This is the inside enumerate environment
+    \item using package enumerate can use special signs
+    \begin{enumerate}
+      \item I --- Big Romman numeral
+      \uppercase\expandafter{\romannumeral1},\uppercase\expandafter{\romannumeral2},\ldots
+      \item i --- romman numeral {\romannumeral1},{\romannumeral2},\ldots
+      \item a --- a,b,\ldots
+      \item A --- A,B,\ldots
+    \end{enumerate}
+  \end{enumerate}
+  \item Next frame is for description environment
+\end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks,containsverbatim,t]
+\frametitle{description}
+\framesubtitle{NOTHING really}
+\Ovalbox{This page also introduces some font common sense}
+\begin{description}
+\item[Size]\tiny{tiny}\\\scriptsize{scriptsize}\\\footnotesize{footnotesize}\\\small{small}
+\\\normalsize{normalsize}\\\large{large}\\\Large{Large}\\\LARGE{LARGE}\\\huge{huge}\\\Huge{Huge}
+\normalsize{}
+\newpage
+\item[family] \hfill\\
+{
+\begin{footnotesize}
+\begin{table}[bt]
+\begin{tabular}{|l|c|c|}\hline
+roman& {\verb|\textrm{roman}|} & \verb|{\rmfamily roman}|\\\hline
+sans serif& \verb|\textsf{sans serif}|& \verb|{\sffamily sans serif}|\\\hline
+typewriter& \verb|\texttt{typewriter}|& \verb|{\ttfamily typewriter}|\\\hline
+\end{tabular}
+\end{table}
+\end{footnotesize}
+}
+\item[series] \hfill\\
+{
+\begin{footnotesize}
+\begin{table}[bt]
+\begin{tabular}{|c|r|r|}\hline
+textmd & \verb|\textmd{medium}| & \verb|{\mdseries medium}|\\\hline
+boldface & \verb|\textbf{boldface}| & \verb|\bfseries boldface|\\\hline
+\end{tabular}
+\end{table}
+\end{footnotesize}
+}
+\item[shapes] \hfill\\
+{
+\begin{footnotesize}
+\begin{table}[bt]
+\begin{tabular}{|c|r|r|}\hline
+upright & \verb|\textup{upright}| & \verb|{\upshape upright}|\\\hline
+italic & \verb|\textit{italic}| & \verb|{\itshape italic}|\\\hline
+slanted & \verb|\textsl{slanted}| & \verb|{\slshape slanted}|\\\hline
+small cap & \verb|\textsc{small cap}| & \verb|{\scshape small cap}|\\\hline
+\end{tabular}
+\end{table}
+\end{footnotesize}
+}
+\end{description}
+\end{frame}
+
+
+\section{blocks}
+\begin{frame}
+\frametitle{basic blocks}
+\begin{columns}
+\column{.4\textwidth}
+\begin{block}{BLOCK}
+This is a block.
+\end{block}
+\begin{example}[\ding{172}]
+example
+\end{example}
+\begin{exampleblock}{example?}
+right
+\end{exampleblock}
+\begin{alertblock}{alert block}
+heihei
+\end{alertblock}
+\begin{beamerboxesrounded}[upper=head,lower=body,shadow=true]{Like this}
+What?
+\end{beamerboxesrounded}
+\pause
+\column{.5\textwidth}
+\begin{beamercolorbox}[wd=3cm,shadow=true, rounded=true]{body}
+color customed.
+\end{beamercolorbox}
+\begin{definition}
+This is an apple.
+\end{definition}
+\begin{corollary}
+I've no idea.
+\end{corollary}
+\begin{Theorem}[Ferm\`at's]
+nothing else.
+\end{Theorem}
+\begin{Proof}
+$a^n+b^n=c^n(n\geq 5)$
+\end{Proof}
+\end{columns}
+\end{frame}
+
+\section{overlay}
+\begin{frame}[containsverbatim]
+\frametitle{\secname}
+\begin{itemize}
+  \item \verb|\|only<1->
+  \item \verb|\|uncover<2,3>
+  \item \verb|\|invisible<2>
+  \item \verb|\|item<-4>
+  \item \verb|\|alert<5>\{text\}	
+  \item \verb|\|structure<3>\{text\}
+  \item \verb|\|textbf<3>\{text\}\ldots
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+\frametitle{animation}
+%\transblindshorizontal, \transblindsvertical, \transboxin, \transboxout,
+%\transdissolve, \transglitter, \transsplitverticalin, \transsplitverticalout,
+%\transsplithorizontalin, \transsplithorizontalout, \transwipe
+  \transblindshorizontal transblindshorizontal\\
+  \transblindsvertical transblindsvertical\\
+  \transboxin transboxin\\
+  \transboxout transboxout\\
+  \transdissolve transdissolve\\
+  \transglitter[direction=90] transglitter\\
+  \transsplitverticalin transsplitverticalin\\
+  \transsplitverticalout transsplitverticalout\\
+  \transsplithorizontalin transsplithorizontalin\\
+  \transsplithorizontalout transsplithorizontalout\\
+  \transwipe transwipe\\
+
+\end{frame}
+
+\section{Media}
+\begin{frame}
+\frametitle{\secname}
+\begin{itemize}
+  \item<1->
+  {\hypertarget{mediapage} some music\\
+\begin{center}
+\href{run:Akon_Right_ 
+  Now.mp3}{\includegraphics[width=.2\textwidth]{akon.jpg}}
+\end{center}
+}
+\item<2-> or movie\\
+\begin{center}
+\href{run:lovely.flv}{\includegraphics[width=.2\textwidth]{chx.jpeg}}
+\end{center}
+\end{itemize}
+\end{frame}
+
+
+\section{hyperlink}
+\begin{frame}
+\frametitle{\secname}
+
+\begin{itemize}
+\item\hyperlinkslideprev{\beamergotobutton{Jump one slide back}}
+\item\hyperlinkslidenext{\beamergotobutton{Jump one slide forward}}
+\item\hyperlinkpresentationstart{\beamergotobutton{Jump to the first
+slide}}
+\item\hyperlinkpresentationend{\beamergotobutton{Jump to the last
+slide}}
+\item \beamergotobutton{\hyperlink{mediapage}{Some entertainment}}
+\end{itemize}
+
+\end{frame}
+
+\part{Advanced}
+\frame{\partpage}
+
+\section{Mathematics Related}
+
+\begin{frame}[containsverbatim]
+\frametitle{Pieces of Code}
+\centering\shadowbox{Hello World}
+\vskip18pt
+\begin{columns}
+\column{.45\textwidth}
+{{\tiny{
+\begin{lstlisting}[language={PASCAL},caption= PASCAL code]
+program HelloWorld(output);
+begin
+  Writeln('Hello world!')
+end
+\end{lstlisting}
+}}
+}
+\column{.45\textwidth}
+{\tiny{
+\begin{lstlisting}[language={[ANSI]C},caption= C code]
+#include<stdio.h>
+int main(int argc, char** argv)
+{
+	printf("hello, world\n");
+}
+\end{lstlisting}
+}}
+\end{columns}
+\end{frame}
+
+\section{pictures}
+
+
+% \appendix
+% \newcount\opaqueness
+% \begin{frame}
+% \frametitle{A Dirty Trick}
+%   \itshape
+%   \animate<1-5>
+%   \Large
+% 
+%   \only<1-5>{
+%   \animatevalue<1-5>{\opaqueness}{20}{100}
+%   \begin{colormixin}{\the\opaqueness!averagebackgroundcolor}
+%     \begin{centering}
+%       \Huge\color{green!60!black} Thank You!\par
+%     \end{centering}
+%   \end{colormixin}
+%   }
+% \end{frame}
+
+\end{document}
