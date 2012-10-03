@@ -1,0 +1,146 @@
+\section{Preliminary}
+
+\subsection{Terminologies}
+There are some basic terminologies in program with AOP/aspectj:
+\begin{description}
+\item[jointpoint] well-defined points in the execution of a program.It requires that the joinpoints are identifiable by the AOP tools.Those join points include class constructions,get/set operations,method calls,method executions etc.
+\item[Pointcut] a constructor that designates a set of join points defined in \emph{aspectj file}(file with suffix of .aj).
+\item[advice] pieces of code attached to pointcuts and executed when join points satisfying their pointcuts are reached.Formally it is written as:$Advice=kind\times pointcut\times code$,where $kind\in\{before,after,around\}$.
+\item[aspect] set of advices.
+\end{description}
+
+\subsection{Aspectj Weaving Mechinism}
+Since \texttt{Aspectj1.1}(the current version is 1.5),the advice weaving has been based on bytecode transformation rather than on source code. In this case,the AspectJ compiler(ajc for short) is composed of two stages.
+\begin{description}
+\item[front-end compiler] an extension to the Java compiler and compiles applications and aspects into pure Java bytecode enriched with additional annotations to handle non pure Java information as advices and pointcuts.
+\item[back-end compiler] weaves compiled aspects with compiled applications producing woven class files.
+\end{description}
+
+\subsection{Pointcut Designators}
+As to compile time information access,there are two kinds of pointcuts:the \textsl{static} pointcut and the \textsl{dynamic} one.While static pointcut can be directly mapped to the original code, we have to include conditional logic(called \texttt{residuals}) to check the dynamic properties with the dynamic pointcuts.This paper only talks about the former.Refer to more details in \cite{masterAspectj} for more infomation.\\
+So we only consider the designators below 8 kinds of pointcuts.
+\begin{table*}[!hbtp]
+  \centering
+\begin{tabular}{|c|c|c|}
+\hline \textbf{designator}&\textbf{matches}&\textbf{Name in this paper}\\
+\hline call&calls to a \texttt{method} or constructor& \texttt{mcall}\\
+\hline execution&execution of a method or constructor& \texttt{mexecution}\\
+\hline get&the reference to a class attribute&\texttt{get}\\
+\hline set&the assignment of a class attribute&\texttt{set}\\
+\hline staticinitialization&execution of a class's static initialization&\texttt{staticInit}\\
+\hline adviceexecution&on advice join points&\texttt{aexecution}\\
+\hline withincode&join points within a method/constructor&\texttt{withincode}\\
+\hline within& join points within a specific class type&\texttt{within}\\
+\hline
+\end{tabular}
+\caption{static pointcut designators}
+\end{table*}
+The regular expression patterns for pointcuts such as \texttt{some\_method(..)} or \texttt{*} is also omitted to ease the semantics reading since they can be extended accurately in compile time.
+
+
+\subsection{JVM Language Instructions}
+To make it simpler,we also use a subset of JVMLI for our research.In this case,those instructions used for efficiency in the JVM specification is also ignored(such as \texttt{iconst\_0});also it omits some primitive type for JVM such as float,array and disable the cast operations(so there are no more \texttt{anewarray} or \texttt{d2l}).Also the parts of the other bytes are simplified as numbers($i$) or address($adr$) for short. The instructions we used is as below:
+\begin{table}[hbt]
+\centering
+\begin{tabular}{cccc}
+\hline\hline pop & push n & dup &iadd \\
+\hline return & ireturn & areturen & athrow \\
+\hline aload i & iload i & astore i&istore i \\
+\hline getfield i& putfield i &getstatic i &  putstatic i\\
+\hline invokeinterface i,n & invokestatic i & ifeq adr & ifne adr\\
+\hline invokevirtual i & invokespecial i & goto adr  & new i \\
+\hline monitorenter & monitorexit\\
+\hline
+\end{tabular}
+\caption{JVML Opcode set}
+\end{table}
+
+\subsection{An Example}
+Here we give a very simple example to exaplain how aspectj advice is woven.
+\begin{multicols}{2}
+\begin{lstlisting}[language=java,caption=original file Hello.java]
+public class Hello {
+
+	public static void sayHello(){
+		System.out.println("hello");
+	}
+	
+	
+	public static void main(String[] args) {
+		sayHello();
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=aspectj,caption=aspectj file World.aj]
+public aspect World {
+	pointcut greeting() : execution(* Hello.sayHello(..));
+
+	after() returning() : greeting() {
+		System.out.println(" world!");
+	}
+	
+	before():greeting(){
+		System.err.println("hi,");
+	}
+}
+\end{lstlisting}
+\end{multicols}
+
+The source file \texttt{Hello.java} can only output \textit{hello} without aspectj advice.However when we compile the source file with the aspectj \texttt{World.aj} using \texttt{javac} and \texttt{ajc},the new program's output changes to \textsl{hi,hello world!}.
+
+So how did it happen? The key is that we add a \texttt{pointcut} \textsl{greeting} in the aspectj file, which matches the \texttt{join point} \textsl{sayHello}(a static method) in file \texttt{Hello.java}. There is also a designator called \textbf{execution} that matches the exact \textit{execution} site of the code. This pointcut corresponds to a so-called cross cut concern of the original file, but notice that it is defined in the aspectj file.With the advice kind like \textbf{before()} we get an {advice},which usually will do some additions in respect to original files.In this example,it means when the stack of JVM runs into the execution of method \texttt{sayHello}(this designator is \texttt{mexecution}),there will be a additional behaviour that output \textsl{hi,} before the output of \textsl{hello}. The \texttt{after} advice is similar except that it is called just before the context of method \texttt{sayHello} is popped.
+
+So the common practice when we using Aspectj(or generally AOP),we need firstly define \textbf{pointcuts} in the aspect file to match \texttt{join point} in the original file.Then we write \texttt{advice} for those \texttt{pointcuts}.Note that advice and pointcut is not one-to-one mapped,that is to say the relationship of them can be $1-n or n-1 or m-n$. If all works fine,we weave our advice into the original bytecode. The benefit is that we do not need to rewrite the existent source file while we change the behaviour.
+
+Let's look the minor differences in the bytecode level. By using \texttt{javap -c} we get the disassamble infomation of \texttt{sayHello()} in \texttt{Hello} class.
+
+\begin{lstlisting}[language=java,caption=sayHello() function in Hello class file]
+  public static void sayHello();
+    Code:
+       0: invokestatic  #43                 // Method date20120901/AspectjHello/World.aspectOf:()Ldate20120901/AspectjHello/World;
+       3: invokevirtual #49                 // Method date20120901/AspectjHello/World.ajc$before$date20120901
+       _AspectjHello_World$2$f69f5afa:()V
+       6: getstatic     #9                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       9: ldc           #15                 // String Hello
+      11: invokevirtual #17                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      14: nop
+      15: invokestatic  #43                 // Method date20120901/AspectjHello/World.aspectOf:()Ldate20120901/AspectjHello/World;
+      18: invokevirtual #46                 // Method date20120901/AspectjHello/World.ajc$afterReturning$date20120901
+          _AspectjHello_World$1$f69f5afa:()V
+      21: return
+\end{lstlisting}
+
+The index \texttt{0,3} and \texttt{15,18} describes the added bytecode to the original class file,which is what our advice \texttt{before} and \texttt{after} have done.We can also look at in the class file which \texttt{ajc} compiles.
+
+\begin{lstlisting}[language=java,caption=aspectOf() in World class file]
+
+    public static date20120901.AspectjHello.World aspectOf();
+    Code:
+       0: getstatic     #63                 // Field ajc$perSingletonInstance:Ldate20120901/AspectjHello/World;
+       3: ifnonnull     19
+       6: new           #65                 // class org/aspectj/lang/NoAspectBoundException
+       9: dup
+      10: ldc           #67                 // String date20120901_AspectjHello_World
+      12: getstatic     #15                 // Field ajc$initFailureCause:Ljava/lang/Throwable;
+      15: invokespecial #69                 // Method org/aspectj/lang/NoAspectBoundException."<init>":
+          (Ljava/lang/Strin g;Ljava/lang/Throwable;)V
+      18: athrow
+      19: getstatic     #63                 // Field ajc$perSingletonInstance:Ldate20120901/AspectjHello/World;
+      22: areturn
+\end{lstlisting}
+
+\begin{lstlisting}[language=java,caption=before advice in World class file]
+   public void ajc$before$date20120901_AspectjHello_World$2$f69f5afa();
+   Code:
+      0: getstatic     #56                 // Field java/lang/System.err:Ljava/io/PrintStream;
+      3: ldc           #59                 // String hi
+      5: invokevirtual #48                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+      8: return
+\end{lstlisting}
+
+
+
+\subsection{Reduce Advice Kind}
+In addition, we also reduce the kind of advice to \texttt{before} and \texttt{after}. In fact,we only consider the \texttt{after} advice if the execution of a join point completes normally,and that is to say we only cope with the \texttt{after returning} advice,\texttt{after throwing} and the simple \texttt{after} is neglected.The \texttt{around} advice can be modeled as the combination of \texttt{before} and \texttt{after},however it is not proven here.
+The \texttt{privilege properties,aspect inheritance} and other aspectj features are also ignored here.

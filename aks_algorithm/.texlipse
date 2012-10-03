@@ -1,0 +1,14 @@
+#TeXlipse project settings
+#Wed Oct 03 13:20:09 CST 2012
+markTmpDer=true
+builderNum=7
+outputDir=
+makeIndSty=
+bibrefDir=
+outputFormat=pdf
+tempDir=tmp
+mainTexFile=aks_algorithm
+outputFile=aks_algorithm.pdf
+langSpell=en
+markDer=true
+srcDir=

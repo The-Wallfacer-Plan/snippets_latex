@@ -1,0 +1,341 @@
+\section{Utility Functions}
+This section contains the details of the useful utility functions for the final regualation.
+
+\subsection{List Processing}
+The function \texttt{head} returns the first element in a given list and \texttt{tail} returns the remains.They are just like \texttt{LISP}'s \texttt{car} and \texttt{cdr} operations.
+\begin{multicols}{2}
+\begin{align*}
+head &:\; (\tau)-list\rightarrow \tau \\
+head(v::l)&=v,\forall (v,l)\in\tau\times(\tau)-\texttt{list}\\
+\end{align*}
+
+\begin{align*}
+tail  &:\;  (\tau)-list\rightarrow \tau\\
+tail(v::l)&  =  l,\forall (v,l)\in \tau\times (\tau)-\texttt{list}\\
+tail({[\;]})&  =  {[\;]}\\
+\end{align*}
+\end{multicols}
+
+\subsection{Constructors and Retriever for Methods and fields}
+\begin{itemize}
+  \item
+  The function \texttt{signatureAspectOf} returns the signature of the method ``\texttt{aspectO}'' of the advice aspect.We can see in listing \texttt{sayHello} that there is a line with the \texttt{invokestatic} of \\ \texttt{date20120901/AspectjHello/World.aspectOf}. This method in the aspect usually calls the actual advice method that we would like to weave(just like the \texttt{invokevirtual} of \\ \texttt{date20120901/AspectjHello/World.ajc\$before\$date20120901} in our \texttt{Hello} example).
+$$\texttt{signatureAspectOf}:\; AdviceInfo\rightarrow MethodSignature$$
+$$\texttt{signatureAspectOf}(ad)=ms\;\texttt{iff}\left\{
+\begin{array}{l}
+ms.name=``aspectOf''\\
+ms.argumentsType=[\;]\\
+ms.resultType=ad.fromClass\\
+\end{array}\right.$$
+
+  \item
+  \texttt{retrieveF} or \texttt{retrieveM} searches a method/field in a (method/field)-\texttt{list} respectively.
+$$\texttt{retrieveF}:\;FieldSignature\times Fields\rightarrow Field$$
+$$\texttt{retrieveF}(fs,l)=\left\{
+\begin{array}{l}
+  \texttt{head(l)}\;\texttt{if}\;\;\; \texttt{head}(l).FieldSignature=ms\\
+  \texttt{retrieveF}(fs,tail(l)\;\;\; \texttt{otherwise}\\
+\end{array}\right.$$
+$$\texttt{retrieveM}:\;MethodSignature\times Methods\rightarrow Method$$
+$$\texttt{retrieveM}(ms,l)=\left\{
+\begin{array}{l}
+  \texttt{head(l)}\;\texttt{if}\; \texttt{head}(l).MethodSignature=ms\\
+  \texttt{retrieveM}(ms,tail(l)\; \texttt{otherwise}\\
+\end{array}\right.$$
+
+\item
+\texttt{newPoolEntry} returns a method that has the given method signature $ms$ and its class $c$.
+$$\texttt{newPoolEntry} :\; MethodSignature\times Class\rightarrow ConstontPoolEntry$$
+$$\texttt{newPoolEntry}(ms,c)=c \;\texttt{iff}\left\{
+\begin{array}{l}
+c.methodSignagure=ms\\
+c.supposedClass=c\\
+\end{array}
+\right.$$
+
+\end{itemize}
+
+\subsection{Functions for Checking Shadows}
+\begin{itemize}
+  \item
+  \texttt{isReturn} judges if it comes to the end of some method and it checks whether the current instruction is one of those \textsl{return} opcodes.
+$$\texttt{isReturn}:\; Method\times ProgramCounter\rightarrow Boolean$$
+$$\texttt{isReturn}(m,pc)=true\;\textnormal{iff}\;m.code(pc)=return\vee areturn\vee ireturn$$
+
+  \item
+  \texttt{isBeforeOrAfterShadow} tests the possibility of being a shadow(\texttt{before} or \texttt{after}).
+\begin{align*}
+  \texttt{isBeforeOrAfterShadow}(m,pc)=&true\\
+  \texttt{iff}\;m.Code(pc)=&\texttt{invokevirtual}\;i|\texttt{invokespecial}\;i|\texttt{invokestatic}|\;\texttt{invokeinterface}\;i,n\\
+&|\texttt{getstatic}\;i|\texttt{getfield}\;i|\texttt{putstatic}\;i|\texttt{putfield}\;i\\
+\end{align*}
+
+  \item
+  \texttt{isBeforeShadow} additionally check if the current instruction is the reserved \texttt{impdep1};while \texttt{isAfterShadow} check if the method would exit.
+$$\texttt{isBeforeShadow}:\;Method\times ProgramCounter\rightarrow Boolean$$
+$$\texttt{isBeforeShadow}(m,pc)=\texttt{true\;iff}\left\{
+\begin{array}{l}
+  \texttt{isBeforeOrAfterShadow}(m,pc)\\
+  m.Code(pc)=\texttt{impdep1}\\
+\end{array}
+\right.$$
+$$\texttt{isAfterShadow}:\; Method\times ProgramCounter\rightarrow Boolean$$
+$$\texttt{isAfterShadow}(m,pc)=true \;\texttt{iff} \left\{
+\begin{array}{l}
+\texttt{isReturn}(m,pc)\\
+\texttt{isBeforeOrAfterShadow}(m,pc)\\
+\end{array}
+\right.$$
+
+\item
+\texttt{isMpatternMatched} and \texttt{isFpatternMatched} decides whether the special method or field matches the pattern.
+\begin{multicols}{2}
+%$$\texttt{isMpatternMatched}:\;MethodPattern\times Method\rightarrow Boolean$$
+$$ \texttt{isMpatternMatched}(mp,m)=true$$
+$$\texttt{iff}\left\{\begin{aligned}
+mp.methodSignature&=m.methodSignature\\
+mp.componentType&=m.fromClass\\
+mp.methodModifiers&=m.methodModifiers
+\end{aligned}
+\right.$$
+
+%$$\texttt{isFpatternMatched}:\;FieldPattern\times Field\rightarrow Boolean$$
+$$ \texttt{isFpatternMatched}(fp,f)=true$$
+$$\texttt{iff}\left\{\begin{aligned}
+fp.fieldSignature&=f.fieldSignature\\
+fp.componentType&=f.fromClass\\
+fp.fieldModifiers&=f.fieldModifiers
+\end{aligned}
+\right.$$
+\end{multicols}
+
+
+\end{itemize}
+
+
+\subsection{After Advice Matches}
+\begin{itemize}
+  \item \texttt{matchAfterAexec} checks whether it is inside an aspect and reaches the end of some method.
+$$\texttt{matchAfterAexec}:\;Method\times ProgramCounter\rightarrow Boolean$$
+$$\texttt{matchAfterAexec}(m,pc)=true\;\texttt{iff}\left\{
+\begin{array}{l}
+  (m.fromClass).aspect=1\\
+  \texttt{isReturn}(m,pc)\\
+\end{array}\right.$$
+  \item \texttt{matchAfterMexec} should check whether it matches the current method pattern.Note that the methods in those aspects are also tested.
+$$\texttt{matchAfterMexec}:\;MethodPattern\times Method\times ProgramCounter\rightarrow Boolean$$
+$$\texttt{matchAfterMexec}(mp,m,pc)=true\;\texttt{iff}\left\{
+\begin{array}{l}
+\texttt{isMpatternMatched}(mp,m)\\
+\texttt{isReturn}(m,pc)\\
+\end{array}\right.$$
+  \item \texttt{matchAfterStaticInit} is called when the advice is an \texttt{After} advice and its pointcut is \texttt{staticInit}($ct$).
+$$\texttt{matchAfterStaticInit}:\;ComponentType\times Method\times ProgramCounter\rightarrow Boolean$$
+$$\texttt{matchAfterStaticInit}(ct,m,pc)=true\;\texttt{iff}\left\{
+\begin{array}{l}
+m.fromClass=ct\\
+(m.methodSignature).name="clinit"\\
+\texttt{isReturn}(m,pc)\\
+\end{array}\right.$$
+
+  \item \texttt{matchAfterPcut} can be viewed as a summary of the above,it returns true if the given \texttt{After} advice is applicable in the method $m$ at the program counter $pc$:
+$$\texttt{matchAfterPcut}:\; Environment\times Pointcut\times Method\times ProgramCounter\rightarrow Boolean$$
+It supports the logical operators \texttt{and},\texttt{or} and \texttt{not}.
+\begin{eqnarray*}
+  \texttt{matchAfterPcut}(\xi,pcut1\;\texttt{and}\;pcut2,m,pc)&=&\texttt{matchAfterPcut}(\xi,pcut1,m,pc)\wedge(\xi,pcut2,m,pc)\\
+  \texttt{matchAfterPcut}(\xi,pcut1\;\texttt{or}\;pcut2,m,pc)&=&\texttt{matchAfterPcut}(\xi,pcut1,m,pc)\vee(\xi,pcut2,m,pc)\\
+  \texttt{matchAfterPcut}(\xi,\texttt{not}\;Pcut,m,pc)&=&\neg \texttt{matchAfterPcut}(\xi,pcut,m,pc)\\
+\end{eqnarray*}
+Note the relationship between \texttt{matchAfterPcut} and the functions above:
+\begin{eqnarray*}
+  \texttt{matchAfterPcut}(\xi,mexecution(mp),m,pc)&=&\texttt{matchAfterMexec}(mp,m,pc)\\
+  \texttt{matchAfterPcut}(\xi,staticInit(ct),m,pc)&=&\texttt{matchAfterStaticInit}(ct,m,pc)\\
+  \texttt{matchAfterPcut}(\xi,aexecution(),m,pc)&=&\texttt{matchAfterAexec}(m,pc)\\
+\end{eqnarray*}
+In the other cases,we have:
+  $$\texttt{matchAfterPcut}(\xi,pcut,m,pc)=\texttt{matchPcut}(\xi,pcut,m,pc)\;\texttt{iff}\left\{
+  \begin{aligned}
+    pcut\in BasicPcut\\
+    pcut\neq \texttt{mexecution}(mp)\\
+    pcut\neq \texttt{staticInit}(ct)\\
+    pcut\neq \texttt{aexecution}()\\
+  \end{aligned}\right.\\$$
+\end{itemize}
+
+
+\subsection{Before Advice Matches}
+\begin{itemize}
+  \item
+  \texttt{matchBeforeExec} returns true if the given pointcut $pcut$ of a \texttt{before} advice matches as a \textsl{method} or \textsl{advice execution} of the given method.
+$$\texttt{matchBeforeExec}:\;Pointcut\times Method\rightarrow Boolean$$
+\begin{eqnarray*}
+  \texttt{matchBeforeExec}(mcall(mp),m)&=&false\\
+  \texttt{matchBeforeExec}(get(fp),m)&=&false\\
+  \texttt{matchBeforeExec}(set(fp),m)&=&false\\
+  \texttt{matchBeforeExec}(withincode(mp),m)&=&\texttt{isMpatternMatched}(mp,m)\\
+  \texttt{matchBeforeExec}(within(ct),m)&=&(m.fromClass=ct)\\
+  \texttt{matchBeforeExec}(mexecution(mp),m)&=&\texttt{isMpatternMatched}(mp,m)\\
+  \texttt{matchBeforeExec}(staticInit(ct,m))&=&((m.fromClass=ct)\wedge ((m.methodSignature).name="clinit"))\\
+  \texttt{matchBeforeExec}(aexecution(),m)&=&((m.fromClass).aspect=1)\\
+\end{eqnarray*}
+And the logical operations are similar:
+\begin{eqnarray*}
+    \texttt{matchBeforeExec}(pcut1\; and\; pcut2,m)&=&\texttt{matchBeforeExec}(pcut1,m)\wedge \texttt{matchBeforeExec}(pcut2,m)\\
+  \texttt{matchBeforeExec}(pcut1\; or\; pcut2,m)&=&\texttt{matchBeforeExec}(pcut1,m)\vee \texttt{matchBeforeExec}(pcut2,m)\\
+  \texttt{mtchBeforeExec}(not\; pcut,m)&=&\neg \texttt{matchBeforeExec}(pcut,m)\\
+\end{eqnarray*}
+
+  \item
+\texttt{matchBeforeOtherExec} returns true if the given pointcut $pc$ of a \texttt{before} advice matches with the instruction at the position $pc$ in the method $m$ \emph{not} as method or advice execution!(The corresponding \texttt{and,or,not} operations are the same and is not listed.)
+$$\texttt{matchBeforeOtherExec}:\;Environment\times Pointcut\times Method\times ProgramCounter\rightarrow Boolean$$
+\begin{eqnarray*}
+  \texttt{matchBeforeOtherExec}(\xi,mexecution(mp),m,pc)&=&false\\
+  \texttt{matchBeforeOtherExec}(\xi,staticInit(ct),m,pc)&=&false\\
+  \texttt{matchBeforeOtherExec}(\xi,aexecution(),m,pc)&=&false\\
+  \texttt{matchBeforeOtherExec}(\xi,pcut,m,pc)=matchPcut(\xi,pcut,m,pc)\;\;&\texttt{iff}&\left\{
+  \begin{aligned}
+    pcut\in BasicPcut\\
+    pcut\neq mexecution(mp)\\
+    pcut\neq staticInit(ct)\\
+    pcut\neq aexecution()\\
+  \end{aligned}\right.\\
+\end{eqnarray*}
+
+\end{itemize}
+
+\subsection{matchPcut}
+\texttt{matchPcut} is called from the functions \texttt{matchBeforeOtherExecut}, \texttt{matchAfterPcut}. The pointcut argument is one of the the following base pointcuts: mcall($mp$),get($fp$), set($fp$), withincode($mp$) and within($ct$).
+$$\texttt{matchPcut}\models Environment\times Pointcut\times Method\times ProgramCounter\rightarrow Boolean$$
+\quad\quad\quad$\texttt{matchPcut}(\xi,pcut,m,pc)=true\;\texttt{if}$
+
+$\textcircled{1}\left\{\begin{array}{l}
+pcut=mcall(mp);mp\in MethodPattern\\
+m.code(pc)=\texttt{invokevirtual}|\texttt{invokestatic}|\texttt{invokeinterface}\;i,n|\texttt{invokespecial}\;i\\
+\Gamma\xi=(\Gamma .javaEnvironment)\\
+mPoolEntry=\Gamma\xi(m.fromClass).constantPool(i)\\
+msign=mPoolEntry.methodSignature\\
+calledm=\texttt{retrieveM}(msign,\Gamma\xi(mPoolEntry.supposedClass).methods)\\
+m.code(pc)=invokespecial\;i)\Rightarrow(\texttt{isPrivate}(calledm)\wedge calledm.methodSignature.name<>"init")\\
+\texttt{isMpatternMatched}(mp,calledm)\\
+\end{array}\right.$
+
+$\textcircled{2}\left\{\begin{array}{l}
+pcut=get(fp);fp\in FieldPattern\\
+m.code(pc)=getfield\;i\vee m.code(pc)=getstatic\;i\\
+\Gamma\xi=(\xi .javaEnvironment)\\
+fPoolEntry=\Gamma\xi(m.fromClass).constantPool(i)\\
+fsign=fPoolEntry.fieldSignagure\\
+wedge getF=\texttt{retriveF}(fsign,\Gamma\xi(fPoolEntry.supposedClass).fields)\\
+\texttt{isFpatternMatched}(fp,getF)\\
+\end{array}\right.$
+
+$\textcircled{3}\left\{\begin{array}{l}
+pcut=set(fp);fp\in FieldPattern\\
+m.code(pc)=\texttt{putfield}\;i\vee m.code(pc)=\texttt{putstatic}\;i\\
+\Gamma\xi=(\xi .javaEnvironment)\\
+fPoolEntry=\Gamma\xi(m.fromClass).constantPool(i)\\
+fsign=fPoolEntry.fieldSignature\\
+setF=\texttt{retrieveF}(fsign,\Gamma\xi(fPoolEntry.supposedClass).fields)\\
+\texttt{isFpatternMatched}(fp,setF)\\
+\end{array}\right.$
+
+$\textcircled{4}\left\{\begin{array}{l}
+pcut=withincode(mp);mp\in MethodPattern\\
+\texttt{isBeforeOrAfterShadow}(m,pc)\\
+\texttt{isMpatternMatched}(mp,m)\\
+\end{array}\right.$
+
+$\textcircled{5}\left\{\begin{array}{l}
+pcut=within(ct);ct\in ComponentType\\
+\texttt{isBeforeOrAfterShadow}(m,pc)\\
+m.fromClass=ct\\
+\end{array}\right.$
+
+\subsection{Advice Applicable to Insert}
+\begin{itemize}
+\item
+  \texttt{isBeforeAdviceApplicable} returns true if the given \texttt{before} advice is applicable in the method $m$ at the program counter $pc$. We distinguish between the case of \textsl{execution} shadow and the other shadows.
+$$\texttt{isBeforeAdviceApplicable}:\;Environment\times Method\times ProgramCounter\times AdviceInfo\rightarrow Boolean$$
+\begin{align*}
+\texttt{isBeforeAdviceApplicable}(\Gamma,m,pc,ad)=&true\;\texttt{iff}\\
+(m.Code(pc)=\texttt{impdep1}\wedge & \texttt{matchBeforeExec}(ad.pointcut,m))\\
+|\texttt{matchBeforeOtherExec}&(\xi,ad.pointcut,m,pc)\\
+\end{align*}
+
+\item
+\texttt{isAfterAdviseApplicable} returns true if the given \texttt{after} advice is applicable in the method $m$ at the program counter $pc$.
+$$\texttt{isAfterAdviseApplicable}:\; Environment\times Method\times ProgramCounter\times AdviceInfo\rightarrow Boolean$$
+
+$\texttt{isAfterAdviseApplicable}(\xi,m,pc,ad)=true\;\texttt{if}\left\{
+\begin{array}{l}
+  \texttt{isAfterShadow}(m,pc)\\
+  \texttt{matchAfterPcut}(\xi,ad.pointcut,m,pc)\\
+\end{array}\right.$
+
+\item
+\texttt{insertBeforeAdvice} takes an environment, a method, a program counter,and an advice as arguments and returns a new environment, a new method, and a new program counter after injecting the advice in the method.\textsl{cpool1} refers to the new constant pool added by the advice;incase there is mathes added to the advice methods,\texttt{cpool2} is also added to define the advice's advice(This may lead to endless loop if the advice is not defined properly).The \texttt{changeMethods} map all possible methods and advice into a new set of methods.$pc^\prime=pc+2$ since \texttt{invokestatic} and \texttt{invokestatic} consumes two instructions.Hence a new environment $\xi^\prime$ is returned. 
+\begin{eqnarray*}
+\texttt{insertBeforeAdvice}& :\;\;& Environment\times Method\times ProgramCounter\times AdviceInfo\\
+ &\rightarrow&Environment\times method\times ProgramCounter\times ProgramCounter\\
+\end{eqnarray*}
+
+\quad\quad$\texttt{insertBeforeAdvice}(\xi,m,pc,ad)=(\xi^\prime,m^\prime,pc^\prime)\;\texttt{if}$
+
+$\left\{
+\begin{array}{l}
+\Gamma\xi=\xi.javaEnvironment\\
+c=\Gamma\xi(m.fromClass)\\
+cpool=c.constantPool\\
+ms=\texttt{signatureAspectOf}(ad)\\
+cpool1=cpool[i\mapsto \texttt{newPoolEntry}(ms,ad.fromClass)],i\not\in Dom(cpool)\\
+cpool2=cpool1[j\mapsto \texttt{newPoolentry}(ad.adviceSignature,ad.fromClass)],j\not\in Dom(cpool1)\\
+code1 = m.code[k+2\mapsto m.code(k)],\forall k\in Dom(m.code)\\
+code2=code1[pc+1\mapsto \texttt{invokestatic}\; i]\\
+code3=code2[pc+2\mapsto \texttt{invokevirtual}\; j]\\
+m^\prime=m[code\leftarrow code3]\\
+c1= c[constantPool\leftarrow cpool2,methods\leftarrow \texttt{ChangeMethods}(c1.methods,m,m^\prime)]\\
+\Gamma\xi_1=\Gamma\xi[m.fromClass\mapsto c1]\\
+pc^\prime=pc+2\\
+\xi=\xi[javaEnvironment\leftarrow\Gamma\xi_1]\\
+\end{array}\right.$
+
+\item
+\texttt{insertAfterAdvice} also takes $nextpc$ into consideration since it always forward 2 instructions during the advice. There are 2 options for this insertion as with whether $pc$ reaches the end of the method.
+\begin{eqnarray*}
+  \texttt{insertAfterAdvice} &:\;\;& Environment\times Method\times ProgramCounter\times AdviceInfo\times ProgramCounter\\
+  &\rightarrow& Environment\times method\times ProgramCounter\times ProgramCounter\\
+\end{eqnarray*}
+
+\quad\quad\quad$\texttt{insertAfterAdvice}(\xi,m,pc,ad,nextpc)=(\xi^\prime,m^\prime,pc^\prime,nextpc^\prime)\;\texttt{iff}$
+
+$\textcircled{1}\left\{
+\begin{array}{l}
+\neg \texttt{isReturn}(m,pc)\\
+\Gamma\xi=\xi.javaEnvironment\\
+c=\Gamma\xi(m.fromClass)\\
+cpool=c.constantPool\\
+ms=\texttt{signatureAspectOf}(ad)\\
+cpool1=cpool[i\mapsto \texttt{newPoolEntry}(ms,ad.fromClass)],i\not\in Dom(cpool)\\
+cpool2=cpool1[j\mapsto \texttt{newPoolentry}(ad.adviceSignature,ad.fromClass)],j\not\in Dom(cpool1)\\
+code1 = m.code[k+2\mapsto m.code(k)],\forall k\in Dom(m.code)\\
+code2=code1[pc+1\mapsto \texttt{invokestatic}\; i]\\
+code3=code2[pc+2\mapsto \texttt{invokevirtual}\; j]\\
+m^\prime=m[code\leftarrow code3]\\
+c1= c[constantPool\leftarrow cpool2,methods\leftarrow \texttt{changeMethods}(c1.methods,m,m^\prime)]\\
+\Gamma\xi_1=\Gamma\xi[m.fromClass\mapsto c1]\\
+pc^\prime=pc\\
+nextpc^\prime=nextpc+2\\
+\xi=\xi[javaEnvironment\leftarrow\Gamma\xi_1]\\
+\end{array}
+\right.$
+
+$\textcircled{2}\left\{
+\begin{array}{l}
+\texttt{isReturn}(m,pc)\\
+\wedge (\xi^\prime,m^\prime,pc^\prime)=\texttt{insertBefore}(\xi,m,pc,ad)\\
+\wedge nextpc^\prime=nextpc+2\\
+\end{array}
+\right.
+$
+
+\end{itemize}

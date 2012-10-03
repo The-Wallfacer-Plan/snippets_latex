@@ -1,0 +1,140 @@
+\section{Environments and Configurations}
+
+\subsection{Notations}
+Since the \texttt{ajc} compiler also compiles the aspectj file into java class file(in the above example,the \texttt{World.aj} is compiled into \texttt{World.class}),we consider that an aspect can be viewed as a class and its advices are represented by the methods of the class. In this case,we transfer our focus into the class files.
+
+Firstly we give some notations that will be needed in later discussions.
+\begin{itemize}
+  \item $X\xrightarrow{m}{Y}$ denotes the set of all \texttt{partital functions}(also known as \texttt{maps}) from set $X$ to $Y$. For $m\in X\xrightarrow{m}{Y}$,it can be extended as $m=[x_0\mapsto y_0,\ldots x_{n-1}\mapsto y_{n-1}]$,where $x_i\in X$ and $y_i\in Y,i\in[0\ldots n-1]$.
+  \item For a map $m\in X\xrightarrow{m}{Y}$,$Dom(m)=X$
+  \item Given a map $f$,write $f[x\mapsto v]$ to denote the updating operation of $f$ that yields a map that is equivlent to $f$ except that $x$ is from now associated with $v$
+  \item Given a record space $D=\langle f_1:D_1,\ldots,f_n:D_n\rangle$(where $f_i$ is a field with the type $D_i$ defined in the specification),and an element $e$ of type $D$,the access to the filed $f_i$ of $e$ is written as $e.f_i$ and the update of fields $f_{i1},\ldots,f_{ik}$ is written $e[f_{i1}\leftarrow v_{i1},\ldots,f_{i}\leftarrow v_{ik}]$.
+  \item $(\tau)-set$ and $(\tau)-list$ denote the \texttt{set} or \texttt{list} of type $\tau$ respectively.
+\end{itemize}
+
+\subsection{Pointcuts, Joinpoint Shadows and Advices}
+As with the static designators we talk about here,there are 3 cases of join point shadows.
+\begin{enumerate}
+  \item The case where the shadow is \textsl{exactly one} instruction
+  \item The case where the shadow is an \textsl{entire} method
+  \item The case that does not by themselves define shadows.They use the shadows defined by the other 6 static pointcuts.
+\end{enumerate}
+
+The \texttt{before} advice code segment is inserted after the \texttt{impdep1} instruction.\texttt{impdep1} is a reserved word in java bytecode opcode but can never appear in any class file; we assume the front-end compiler produces the instructioin for us to insert the advice;and after the compilation of the back-end compiler,the advice is woven and \texttt{impdep1} is delimitted.The \texttt{after} advice code is easy to recognize since it always usually appears with method return opcodes like \texttt{return,ireturn,areturn}.
+
+Table 3 refers to the pointcut and the afftected area while the box below includes the syntax of our defined pointcuts.
+
+\begin{table}
+\centering
+\begin{tabular}{|c|c|}
+\hline Join Point Designator  & Join Point shadow\\
+\hline \texttt{mcall}  & \texttt{invokevirtual} $i$,\texttt{invokespecial} $i$, \texttt{invokestatic} $i$, \texttt{invokeinterface} $i,n$\\
+\hline \texttt{get} & \texttt{getfield} $i$ ,\texttt{getstatic} $i$\\
+\hline \texttt{set} & \texttt{putfield} $i$ ,\texttt{putstatic} $i$\\
+\hline \texttt{mexecution} & Entire method code\\
+\hline \texttt{execution} & Entire advice's code\\
+\hline \texttt{staticInit} & Entire ``\texttt{clinit}'' method code\\
+\hline
+ \end{tabular}
+\caption{pointcut and affected bytecode}
+\end{table}
+
+\begin{center}
+\begin{boxedminipage}{.8\columnwidth}
+\begin{align*}
+BasePcut \models&  \texttt{mcall}(MethodPattern) \oo \texttt{mexecution}(MethodPattern)\oo \texttt{aexecution()}\\
+&\oo   \texttt{withincode}(MethodPattern)\oo \texttt{get}(FieldPattern)\oo  \texttt{set}(FieldPattern)\\
+BooleanPcut  \models &  Pcut\ww \texttt{or}\ww Pcut \oo \texttt{not}\ww Pcut\oo Pcut\ww \texttt{and}\ww Pcut\\
+MethodPattern  \models & \langle methodModifiers:(Methodmodifier)-\texttt{set},methodSgnature:MethodSignature,\\
+& componentType:ComponentType\rangle\\
+FieldPattern   \models & \langle fieldModifiers:(FieldModifier)-\texttt{set},FieldSignature:FieldSignature,\\
+&componentType : ComponentType \rangle \\
+MethodSignature  \models & \langle name:\texttt{Identifier},argumentsType:(Type)-\texttt{list},resultType:Type \rangle\\
+FieldSignature  \models & \langle name:\texttt{Identifier},type:Type \rangle\\
+MethodModifier  \models & \texttt{public} \oo \texttt{private} \oo  \texttt{static} \oo \texttt{synchronized}\\
+FieldModeifer  \models & \texttt{public} \oo \texttt{private} \oo \texttt{static} \\
+ComponentType  \models & ReferenceType \oo AspectType\\
+ResultType  \models & Type \oo \texttt{void}\\
+Type  \models & PrimitiveType \oo ReferenceType\\
+ReferenceType  \models & ClassType \oo InterfaceType\\
+ClassType  \models & \texttt{Identifier}\\
+InterfaceType  \models & \texttt{Identifier}\\
+AspectType  \models & \texttt{Identifier}\\
+PrimitiveType  \models & \texttt{Identifier}
+\end{align*}
+\end{boxedminipage}
+\end{center}
+
+\subsection{Environments}
+Below describes the \texttt{environment} before weaving, it contains the \texttt{javaEnvironment} and the \texttt{advices}.We can denote the environment as:
+$$ Environment \models \langle javaEnvironment:JavaEnvironment, advices:(AdviceInfo)-\texttt{list}\rangle$$
+The \texttt{javaEnvironment} is somewhat like the actual jvm environment except that it's reduced and there is an additional instruction \texttt{impdep1}.
+In our model,a class is just a record containing a constant pool, a super-class, a set of interfaces, a list of fields, a map that associates values to static fields, a list of methods, three flags that indicate whether the class is initialized or not, is an interface or not, is an aspect or not and a monitor. We only explain some productions,details can been seen in \cite{web:jvm_spec}.
+\begin{itemize}
+  \item A \texttt{constant pool} is a map that associates a set of integers with a set of constant pool entries,which is like this:
+      $$ConstantPool \models Int\xrightarrow{m}{ConstantPoolEntry}$$
+      In our example,we can use \texttt{javap -verbose Hello.class} to see what contains in the constant pool.
+      \begin{lstlisting}[language=java,caption=constant pool]
+   #1 = Class              #2             //  date20120901/AspectjHello/Hello
+   #2 = Utf8               date20120901/AspectjHello/Hello
+   #3 = Class              #4             //  java/lang/Object
+   #4 = Utf8               java/lang/Object
+   #5 = Utf8               sayHello
+   #6 = Utf8               ()V
+   #7 = Utf8               org.aspectj.weaver.MethodDeclarationLineNumber
+   #8 = Utf8               Code
+   #9 = Fieldref           #10.#12        //  java/lang/System.out:Ljava/io/PrintStream;
+  #10 = Class              #11            //  java/lang/System
+  #11 = Utf8               java/lang/System
+  #12 = NameAndType        #13:#14        //  out:Ljava/io/PrintStream;
+  #13 = Utf8               out
+  ...
+      \end{lstlisting}
+      The index first appearing in each line is the \textsl{key} \texttt{Integer}(\#5 for instance) and the content(like \texttt{sayHello}) can be viewed as the \textsl{value} of the entries.
+  \item A \texttt{constant pool entry} can be a class type, a pair of a method signature and a supposed class.Those entries are usually defined by the \texttt{type} and the concatenation of String of entries. The recognition and interpretation, however is the task of JVM, which is out of our topic.
+  \item The \texttt{monitor} associated with a class is a record of three components: \texttt{threadOwner}, \texttt{depth} and a \texttt{waitList}, i.e. it is can be represented as a tuple like below:
+      $$Monitor \models  \langle threadOwner:Threadowner,depth:Nat,waitList:WaitingList\rangle$$
+      The monitor is set to $\langle None,0,[\;]\rangle$ if the class is not locked.
+\end{itemize}
+Other productions can be seen as follows:
+\begin{center}
+\begin{boxedminipage}{.8\columnwidth}
+\begin{align*}
+JavaEnvironment \models &  ComponentType \xrightarrow{m}{Class} \\
+Class \models & \langle constantPool:ConstantPool,superClass:ClassType|NoneType,\\
+&interfaces:(ClassType)-\texttt{set},fields:(Field)-\texttt{set},\\
+&staticMap:Field\xrightarrow{m}{Value},methods:(Method)-\texttt{set},\\
+&initialized:Int,interface:Int,aspect:Int,monitorClass:Monitor\rangle\\
+ConstantpoolEntry \models & ClassType\oo MethodPoolEntry,FieldPoolEntry\\
+MethodPoolEntry \models & \langle methodSignature:MethodSignature,supposedClass:ClassType\rangle\\
+FieldPoolEntry \models & \langle fieldSignature:FieldSignature,supposedClass:ClassType\rangle\\
+ThreadOwner \models& ThreadId|NoneType\\
+WaitingList \models &(ThradId)-\texttt{list}\\
+ThreadId \models & Nat\\
+Field \models & \langle fieldSignagure:FieldSignature,fromClass:ComponentType,\\
+& fieldModifiers:(FieldModifier)-\texttt{set}\rangle\\
+Method \models & \langle methodSignagure:MethodSignature,fromClass:ComponentType,\\
+&methodModifiers:(MethodModifier)-\texttt{set},code:Code,method\\
+&Variables:MethodVariables\rangle\\
+AdviceInfo \models & \langle kind:\left\{ \texttt{Before,After} \right\},pointcut:Pcut,\\
+&fromClass:AspectType,adviceSignagure:MethodSignagure\rangle\\
+Code \models & ProgrammCounter\xrightarrow{m}{Instruction}\\
+Instruction \models & JVMLInstruction|\texttt{impdep1}\\
+ProgramCounter \models & Nat\\
+MethodVariables \models & (Value)-list\\
+\end{align*}
+\end{boxedminipage}
+\end{center}
+
+
+\subsection{Configurations}
+The operational semantics is based on the evolution of configurations that are defined hereafter. Weaving a class with some aspects is the result of weaving all its methods with the considered aspects. So we only need to describe the weaving inside one method and a configuration will have the following form:
+$$\langle\xi,m,pc,ads,nextpc\rangle$$
+where:
+\begin{itemize}
+  \item $\mathbf{\xi}$ represents the environment
+  \item $\mathbf{m}$ is the related method
+  \item $\mathbf{pc}$ represents the program counter that contains the address of the instruction to be advised into $m$
+  \item $\mathbf{ads}$ represents the advices to consider
+  \item $\mathbf{nextpc}$ represents the program counter for the next instruction to consider
+\end{itemize}
