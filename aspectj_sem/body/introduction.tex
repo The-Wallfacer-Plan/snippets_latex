@@ -1,0 +1,11 @@
+\section{Introduction}
+Aspect Oriented Programming(AOP) is a new way of modularizing programs compared to object oriented programming
+(OOP).It's designed to solve two central problems in OOP: \texttt{code tangling} and \texttt{code scattering}, which refers to one module with many concerns and many modules with one concern respectively. A common example is the logging behaviour for a program, which may be scattered across methods, classes, object hierarchies, or even entire object models(We will give a simple example below to explain). AOP improves code reuse across different object hierarchies by providing explicit support for separation of concerns. Due to this benefit, AOP is usually used for logging,verification,policy enforcement,security management,profiling,memory management,visualization of program executions and so on.
+
+Since the concepts explicitly introduced by Gregor Kiczales in 1997\cite{web:aopwiki}, AOP has been widely used,especially in enterprise applications.There has now been quite a lot of implementations of AOP,such as Aspectj, aspectwerkz, Spring AOP,Aspect.NET etc. This review is mainly about the most well-known Aspectj designed by Gregor et.al and focuses on the java bytecode level semantics.
+
+In aspectj aspects are woven into programs statically,so the bytecode corresponding to the original source files would be changed as long as there is an advised being matched.It illuminates us that we can model the semantics on the bytecode rather than source code,which is calculus into which source-level AOP constructs can be translated. This makes sense  since it can be applied to other JVM programming languages such as Scala,JRuby,Jython etc.
+
+The remainder of this report is organized as follows:Section 2 talks about some background knowledges for AOP and aspectj,also gives a simple example for the readers.Section 3 is tells the environments and configurations of the semantics.Next section lists all the utility functions for the rules.Section 5 deduces five rules of related to the weave process.And the last section makes a summary.
+
+

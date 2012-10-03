@@ -1,0 +1,114 @@
+%\documentclass{www2009-accepted}
+\documentclass{article}
+
+\usepackage[margin=2.5cm]{geometry}
+
+\usepackage{boxedminipage}
+\usepackage{amssymb}
+\usepackage{amsfonts}
+\usepackage{multirow}
+\usepackage{multicol}
+\usepackage{url}
+\usepackage{latexsym}
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\usepackage{subfigure}
+
+\usepackage{color}
+\usepackage{caption2}
+\usepackage{booktabs}
+\usepackage{setspace}
+\usepackage{threeparttable}
+\usepackage{listings}
+
+\usepackage{extarrows}
+
+\newcommand{\pn}[1]{\langle \textnormal{#1} \rangle}
+\newcommand{\oo}{\; \mid \;}
+\newcommand{\sk}{\dots }
+\newcommand{\ww}{\;}
+\newcommand{\nn}{\perp}
+\newcommand{\sm}[1]{\textnormal{#1}}
+\newcommand{\sd}[1]{\textnormal{\it #1}}
+
+\newtheorem{thm}{Theorem}
+
+\lstdefinelanguage{Aspectj}{
+     keywords={around, before, after,aspect,call,execution,pointcut,returning,public},
+     ndkeywords={},
+     sensitive=false,
+  }
+
+%\sffamily \ttfamily
+\lstset{
+basicstyle=\small\sffamily,
+numberstyle=\tiny,
+columns=fullflexible
+}
+
+\graphicspath{{figure/}{figures/}{logo/}{logos/}{graph/}{graphs}}
+\DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.jpeg}
+
+
+\newcommand{\tabincell}[2]{\begin{tabular}{@{}#1@{}}#2\end{tabular}}
+
+\begin{document}
+
+\newcommand{\todo}[1]{{\textbf{(TODO: #1)}}}
+\newcommand{\code}[1]{{\tt#1}}
+\long\def\comment#1{}
+
+% \long\def\myfig#1#2#3#4{
+% \begin{figure}[htb]
+%   \centerline{\includegraphics[width=#2]{figures/#1}}
+%   \caption{\footnotesize{#3}}
+%   \label{fig:#4}
+% \end{figure}
+% }
+
+\long\def\myfigg#1#2#3#4{
+\begin{figure*}[htb]
+  \centerline{\includegraphics[width=#2]{figures/#1}}
+  \caption{\footnotesize{#3}}
+  \label{fig:#4}
+\end{figure*}
+}
+
+
+\title{A Bytecode Level Operational Semantics Analysis on Aspectj Pointcut Matching}
+\author{Hongxu Chen\footnote{STAP@SJTU\quad 1110379002}}
+\date{}
+
+%\title{A Bytecode Level Operation Semantics Analysis on Aspectj Pointcut Matching Process}
+
+%\numberofauthors{4}
+%\author{
+%\alignauthor Hongxu Chen\\
+%       \affaddr{leftcopy.chx@gmail.com}\\
+%       \affaddr{1110379002\;STAP@SJTU}\\
+%       }
+%\date{\today}
+\maketitle
+\input{body/abstract.tex}
+%\keywords{Aspectj, Java Bytecode,JVML}
+
+
+\onecolumn
+\input{body/introduction.tex}
+%\input{body/motiveexample.tex}
+\input{body/preliminary.tex}
+\input{body/approach.tex}
+\input{body/issues.tex}
+\input{body/evaluation.tex}
+%\input{body/relatedwork.tex}
+\input{body/conclusion.tex}
+
+
+\bibliographystyle{abbrv}
+\bibliography{ref/ir}
+
+%\balancecolumns % GM July 2000
+
+\end{document}
