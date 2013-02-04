@@ -1,0 +1,3 @@
+[submodule "sjtu-thesis-template-latex"]
+	path = sjtu-thesis-template-latex
+	url = https://github.com/weijianwen/sjtu-thesis-template-latex.git
