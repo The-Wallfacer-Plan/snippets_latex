@@ -1,0 +1,52 @@
+% Copyright 2011 by Paulo J. Matos
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+\mode<presentation>
+
+\setbeamercolor*{author in head/foot}{parent=palette tertiary}
+\setbeamercolor*{date in head/foot}{parent=palette primary}
+
+\setbeamercolor*{title in head/foot}{parent=palette tertiary}
+\setbeamercolor*{frametitle in head/foot}{parent=palette primary}
+
+\providecommand\insertframetitle{}
+
+\defbeamertemplate*{footline}{lleida theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.75\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor~~(\insertshortinstitute)
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\defbeamertemplate*{headline}{lleida theme}
+{
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.25\paperwidth,ht=2.25ex,dp=1ex,right]{title in head/foot}%
+    \usebeamerfont{section in head/foot}\inserttitle\hspace*{2ex}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.75\paperwidth,ht=2.25ex,dp=1ex,left]{frametitle in head/foot}%
+    \usebeamerfont{frametitle in head/foot}\hspace*{2ex}\insertframetitle
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+\setbeamertemplate{frametitle}{}
+
+\setbeamersize{text margin left=1em,text margin right=1em}
+
+\mode
+<all>

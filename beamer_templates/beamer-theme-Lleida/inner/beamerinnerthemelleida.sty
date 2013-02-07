@@ -1,0 +1,29 @@
+% Copyright 2011 by Paulo J. Matos
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+\mode<presentation>
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{blocks}[rounded]
+\setbeamertemplate{title page}[default][colsep=-4bp,rounded=true]
+\setbeamertemplate{part page}[default][colsep=-4bp,rounded=true]
+
+% Items
+
+\setbeamertemplate{itemize item}{\scriptsize\hbox{*}}
+\setbeamertemplate{itemize subitem}{\tiny\hbox{**}}
+\setbeamertemplate{itemize subsubitem}{\tiny\hbox{***}}
+
+% Enumerate items
+
+\setbeamertemplate{enumerate item}{\scriptsize\insertenumlabel.}
+\setbeamertemplate{enumerate subitem}{\tiny\insertenumlabel.\insertsubenumlabel}
+\setbeamertemplate{enumerate subsubitem}{\tiny\insertenumlabel.\insertsubenumlabel.\insertsubsubenumlabel}
+
+\mode<all>
