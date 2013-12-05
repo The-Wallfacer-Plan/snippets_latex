@@ -1,0 +1,10 @@
+*.pdf
+!res/*.pdf
+!images/*.pdf
+*.aux
+*.log
+*.nav
+*.out
+*.snm
+*.toc
+
