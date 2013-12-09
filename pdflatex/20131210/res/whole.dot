@@ -1,0 +1,21 @@
+digraph "Whole" {
+        node [style=filled, shape=record]
+        n1[label="bug.c"];
+        n2[label="patch.c"];
+        n3[label="bug.bc"];
+        n4[label="patch.bc"];
+        n5[label="pruned_bug.bc"];
+        n6[label="pruned_patch.bc"];
+        n0[label="", fixedsize="false", width=0, height=0, shape=none];
+        n7[label="klee-input.bc"];
+        n8[label="Validation results", shape=box3d];
+
+        n1 -> n3 [ label="llvm-gcc", color=lightblue ];
+        n3 -> n5 [ label="pruning pass", color=blue ]
+        n2 -> n4 [ label="llvm-gcc", color=lightblue ]
+        n4 -> n6 [ label="pruning pass", color=blue ]
+        n5 -> n0
+        n6 -> n0
+        n0 -> n7 [ label="link wrapper" ]
+        n7 -> n8 [ label="klee"]
+}

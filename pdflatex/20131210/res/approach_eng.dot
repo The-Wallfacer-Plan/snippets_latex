@@ -1,0 +1,31 @@
+digraph Approach {
+        graph [ranksep=0.75,fontsize=20 labelloc="b" label="" splines=true overlap=false]
+        subgraph Dependence {
+                node [style=filled, shape=box3d]
+
+                n1[fillcolor="#119999", label="Program Concerns Config"]
+                n2[fillcolor="#bebebe", label="Points-to Set Build-up"]
+                n2m[fillcolor="#d3d3d3", label="Mod Set Generation"]
+                n3[fillcolor="#d3d3d3", label="CallGraph Generation"]
+                n4[fillcolor="#ccffff", label="Unused Function Pruning"]
+                n5[color=black, fillcolor="#add8e6", label="Reachability based Pruning"]
+                n6[color=black, fillcolor="#add8e6", label="Slicing based Pruning"]
+
+                n1 -> n4
+                n1 -> n5
+                n1 -> n6
+                n2 -> n3
+                n2 -> n4
+                n2 -> n6
+                n2 -> n2m
+                n3 -> n4
+                n3 -> n5
+                n3 -> n6
+                n4 -> n5
+                n4 -> n6
+                n5 -> n6[style=dashed]
+                n2m -> n6
+
+}
+
+}
