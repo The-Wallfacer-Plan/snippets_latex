@@ -1,0 +1,1 @@
+My fork of master's degree thesis template, based on [[https://github.com/weijianwen/sjtu-thesis-template-latex][sjtu-thesis-template-latex]].

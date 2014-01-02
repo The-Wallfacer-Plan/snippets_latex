@@ -1,0 +1,176 @@
+\chapter{实验与评估}
+\label{chap:eval}
+
+本章介绍了\dryrun 的使用方法。解释了实验的方法及选用的用例集特点，对每个用例通过\autoref{chap:impl}和\autoref{chap:linker}中生成的可被KLEE执行的程序进行验证，根据研究目标对\dryrun 进行了评估。
+
+\section{实验流程}
+\label{sec:impl_process}
+
+\dryrun 基于LLVM2.9\footnote{LLVM项目首页： http://llvm.org}的源代码实现\footnote{生成\rbscope 的实现代码同时支持LLVM2.9和LLVM3.4以上版本；然而KLEE本身只支持LLVM2.9，故\dryrun 目前只支持LLVM2.9。}；符号执行引擎使用了svn r165499版本的KLEE\footnote{KLEE符号执行虚拟机项目: http://llvm.org/svn/llvm-project/klee/trunk}, 并使用了STP作为约束求解器\footnote{STP主页：https://stp-fast-prover.svn.sourceforge.net/svnroot/stp-fast-prover/trunk/stp svn版本r940}。
+具体的实验流程如下：
+\begin{itemize}
+\item 给定一个程序\prog (\prog 可以为\bug 或 \patch)，通过图形用户界面将\prog\entry ， \prog\bs , \prog\ps 信息写入配置文件中。
+\item 将\prog 通过llvm的C语言前端(llvm-gcc或clang)将之转换为llvm的中间表达形式(仍记为\prog )。
+\item LLVM分析和转换框架opt的扩展rb\_gen，该扩展主要包含4个pass：\textmd{rb-md}，\textmd{rb-uncall}, \textmd{rb-reach}及\textmd{rb-slice}，使用方法详见\autoref{chap:IR}。
+\begin{enumerate}[label={[\arabic*]}]
+\item \textmd{rb-md} 根据生成的外部配置文件，在LLVM中间表达形式上定位\prog\ps ，\prog\bs 和\prog\entry ，并分别添相应的元数据信息。
+\item \textmd{rb-uncall} 通过函数调用图信息，根据元数据中的\prog\entry 信息，削减程序中未被调用的函数。
+\item \textmd{rb-reach} 重建的指向分析结果和调用图信息，结合添加的元数据信息，针对\prog\ps ，\prog\bs 进行可达性分析，并依据该分析结果对程序作削减。
+\item \textmd{rb-slice} 根据重建的指向分析结果、调用图信息及修改集合，以\prog\bs 作为切片准则进行后向切片。
+\end{enumerate}
+\item 驱动程序合成器rb\_link，这相当于LLVM链接器(\textmd{llvm-ld})的一个包装器程序(wrapper)。其调用方式为
+  \begin{displaymath}
+rb\_link{\quad} input_1.bc{\quad} \left[\quad input_2.bc{\quad} \cdots{\quad} input_n.bc\quad\right]
+  \end{displaymath}
+
+得到可以为KLEE符号执行的\textmd{klee-input.bc}。当仅有单一的输入程序(即$n=1$)时添加驱动程序验证其正确性；当有两个或两个以上程序输入时，添加交叉验证语义，并将多个版本程序依照\autoref{sec:cross}中提到的方法进行拼接。
+\item 对\textmd{klee-input.bc}进行符号执行。由于默认参数下KLEE符号执行时具有较多的不确定性，为了得到相对确定的程序结果，并使得使用的参数统一，设计了下面的参数调用(对这些参数使用的解释参见\autoref{chap:klee_exe})。
+
+\begin{figure}[t]
+  \begin{center}
+    \begin{lstlisting}[language=bash]
+klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable-inlining --optimize --use-forked-stp --use-cex-cache --libc=uclibc --posix-runtime --allow-external-sym-calls --only-output-states-covering-new --max-instruction-time=30. --max-time=4800. --watchdog --max-memory-inhibit=false --max-static-fork-pct=1 --max-static-solve-pct=1 --max-static-cpfork-pct=1 --switch-type=internal --use-batching-search=0 -randomize-fork=0 --search=dfs klee-input.bc --sym-args 0 1 10 --sym-args 0 2 2 --sym-files 1 8 --sym-stdout
+\end{lstlisting}
+\vspace{-16pt}
+\bicaption[fig:klee_arg]{符号执行时KLEE的参数}{符号执行时KLEE的参数}{Fig}{Arguments Used by KLEE during Symbolic Execution}
+\end{center}
+\end{figure}
+\end{itemize}
+
+\section{实验介绍}
+\label{sec:experiment}
+本实验运行在16核/128G的服务器上，处理器为Intel Xeon E5-2665，主频2.5GHz，运行于Linux 2.6.32内核之上。
+沿袭KLEE的做法，选用了Coreutils-6.10 这一程序集合作为研究对象；这一程序集合被广泛用于命令行处理文件、壳程序(shell)及文本操作，并且包含了大量的系统调用，故具有一定的复杂性。其中，选取了9个不同的程序，得到了12处补丁。其中每个补丁程序\patch 对应着程序中原有的一个真实的assert断言；在该断言的附近修改了一条或多条对该断言有影响的语句作为程序的补丁。为使得结果不失一般性，其中的\bug\ass 是通过“grep assert” coreutils的源代码目录并按照所得结果的字典序选取，并剔除了其中断言较为密集或难以添加补丁的程序；相对于\bug\ps ，其改动的类型包括添加、修改或减少\bug 中的一条或多条语句。除了补丁和断言处在程序执行的距离上的限制之外，我们尽可能使得\patch\ps 的改动具有多样性。对于\bug\ass ，因为至今仍然没有任何bug报告指出触发了该错误，故可假定每一个\bug\ass 是正确的；另一方面，补丁是人为地在\bug 改动的，故一般而言\patch 是错误的。
+\autoref{tab:cases} 列出了12个用例(在源代码层次上)的错误发生位置和补丁修改位置(已通过\autoref{sec:complex}中的方法规范了\patch\ps )以及该补丁的类型。另外给出了\patch\ps 版本程序在程序削减前后的大小变化，由结果可见在大小上程序削减的效果较好，和原来的程序相比最多可以削减至原有程序的1/144；并且对于所用的测试用例，\rbscope 的生成时间$T_{rbc}$相对较小(最长时间为106ms，相对于符号执行的时间是微不足道的)，这是可以接受的。
+
+对\dryrun 补丁验证结果的评估包含下面4个方面：
+\begin{enumerate}
+\item 有效性。它用于评估\dryrun 是否能检测出12个错误的补丁。这里设置KLEE最大执行时间为4800s，对于每条指令仍然使用默认的30s作为其超时值。
+\item 高效性。对同一份\patch\ps ，比较在\rbscope 上的符号执行时间和在整个程序上的符号执行时间。同时我们还评估了\rbscope 生成所消耗的时间(即rb\_gen中的所有pass的执行时间)。这里忽略了合成驱动程序所消耗的时间——一般而言，这个时间是微不足道的。
+\item 交叉验证。这一评估检测\dryrun 是否能检测出12个回归错误性质的补丁。由于采用在 \autoref{sec:experiment} 中介绍的选取测试用例的方式，\dryrun 期望的结果是检测出\patch 中包含错误而在\bug 中没有找出错误。
+\item 错误肯定。由于\dryrun 对\rbscope 进行验证而非程序本身，其验证结果和对原有程序的结果不尽相同；在实际情形中在进入程序入口函数时总会存在一些动态的前置条件无法用静态分析的方法准确获得，故存在真实执行时不存在的错误，即错误肯定。这里通过将\bug\scope 单独使用合成器生成驱动程序，作为KLEE的输入值进行动态符号执行。期望的结果是没有触发对应于\bug 中的断言。
+\end{enumerate}
+符号执行引擎遍历完所有的路径(即达到完全路径覆盖)相当耗时，这在现实中是不可行的；故实验中设定当程序遇到了给定的\prog\ass 时立即终止。另外，为了降低KLEE运行时的不确定性，不再使用基于符号路径的随机路径寻找策略或基于覆盖率的策略，而是使用了结果相对稳定的深度优先算法来探寻所有的可行路径，并且对每个用例执行3次取平均值的方法得到。
+
+\begin{table}
+  \centering
+  \small
+  \begin{tabular}{|c|c|c|c|c|c|c|c|}
+    \hline
+    编号 & 程序名 & \patch\ps & \patch\bs 行号 & 类型 & \patch\scope 大小(Kb) & $T_{rbc}$(ms)& \patch 大小(Kb) \\
+    \hline
+    01 & cut & 620 & 624 &  添加 &2.6 & 106 & 181\\ \hline
+    02 & factor & 114 & 121 &  修改 & 2.2 & 62 & 139\\ \hline
+    03 & join & 642 & 586 & 修改 & 1.8& 54& 168\\ \hline
+    04 & mv & 461 & 465 &  修改 & 2.8 & 62 & 404 \\ \hline
+    05 & od & 881 & 991 &  修改 & 2.0 & 60 & 193 \\ \hline
+    06 & od & 1,290 & 1,389 &  修改 & 3.7 & 60 & 193\\ \hline
+    07 & rm & 322 & 347 &  修改 & 1.8 & 71 & 257 \\ \hline
+    08 & tail & 139 & 638 &  修改 & 2.7 & 89 & 210 \\ \hline
+    09 & tr & 419 & 1,107 & 修改 & 2.1 & 56 & 187 \\ \hline
+    10 & tr & 898 & 810 &  修改 & 8.9 & 55 & 187 \\ \hline
+    11 & tr & 422 & 1,107 & 删除 & 2.2 & 54 & 187 \\ \hline
+    12 & tsort & 140 & 170 &  修改 & 4.9 & 63 & 141 \\ \hline
+  \end{tabular}
+  \caption{测试用例及\rbscope 生成}
+  \label{tab:cases}
+\end{table}
+
+\section{实验结果}
+\label{sec:experiment_res}
+对于\dryrun 有效性和高效性的评估结果参见\autoref{tab:eval1}。对于有效性而言，\dryrun 由于大大削减了程序的大小因而成功地触发了程序中的断言，而完整地执行KLEE却只在规定时间内找到了3个用例的程序的结果，而对75\% 的程序都没有顺利检测出结果。在这9个没有检测出程序中错误的完整程序的例子中，有8是由于超时导致；剩下的(patch04)因为KLEE不能完整支持LLVM2.9的所有指令而生成不了正确的KLEE可解释的中间代码；而对于\rbscope 则恰好削减了那部分不支持的代码。
+
+对于\dryrun 的高效性而言，不难看出KLEE在仅包含\rbscope 的驱动程序上的执行比完整执行整个程序快速很多；KLEE对不经削减的程序进行符号执行话费的时间相对较长，KLEE在8个测试用例上均超时，仅仅对patch07在短时间内得到了验证结果(在1.06秒内触发程序中的断言)；从KLEE动态符号执行的指令和向约束求解器STP查询的数量上可以很好地解释这一差距。总而言之，由于事先对程序所做的大幅度削减，\dryrun 有效并高效地进行补丁验证。
+
+\begin{table}
+  \centering
+  \small
+  \begin{tabular}{|p{0.80cm}|c|c|c|c|r|}
+    \hline
+    编号 & 版本 & 是否有效 & 验证时间(s)& 指令数(K) & 查询次数 \\
+    \hline
+    \multirow{2}{0.80cm}{01}
+    & $rb\_scope$ &是 &  0.47  & 5.1 & 63  \\  \cline{2-6}
+    & original &  否 & 超时 &   84,869.0 & 3,968  \\
+    \hline
+    \multirow{2}{0.80cm}{02}
+    & $rb\_scope$ &否 & 0.49 & 6.2 & 120  \\  \cline{2-6}
+    & original & 是 & 57.251 &  137.1 & 504  \\
+    \hline
+    \multirow{2}{0.80cm}{03}
+    & $rb\_scope$ &否 & 1.09 & 9.8 & 69  \\  \cline{2-6}
+    & original &  否 & 超时 &  1,433,000.1 & 4,319  \\
+    \hline
+    \multirow{2}{0.80cm}{04}
+    & $rb\_scope$ &是 &  1046.17 & 1,027.4 & 4,121  \\  \cline{2-6}
+    & original & 否 & x &  x & x  \\
+    \hline
+    \multirow{2}{0.80cm}{05}
+    & $rb\_scope$ &是 &  26.80 & 6.7 & 338  \\  \cline{2-6}
+    & original & 否 & 超时 &  363,301.0 & 1,983   \\
+    \hline
+    \multirow{2}{0.80cm}{06}
+    & $rb\_scope$ &是 &  3.48 & 5.3 & 74  \\  \cline{2-6}
+    & original & 否 &超时  & 276,434.2 & 7,0982  \\
+    \hline
+    \multirow{2}{0.80cm}{07}
+    & $rb\_scope$ &是 &  1.02 & 5.5 & 77  \\  \cline{2-6}
+    & original & 是 & 1.06 & 18.9   & 148  \\
+    \hline
+    \multirow{2}{0.80cm}{08}
+    & $rb\_scope$ &是 &  1.80 & 5.2 & 60  \\  \cline{2-6}
+    & original & 否 & 超时 &  2,422,569.1 & 270  \\
+    \hline
+    \multirow{2}{0.80cm}{09}
+    & $rb\_scope$ &是 &  3.41 & 18.5 & 79  \\  \cline{2-6}
+    & original & 否 & 超时 &  245.7 & 775  \\
+    \hline
+    \multirow{2}{0.80cm}{10}
+    & $rb\_scope$ &是 &  2.64 ms & 6.1 & 13  \\  \cline{2-6}
+    & original & 是 & 672.69  &  1,299.6 & 3,021  \\
+    \hline
+    \multirow{2}{0.80cm}{11}
+    & $rb\_scope$ &是 &  20.13 & 2.3 & 838  \\  \cline{2-6}
+    & original & 否 & 超时  &  4,521.9 & 8,432  \\
+    \hline
+    \multirow{2}{0.80cm}{12}
+    & $rb\_scope$ &是 &  3.02 & 5.5 & 88  \\  \cline{2-6}
+    & original & 否 & 超时 &  4,651.3 & 4,648  \\
+    \hline
+  \end{tabular}
+  \caption{对补丁验证的可行性和高效性的评估}
+  \label{tab:eval1}
+\end{table}
+
+\begin{table}
+  \centering
+  \small
+  \begin{tabular}{|l|c|c|c|r|}
+    \hline
+    编号 & \footnotesize{Regression} & $T_{cv}$(s) & \footnotesize{FP} &$T_{fp}$(s) \\
+    \hline
+    01 & 是 & 1.08 & 否 & 0.79 \\ \hline
+    02 & - & 超时 & - &超时\\ \hline
+    03 & 是 & 1.09 & 否 &5.64\\ \hline
+    04 & - & 超时 & - &超时\\ \hline
+    05 & - & 超时 & - &超时\\ \hline
+    06 & 是 & 114.54 & 否 & 540.84\\ \hline
+    07 & 否 & 9.17 & 是 & 2.09\\ \hline
+    08 & 否 & 7.26 & 否 & 8.50\\ \hline
+    09 & 是 & 2.01 & 否 & 8.03\\ \hline
+    10 & - & 超时 & - &超时\\ \hline
+    11 & 是 & 2.11 & 否 & 93.40\\ \hline
+    12 & 是 & 3.02 & 否 & 7.94\\ \hline
+  \end{tabular}
+  \caption{对回归错误和错误肯定的评估}
+  \label{tab:eval2}
+\end{table}
+
+
+使用\dryrun 进行补丁验证在理论上来说存在错误肯定。\autoref{tab:eval2} 中的第4、5两列是对该12个测试用例的在错误肯定上得到的结果。可见，对于这12个例子而言，patch07中出现了错误肯定，即\dryrun 仍然触发了\bug\ass ，因此错误地认为\bug 也会触发这一错误。另外的4个用例中超时了；然而因为没有产生误报，故不属于错误肯定。而剩下的7个用例中得到了正确的结果。
+
+更进一步，实验中还检验了交叉验证结果，其结果见\autoref{tab:eval2} 中的第2、3列。可以看出，对于6个程序\dryrun 正确地找出了回归错误。有4个例子因为超时而没有检测出；这是由于在它们\bug\scope 中存在分支循环结构，这会带来很多可行的路径，然而\dryrun 没有在给定的时间限制内执行完所有路径。有两个程序被认为没有出现回归错误，其中第7个例子(rm)是由于\bug\scope 带来的错误肯定带来的，而第8个例子则是因为程序在执行到断言之前触发了内存错误而没有真正进行交叉验证。
+
+\section{本章小结}
+\label{sec:c5}
+本章阐述对\dryrun 的评估，详细说明了具体的实验流程、评估方法及实验结果，指出了相对于完整的符号执行\dryrun 带来的性能上的优化，同时分析可能带来的错误肯定和交叉验证的问题。

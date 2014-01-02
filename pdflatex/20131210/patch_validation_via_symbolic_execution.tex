@@ -47,7 +47,7 @@
 
 % rectangles circles inmargin rounded
 \useinnertheme{rectangles}
-% \useinnertheme[shadow]{rounded} % 对 box 的设置: 圆角、有阴影.
+% \useinnertheme[shadow]{rounded}
 % infolines miniframes shadow sidebar c smoothtree split tree progressbar
 \useoutertheme{progressbar}
 
@@ -183,7 +183,7 @@ Patches are not always complete
 \end{center}
 \end{frame}
 
-\section{Insights}
+\section{Insight}
 \begin{frame}
   \frametitle{\secname}
 Symbolic Execution
@@ -218,8 +218,8 @@ Symbolic Execution
   \frametitle{\secname}
   Combine \textcolor{blue}{static pruning} and \textcolor{blue}{symbolic execution}
   \begin{enumerate}
-    \item Pruning code that cannot \emph{reach} from \textcolor{blue}{patch site} and doesn't have influence on \textcolor{blue}{assert site} for bug/patch versions of programs($\Rightarrow$ \alert{rbscope})
-    \item Linking 2 versions of program into 1 new program, adding symbolic execution semantics for entry function formal argument and global variables and special functions for validating
+    \item \footnotesize{Pruning code that cannot \emph{reach} from \textcolor{blue}{patch site} and doesn't have influence on \textcolor{blue}{assert site} for bug/patch versions of programs($\Rightarrow$ \alert{rbscope})}
+    \item \footnotesize{Linking 2 versions of program into 1 new program, adding symbolic execution semantics for entry function formal argument and global variables and special functions for validating}
   \end{enumerate}
   \pause
     \column{.45\textwidth}
@@ -288,7 +288,7 @@ Symbolic Execution
 \textcolor{blue}{  unreachable}
 
 \textcolor{black}{if.else:}
-\textcolor{blue}{  ret i32 %i /// <=}
+\textcolor{black}{  ret i32 %i}
 
 \textcolor{black}{declare void @__assert_fail(i8*, i8*, i32, i8*)}
 

@@ -1,0 +1,79 @@
+\chapter{前向切片的问题}
+\label{chap:fwd_issue}
+
+和后向切片相反，前向切片讨论的是程序中的某个位置的变量的变化影响的集合。研究表明，前向切片的剩余部分程序比后向切片剩余部分程序要小很多~\upcite{FWD_BWD}。然而\rbscope 不可以依靠前向切片进行进一步精化，这是因为前向切片得到的削减结果一般而言是不可执行的；更有甚者，前向切片的结果并不能保证程序原有的语义。下面采用一个典型例子说明问题。
+
+如果以\autoref{fig:fwd_issue1}的第3行中$j$的重新赋值作为前向切片准则，剔除不相关的语句后的切片结果如\autoref{fig:fwd_issue1_res}所示。原有的控制流结构消失，变量$k$不再有变量定义，同时函数不再有返回值。
+
+对于这一问题，我们最初曾考虑下面的解决方案：
+\begin{enumerate}[label={(\arabic*)}]
+\item 在切片过程中刻意保留程序中的控制流形式和变量存储空间信息;
+\item 并将程序中(中间表达形式上)出现的没有具体值的变量替换为符号执行引擎可以理解的符号值。
+\end{enumerate}
+然而\autoref{fig:fwd_issue2}可以说明这并不可行。
+
+当以“$int x = bar();$” 中的x作为前向切片准则并且总是保留变量空间分配的语义时，仅有“$y = 2 * baz();$” 这一语句会被剔除，然而在执行到程序的断言处时在切片前后的y值是不同的，这改变了程序本身的语义。同时这里无法“添加符号变量” \cndash 在LLVM的中间表达形式上，得到的切片结果不存在“未定义变量”。另一方面，若以assert断言处的条件值“$x-y>=6$”作为后向切片准则，因为x和y的改变都会对它产生影响，故后向切片的结果中需保留所有的程序代码片段。因此这样得到的\rbscope 在源代码层次上错误地改变了程序本身的语义。
+
+基于上述原因，在生成\rbscope 时不再使用前向切片的方法而只考虑基于程序在可达性上的削减。
+
+\begin{figure}[t]
+\begin{center}
+\begin{lstlisting}[language={[ANSI]C}]
+  int foo(int i, int j){
+    int k = i;
+    j = j + 1; // j的赋值作为切片准则
+    if(i < 0){
+      j++;
+      k = j;
+    }
+    return i;
+  }
+\end{lstlisting}
+\vspace{-16pt}
+\caption{前向切片问题举例1}
+\label{fig:fwd_issue1}
+\end{center}
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\begin{lstlisting}[language={[ANSI]C}]
+  int foo(int i, int j){
+    j = j + 1; // j的赋值作为切片准则
+    j++;
+    k = j;
+  }
+\end{lstlisting}
+\vspace{-16pt}
+\caption{前向切片问题举例1\cndash 切片结果}
+\label{fig:fwd_issue1_res}
+\end{center}
+\end{figure}
+
+\begin{figure}[t]
+\begin{center}
+\begin{lstlisting}[language={[ANSI]C}]
+#include <assert.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+int bar(void) { return rand() % 3 + 6; }
+
+int baz(void) { return 2 * (rand() % 3); }
+
+int main(void) {
+  int y;
+  int x = bar();  // x为前向切片准则
+  y = 2 * x;
+  x = y;
+ %* \sout{\texttt{y = 2 * baz();}} *)
+  assert(x - y >= 6); // x-y>=6 作为后向切片准则
+  return 0;
+}
+
+\end{lstlisting}
+\vspace{-16pt}
+\caption{前向切片问题举例2}
+\label{fig:fwd_issue2}
+\end{center}
+\end{figure}

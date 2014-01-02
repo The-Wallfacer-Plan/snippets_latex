@@ -1,0 +1,198 @@
+%% Encoding: UTF-8
+
+% 字号选项: c5size 五号(默认) cs4size 小四
+% 双面打印（注意字号设置）
+% \setCJKmainfont[SmallCapsFont=*]{Adobe Song Std}
+% 单面打印（注意字号设置）
+% \documentclass[cs4size, a4paer, oneside, openany]{sjtuthesis} 
+\documentclass[cs4size, a4paper, twoside]{sjtuthesis} 
+
+% \usepackage[sectionbib]{chapterbib}%每章都用参考文献
+
+\usepackage[lined,boxed,commentsnumbered,ruled,linesnumbered]{algorithm2e}
+\usepackage[normalem]{ulem}
+\usepackage{enumitem}
+\usepackage{multicol,pdflscape}
+\usepackage{subfigure}
+\addtolength{\subfigcapskip}{-24pt}
+% \usepackage[dvipsnames]{xcolor}
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\ttfamily\footnotesize,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygray}\itshape,    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+%  frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  identifierstyle=\texttt,
+  language=C,                      % the language of the code
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+\newboolean{DOIT}
+\setboolean{DOIT}{false}%编译某些只想自己看的内容，编译true，否则false
+
+%% 行距缩放因子(x倍字号)
+\renewcommand{\baselinestretch}{1.3}
+
+% 设置图形文件的搜索路径
+\graphicspath{{figure/}{figures/}{logo/}{logos/}{graph/}{graphs}}
+
+%%==============================================================================
+%% 在sjtuthesis.cls中定义的有用命令
+%%==============================================================================
+% \cndash 中文破折号
+% 数学常量
+% \me 对数常数e
+% \mi 虚数单位i
+% \mj 虚数单位j
+% \dif 直立的微分算符d为直立体。
+% 可伸长的数学箭头、等号
+% \myRightarrow{}{}
+% \myLeftarrow{}{}
+% \myBioarrow{}{}
+% \myLongEqual{}{}
+% 参考文献
+% \upcite{} 上标引用
+%%==============================================================================
+
+\newcommand{\todo}[1]{{\footnotesize \textcolor{red}{$\ll$\textsf{TODO #1}$\gg$}}}
+\newcommand{\dryrun}{\textsf{SERAPH}}
+\newcommand{\rbscope}{\texttt{rbscope}}
+
+\newcommand{\bug}{\ensuremath{\mathcal{B}}}
+\newcommand{\patch}{\ensuremath{\mathcal{P}}}
+\newcommand{\prog}{\ensuremath{\mathcal{S}}}
+\newcommand{\bs}{\ensuremath{_{bug}}}
+\newcommand{\ass}{\ensuremath{_{assert}}}
+\newcommand{\entry}{\ensuremath{_{entry}}}
+\newcommand{\ps}{\ensuremath{_{root}}}
+\newcommand{\scope}{\ensuremath{_{scope}}}
+\newcommand{\pin}{\ensuremath{V_{inputs}}}
+
+\begin{document}
+
+% 中文封面内容
+\title{基于选择性符号执行的补丁验证}
+\author{陈\quad{}泓\quad{}旭}
+\advisor{赵建军教授}
+\degree{硕士}
+\defenddate{2014年1月7日}
+\school{上海交通大学}
+\institute{软件学院}
+\studentnumber{1110379002}
+\major{计算机科学与技术}
+
+% 英文封面内容
+\englishtitle{Selective Symbolic Execution Based Patch Validation}
+\englishauthor{\textsc{Hongxu Chen}}
+\englishadvisor{Prof. \textsc{Jianjun Zhao}}
+\englishschool{Shanghai Jiao Tong University}
+\englishinstitute{\textsc{School of Software} \\
+  \textsc{Shanghai Jiao Tong University} \\
+  \textsc{Shanghai, P.R.China}}
+
+\englishdegree{Master}
+\englishmajor{Computer Science and Technology}
+\englishdate{Jan. 7th, 2014}
+
+%% 生成封面
+\maketitle
+
+\makeenglishtitle
+
+% 论文原创性声明和使用授权
+\makeDeclareOriginal
+
+\makeDeclareAuthorization
+
+%% 前言
+\frontmatter
+
+% 摘要
+\include{abstract}
+
+% 目录
+\tableofcontents
+
+% 表格索引
+\listoftables
+
+% 插图索引
+\listoffigures
+
+\addcontentsline{toc}{chapter}{\listtablename}  %将图索引加入全文目录
+\addcontentsline{toc}{chapter}{\listfigurename} %将表格索引加入全文目录
+
+\def\chapterautorefname~#1\null{第{#1}章\null}
+\def\sectionautorefname~#1\null{#1~小节\null}
+\def\subsectionautorefname~#1\null{#1~小节\null}
+\def\subsubsectionautorefname~#1\null{#1~小节\null}
+\renewcommand\figureautorefname{图}
+\renewcommand\tableautorefname{表}
+\renewcommand\appendixautorefname{附录}%
+\renewcommand{\algorithmcfname}{算法}
+
+% 主要符号、缩略词对照表
+\include{symbol}
+
+%%==============================================================================
+%% 正文
+%%==============================================================================
+\mainmatter
+
+%% 各章正文内容
+\include{chapter01}
+\include{chapter02}
+\include{chapter03}
+\include{chapter04}
+\include{chapter05}
+\include{chapter06}
+
+%%==============================================================================
+%% 附录(章节编号重新计算，使用字母进行编号)
+%%==============================================================================
+\appendix
+
+% 附录中编号形式是"A-1"的样子
+\renewcommand\theequation{\Alph{chapter}--\arabic{equation}}
+\renewcommand\thefigure{\Alph{chapter}--\arabic{figure}}
+\renewcommand\thetable{\Alph{chapter}--\arabic{table}}
+
+\include{app1}
+\include{app2}
+\include{app3}
+
+%%==============================================================================
+%% 文后(无章节编号)
+%%==============================================================================
+\backmatter
+% 参考文献,包含参考文献文件.bib
+\bibliography{ref/main}
+% 致谢
+\include{ack}
+% 发表文章目录
+\include{pub}
+% 参与项目列表
+\include{projects}
+
+\end{document}

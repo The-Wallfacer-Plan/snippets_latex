@@ -1,0 +1,29 @@
+\chapter{KLEE的参数配置}
+\label{chap:klee_exe}
+
+\dryrun 使用了KLEE 作为符号执行的引擎，评估\dryrun 的性能时需要和KLEE对完整程序的补丁验证结果进行比较。对KLEE本身的执行，遵循了下面三个原则：
+\begin{enumerate}
+\item 将符号执行的不确定性降至最小。
+\item 尽可能利用KLEE对符号执行时的优化。
+\item 对测试用例集合选用了相同的符号执行的参数。
+\end{enumerate}
+
+然而出于最初设计及性能上的要求，KLEE在符号执行时不可避免地具有很多不确定性\footnote{http://comments.gmane.org/gmane.comp.compilers.llvm.klee/1460}，例如：
+\begin{enumerate}
+\item 现代操作系统中广泛采用了空间格局随机化(Address space layout randomization， ASLR)，通过对堆、栈、共享库映射等线性区布局的随机化以增加攻击者预测目的地址的难度。然而这使得符号执行工具对可能出现缓冲区溢出等安全漏洞的指令操作检查对不同的程序结果迥异。
+\item 程序中由malloc或new等动态分配在堆上的地址位置是不确定的。
+\item KLEE为了最大化语句覆盖率和分支覆盖率，采用了随机路径(random-path)并掺杂以覆盖新语句或分支为目的随机搜索(nurs:covnew)策略。
+\item 在程序的分支节点处，KLEE fork的状态(参见\autoref{sec:original})被用于True分支或False分支可以是随机的。
+\item 向符号求解器STP查询得到的可行解的具体值是不确定的；由于KLEE本身采用了“可行解结果缓存机制”(参见\autoref{sec:solver_restrict})，求解所得的“好”的具体值会避免后续的约束求解多次向STP查询可行解，缓存的具体值的“好坏”很大程度上影响符号执行的效率(这也正是KLEE采用该优化的原因)。
+\end{enumerate}
+
+实验中我们关闭了系统对ASLR的支持，并对KLEE和\dryrun 均采用了\autoref{fig:klee_arg}中的配置方法。下面就几个重要参数作一些解释：
+\begin{enumerate}[label={(\arabic*)}]
+\item \textmd{--search=bfs} 选用确定的深度优先算法探索路径。
+\item \textmd{--use-batching-search=0} 不使用任何批量路径搜索。
+\item \textmd{--randomize-fork=0} 不使用随机fork策略。
+\item \textmd{--use-cex-cache} 使用可行解缓存，尽管这会带来不确定性，但禁止它会使得符号执行极其缓慢。
+\item \textmd{--optimize} 采用LLVM进行标准的编译优化，简化符号执行的输入指令。
+\item \textmd{--posix-runtime} 采用POSIX标准的运行时。结合\textmd{--sym-args}、\textmd{--sym-files}和\textmd{--sym-stdout}~\upcite{KLEE}，使得KLEE可以通过命令行添加符号执行的约束\footnote{http://ccadar.github.io/klee/CoreutilsExperiments.html}，~\cite{KLEE}对coreutils的大部分用例都需要这样的配置。
+\item \textmd{--libc=uclibc} 以$\mu clibc$作为libc库，使得标准库函数转化为更为底层的系统调用；KLEE是在系统调用层次上建模的，链入$\mu clibc$将coreutils程序集合中的外部函数减小到极少的部分。
+\end{enumerate}

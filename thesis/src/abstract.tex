@@ -1,0 +1,19 @@
+\begin{abstract}
+  正确并高效地进行补丁验证对提高软件质量及程序员生产效率至关重要。使用静态分析的方法可以在程序不执行的情况下检测出程序中可能存在的部分错误；同时，动态符号执行可以自动生成高覆盖率的测试用例。然而由于这两种方法都受限于程序的规模，没有很好的扩展性。事实上，对于大型程序这两者并不适用，一般只能作为质量保证的辅助方法。工业界通常使用大量的测试用例来降低产品中代码出错的可能性。然而这样的验证的过程缓慢，并且往往是不完整的。
+
+  程序演化过程中经常需要修复程序中的错误。一般而言，补丁相对于错误发生处是局部的、通常很小，并且很少涉及程序的核心语义的改变。本文基于这一观察，展示了一种结合静态分析手段和动态符号执行的新方法，具有较好的扩展性。其基本的思想是通过静态分析的方式大幅度削减不相关的路径和程序语句，由此将待验证的程序范围局部化，进而添加符号变量语义和符号执行的驱动程序，最终通过标准的动态符号执行引擎对之进行详尽的测试。
+  
+  本文在开源编译器框架LLVM、符号执行引擎KLEE及STP约束求解器的基础上实现了反映上述想法的工具原型{\dryrun}。从GNU Coreutils程序集合选取了数十个补丁程序对它进行评估，\dryrun 成功地找出了所有不正确补丁；同时，和KLEE对完整的程序执行相比，检测程序中的错误的性能大大提高，速度上最高有1000倍的提升。
+  
+  \keywords{\large 符号执行\quad 补丁验证\quad 静态程序分析}
+\end{abstract}
+
+\begin{englishabstract}
+Validating patches correctly and effectively is critical to both software quality improvement and programmers' productivity. Static analysis approaches can often detect part of the possibly incorrect errors without even executing it. While in the meantime, dynamic symbolic execution tools can be used to generate test cases with high coverage automatically. However both of them are restricted to the size of the software under testing, thus lacking the scalability. In reality, neither of them are applicable to large scale software; instead they generally act as auxiliary means of quality assurance. The standard practice in industry is to write various test cases to reduce the occurrences of bugs for their products; however the validation process is not only slow, but also incomplete.
+
+There is almost always a need for bug fix during a regular software evolution process; and the typical case is that the patch is usually local to its error site, relatively small and rarely changes core program semantics. Based on this key insight, this paper presents a new approach that combines the strengths of static analysis approaches and dynamic symbolic execution, with the benefit of being more scalable. The basic idea is to localize the scope of validation by performing static analysis that aggressively prune away irrelevant paths and statements; by instrumenting symbolic semantics and a program drivers, a standard dynamic symbolic execution engine performs exhaustive testing and do the validation for the patch. 
+
+This paper has built a working prototype, called {\dryrun}, on top of open-sourced compiler framework LLVM and symbolic execution engine KLEE with the help of STP constraint solver. During evaluation, for tens of patches we impartially selected from GNU Coreutils programs, {\dryrun} successfully detects all the incorrect patches; in addition, there is at most a great enhancement in performance compared to symbolic execution against the whole program, with at most 1000x speedup.
+
+  \englishkeywords{\large Symbolic Execution, Patch Validation, Static Program Analysis }
+\end{englishabstract}

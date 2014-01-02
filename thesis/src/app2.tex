@@ -1,0 +1,96 @@
+\chapter{LLVM中间代码的一些特点}
+\label{chap:IR}
+
+\section{控制流和数据流}
+\label{sec:df_cf}
+
+在LLVM中间代码上的控制流和数据流具有一些特殊性。 和其他中间表达形式(如soot\footnote{http://www.sable.mcgill.ca/soot/}中广为使用的Jimple或Shimple)不同，LLVM IR更为底层，类似于精简指令集计算机(RISC)的汇编指令形式。
+
+对于每一个编译单元(translation unit,在中间代码层次上被称为模块module)，其符号表中包含全局变量(GlobalVariable)和函数(Function)信息；而函数由显式的基本块组成(basic block)；基本块则由指令(instruction)序列组成。函数、全局变量、基本块及指令在中间代码上均是值(Value)，需要维护其被使用信息。另一方面，当某个值使用到其他值时(则该值成为使用者User)，还需要维护其使用的值。故在LLVM上的数据流分析比传统数据流分析更具有一般意义。由于函数维护了其被使用信息，而函数调用处(call site)是由调用指令(CallInst或InvokeInst)直接或间接表征，故得到函数的静态被调用信息是高效的。同时由于LLVM中大量使用了静态单赋值(Static Single Assignment)技术，使得数据流的分析更为简洁。
+
+另一方面，每一个基本块有且仅有一个终结指令(TerminatorInst)，该终结指令指向了所有可能的后续基本块(ReturnInst，UnreachableInst没有后续基本块)，并给出了其执行条件。任意一个函数有唯一的入口基本块，而LLVM的C语言编译前端往往会生成仅含有一个return指令的中间代码，尽管存在由于特殊函数调用(如exit(1)或abort())导致的程序不正常退出情形使得程序并不满足经典程序控制流图的单出口原则，但经过对该情况进行特殊处理即可以得到正确的控制流图。事实上，LLVM能够方便并准确生成流图信息，而过程间分析和大部分过程内分析都依赖于控制流图信息。
+
+然而，由于LLVM的中间表达形式更接近于汇编代码，故不可避免地存在读写内存的指令，如LLVM中对全局变量使用都需要Load指令从内存中进行装载，由LLVM前端生成的LLVM IR在(源代码中显式给出的)变量被使用之前都必须从内存中读取，每次修改之后都需要写入内存。如对于\autoref{fig:ir_load}，
+\begin{figure}[t]
+  \begin{center}
+    \begin{lstlisting}[language={[ANSI]C}]
+      int p = 9;
+      int foo(int i){
+        return i = (p++) * i;
+      }
+    \end{lstlisting}
+    \vspace{-16pt}
+    \caption{LLVM中间代码指令举例}
+    \label{fig:ir_load}
+  \end{center}
+\end{figure}
+其对应的不含任何优化的中间代码形式为\autoref{fig:ir_load_ir}
+\begin{figure}[t]
+  \begin{center}
+    \begin{lstlisting}[language=llvm]
+      @p = global i32 9, align 4
+
+      define i32 @foo(i32 %i) {
+      entry:
+      % i.addr = alloca i32, align 4
+      store i32 %i, i32* %i.addr, align 4
+      % 0 = load i32* @p, align 4
+      % inc = add nsw i32 %0, 1
+      store i32 %inc, i32* @p, align 4
+      % 1 = load i32* %i.addr, align 4
+      % mul = mul nsw i32 %0, %1
+      store i32 %mul, i32* %i.addr, align 4
+      ret i32 %mul
+    }
+  \end{lstlisting}
+  \vspace{-16pt}
+  \caption{LLVM中间代码指令举例\cndash 未优化的IR}
+  \label{fig:ir_load_ir}
+\end{center}
+\end{figure}
+
+这里，变量$i$作为函数的参数，在IR中首先为该变量分配了地址空间(变量$i.addr$所指向的空间)，继而将之存储到$i.addr$中；在使用$i$或全局变量$p$(具有常地址变量)时，必须通过Load操作；程序运算完成后，需要额外地将改变的值存放到$i.addr$中。不难看出这里和$i$相关的Load/Store是多余的。
+
+LLVM提供了地址寄存器提升的转化过程，上例中经过mem2reg这一“遍”(pass)可以将程序转化为\autoref{fig:ir_load_ir_opt}中的形式：
+\begin{figure}[t]
+  \begin{center}
+    \begin{lstlisting}[language=llvm]
+      @p = global i32 9, align 4
+
+      define i32 @foo(i32 %i) {
+      entry:
+      % 0 = load i32* @p, align 4
+      % inc = add nsw i32 %0, 1
+      store i32 %inc, i32* @p, align 4
+      % mul = mul nsw i32 %0, %i
+      ret i32 %mul
+    }
+  \end{lstlisting}
+  \vspace{-16pt}
+  \caption{LLVM中间代码指令举例 \cndash “地址寄存器提升”后的IR}
+  \label{fig:ir_load_ir_opt}
+\end{center}
+\end{figure}
+
+这里，变量$i$和从内存中读取的$p$被存放入寄存器$\%0$和$i$代表的寄存器中，直接对该两个变量进行操作，减少了不必要的内存读写操作。为了程序保证程序在不同分支语句上的变量值一致，LLVM的IR在指令层提供了$\phi$函数支持(PHINode)；$\phi$函数的生成及应用参见~\cite{SSA}。
+
+由该例也可发现，对于全局变量“值”的每一次使用仍然必须Load指令，而全局变量的修改必然会带来Store操作。因此，除了数据流和控制流分析之外，还必须结合准确的指向分析\autoref{sec:andersen}来解决内存依赖关系。
+
+\section{LLVM opt的插件机制}
+\label{sec:plugin}
+在LLVM IR层次对单个编译单元的代码分析和转化一般是通过LLVM的opt\footnote{http://llvm.org/docs/CommandGuide/opt.html}(LLVM优化器)这一工具完成的，即opt提供了LLVM的编译器分析和优化的“遍”(pass)的接口。LLVM自带很多pass，如上文用到的“mem2reg”即为常见的pass之一。它以LLVM中间代码作为输入(人可读的IR形式或经过序列化的bitcode形式)，在不同的语法层次上的分析或转化。
+所有的分析和转化都继承自Pass这一基本类，同时由PassManager管理；根据转化的对象可以将各类型的Pass分为：
+\begin{itemize}
+\item \textmd{ModulePass} 作用于整个编译模块。最具灵活性，然而不能高效利用遍历时的装载以提高Pass的执行效率。
+\item \textmd{FunctionPass} 作用于编译单元中的函数，可以对函数中的基本块和指令进行各类过程内分析和转化，是最为常用的一类Pass。
+\item \textmd{LoopPass} 对函数中的循环结构进行分析。
+\item \textmd{BasicBlockPass} 分析并转化函数中的基本块。
+\end{itemize}
+
+用户自定义的Pass以动态链接库的形式存在，在使用时需要指明装载；用户自定义的Pass和和LLVM自身的Pass在功能上是等价的。多个不同的pass可以链入执行，其执行顺序由pass的指定顺序及其类型决定。故对编译单元的分析和转换统一使用下面的形式：
+
+\begin{lstlisting}[language=bash]
+  opt -load /path/to/plugin_1.so [-load /path/to/plugin_2.so -load /path/to/plugin_m.so] -pass_a1 [-pass_a2 ... -pass_an] input.bc -o output.bc
+\end{lstlisting}
+
+\dryrun 的执行过程中所涉及到的分析和转化均使用了上述方法。
