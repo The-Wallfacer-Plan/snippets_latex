@@ -1,0 +1,219 @@
+% -*- TeX-engine: xetex; TeX-PDF-mode: t; -*-
+
+%% ---------------------------------------------------------------------------- %
+% The beamer class automatically loads some other LATEX packages, including
+% xcolor, amsmath, amsthm, calc, geometry, hyperref, extsizes.
+% color predefined:red, blue, green, cyan, magenta, yellow, black, darkgray, gray,
+% lightgray, orange, violet, purple, brown
+\documentclass[11pt]{beamer}
+% \documentclass[pdf]{beamer}
+% aspectratio=1610
+% default font size 11pt;8pt, 9pt, 10pt, 11pt, 12pt, 14pt, 17pt, 20pt
+% used to print as article
+% \documentclass[]{article}
+% \usepackage{beamerarticle}
+
+% Antibes, Bergen, Berkeley, Berlin, Boadilla, Copenhagen, Darmstadt, Dresden,
+% Frankfurt, Goettingen, Hannover, Ilmenau, Juanlespins, Madrid, Malmoe,
+% Marburg, Montpellier, Paloalto, Pittsburgh, Rochester, Singapore, Warsaw
+% \usetheme[compress]{Singapore} %title at the top-middle
+% \usecolortheme{freewilly}
+\usetheme{Boadilla}
+% \beamertemplatetransparentcoveredhigh
+% \beamertemplatetransparentcovereddynamicmedium
+
+\mode<article> % 仅应用于article版本
+{
+  \usepackage{beamerbasearticle}
+  \usepackage{fullpage}
+  \usepackage{hyperref}
+}
+
+% font theme
+% \usefonttheme[onlymath]{serif}
+% \usefonttheme{structureitalicserif}
+% \usefonttheme{structurebold}
+% \usefonttheme{structuresmallcapsserif}
+% \usepackage{lucidaso} % Lucida Bright (SO Version)
+\usefonttheme[onlymath]{serif}
+% \usepackage[small]{eulervm} % Euler VM for math font
+% \usepackage{helvet}
+
+% color themes:albatross crane beetle dove fly seagull wolverine beaver
+% \usecolortheme{fly}
+% Outer color themes:whale, seahorse, dolphin
+\usecolortheme{whale}
+% Inner color themes: lily, orchid,rose
+\usecolortheme{orchid}
+
+% rectangles circles inmargin rounded
+\useinnertheme{rectangles}
+% \useinnertheme[shadow]{rounded} % 对 box 的设置: 圆角、有阴影.
+% infolines miniframes shadow sidebar c smoothtree split tree progressbar
+\useoutertheme{progressbar}
+
+% define colors
+% \setbeamercolor{uppercol}{fg=white,bg=blue}%
+\setbeamercolor{lowercol}{fg=black,bg=gray}%
+\xdefinecolor{lavendar}{rgb}{0.8,0.6,1}
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\colorlet{structure}{green!60!black}
+% redefine structure color
+% \usecolortheme[named=yellow]{structure}
+% redefine alert color
+% \setbeamercolor{alerted text}{fg=cyan}
+
+\setbeamertemplate{headline}[default]
+
+% \beamertemplateshadingbackground{blue!5}{yellow!10}
+\setbeamertemplate{background canvas}[vertical
+shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
+\setbeamertemplate{sidebar canvas
+  left}[horizontal shading][left=white!40!black,right=black]
+\setbeamertemplate{navigation symbols}{}
+\mode<beamer>{\setbeamertemplate{blocks}[rounded][shadow=true]}
+% transparent,highly dynamic,dynamic,
+\setbeamercovered{invisible}
+\setbeamercolor{body}{fg=blue!80, bg=black!20}
+\setbeamercolor{head}{fg=blue,bg=blue!30}
+
+\setbeamerfont{title}{shape=\slshape,family=\ttfamily,series=\bfseries}
+
+\beamertemplateballitem
+
+%% ---------------------------------------------------------------------------- %
+% useful packages
+
+\usepackage{pifont}
+% \usepackage{textcomp}
+% \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+
+\usepackage{graphicx}
+
+% shadowbox,fbox,Ovalbox,ovalbox,doublebox
+\usepackage{fancybox}
+\usepackage{multimedia}
+\usepackage{listings}
+\usepackage{boxedminipage}
+% \usepackage{babel}
+% \usepackage{enumitem}
+\usepackage{array}
+%% ---------------------------------------------------------------------------- %
+
+\makeatletter
+\def\beamer@linkspace#1{%
+  \begin{pgfpicture}{0pt}{-1.5pt}{#1}{5.5pt}
+    \pgfsetfillopacity{0}
+    \pgftext[x=0pt,y=-1.5pt]{.}
+    \pgftext[x=#1,y=5.5pt]{.}
+  \end{pgfpicture}}
+\makeatother
+
+\AtBeginSection[]{
+  \frame<handout:0>{
+    \frametitle{目录}
+    \tableofcontents[current,currentsubsection]
+  }
+  \addtocounter{framenumber}{-1}%
+}
+
+\hypersetup{pdfpagemode={FullScreen}}
+\hypersetup{pdfstartview={FitH}}
+
+\newenvironment{CenteredBox}{%
+  \begin{Sbox}}{% Save the content in a box
+  \end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}% And output it centered
+\makeatother
+
+\newenvironment<>{varblock}[2][\textwidth]{%
+  \setlength{\textwidth}{#1}
+  \begin{actionenv}#3%
+    \def\insertblocktitle{#2}%
+    \par%
+    \usebeamertemplate{block begin}}
+  {\par%
+    \usebeamertemplate{block end}%
+  \end{actionenv}}
+
+\lstset{
+  numbers=left, % 行号
+  framexleftmargin=10mm, % 背景框
+  frame=none,
+  captionpos=b,
+  % 背景色
+  % backgroundcolor=\color[rgb]{1,1,0.76},
+  % backgroundcolor=\color[RGB]{245,245,244},
+  % 样式
+  keywordstyle=\bf\color{blue},
+  identifierstyle=\bf\color{black!90},
+  numberstyle=\color[RGB]{0,192,192}\tiny,
+  commentstyle=\it\color[RGB]{0,96,96},
+  stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},
+  showstringspaces=false % 显示空格
+}
+
+\renewcommand{\baselinestretch}{1.3}
+\renewcommand{\contentsname}{\setmainfont{WenQuanYi Micro Hei}目录\setmainfont{SimSun}}
+\renewcommand{\figurename}{\setmainfont{WenQuanYi Micro Hei}图\setmainfont{SimSun}}
+\renewcommand{\tablename}{\setmainfont{WenQuanYi Micro Hei}表\setmainfont{SimSun}}
+\renewcommand{\refname}{\setmainfont{WenQuanYi Micro Hei}参考文献\setmainfont{SimSun}}
+\renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
+
+%% ---------------------------------------------------------------------------- %
+% specific for this article
+\newcommand{\dryrun}{\textsf{SERAPH}}
+\newcommand{\rbscope}{\texttt{rbscope}}
+
+\newcommand{\bug}{\ensuremath{\mathcal{B}}}
+\newcommand{\patch}{\ensuremath{\mathcal{P}}}
+\newcommand{\prog}{\ensuremath{\mathcal{S}}}
+\newcommand{\bs}{\ensuremath{_{bug}}}
+\newcommand{\ass}{\ensuremath{_{assert}}}
+\newcommand{\entry}{\ensuremath{_{entry}}}
+\newcommand{\ps}{\ensuremath{_{root}}}
+\newcommand{\scope}{\ensuremath{_{scope}}}
+%% ---------------------------------------------------------------------------- %
+
+% font related
+\usepackage[T1]{fontenc}
+\usepackage{xeCJK}
+\setmainfont[Mapping=tex-text]{TeX Gyre Termes}%英文衬线字体
+\setsansfont[Mapping=tex-text]{Consolas}%英文无衬线字体
+\setmonofont[Mapping=tex-text]{Consolas}%英文等宽字体
+% SimSun
+\setCJKmainfont{Adobe Song Std}%设置正文为黑体
+\setCJKmonofont{Adobe Heiti Std}%设置等距字体
+\setCJKsansfont{Adobe Song Std}%设置无衬线字体
+%% ---------------------------------------------------------------------------- %
+
+\title{基于选择性符号执行的补丁验证}
+\author{陈泓旭}
+\date{\today}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{背景介绍}
+
+\begin{frame}
+  \frametitle{good}
+  好
+\end{frame}
+
+% \begin{frame}
+%   \frametitle{bad2}
+%   shi
+% \end{frame}
+
+\begin{frame}
+  \frametitle{工作}
+  \begin{itemize}
+  \item 提出了一种新的补丁验证的方法,使得可以通过有选择的符号执行对补丁进行有效并高效地验证。
+  \item 计算所有可能的从补丁处至错误发生处的极小相关程序范围。
+  \item 给出了如何由现有程序的\rbscope 生成可供验证驱动程序进行交叉验证 的算法,使得可以通过符号执行结果对“补丁程序是否完整或引入新的错误”这一问题给出正确解释。
+  \item 实现了该思想的工具原型 SERAPH,使得可以对 Coreutils 等实际复杂程序中的补丁进行验证。
+  \end{itemize}
+\end{frame}
+
+\end{document}
