@@ -88,7 +88,7 @@
 \usepackage{pifont}
 % \usepackage{textcomp}
 % \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
-
+\usepackage{indentfirst}
 \usepackage{graphicx}
 
 \usepackage{fancybox} % shadowbox,fbox,Ovalbox,ovalbox,doublebox
@@ -109,8 +109,8 @@
 \definecolor{mymauve}{rgb}{0.58,0,0.82}
 
 \newenvironment{CenteredBox}{%
-  \begin{Sbox}}{% Save the content in a box
-  \end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}% And output it centered
+  \begin{Sbox}}{%
+  \end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}
 \makeatother
 
 \newenvironment<>{varblock}[2][\textwidth]{%
@@ -145,7 +145,8 @@
 
 \hypersetup{pdfpagemode={FullScreen}}
 \hypersetup{pdfstartview={FitH}}
-
+\setbeamertemplate{itemize/enumerate body begin}{\small}
+\setbeamertemplate{itemize/enumerate subbody begin}{\footnotesize}
 \lstset{ %
   backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
   basicstyle=\ttfamily\tiny,        % the size of the fonts that are used for the code
@@ -174,22 +175,7 @@
   tabsize=2,                       % sets default tabsize to 2 spaces
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
-% \lstset{
-% numbers=left, % 行号
-% framexleftmargin=10mm, % 背景框
-% frame=none,
-% captionpos=b,
-%   % 背景色
-%   % backgroundcolor=\color[rgb]{1,1,0.76},
-%   % backgroundcolor=\color[RGB]{245,245,244},
-%   % 样式
-% keywordstyle=\bf\color{blue},
-% identifierstyle=\bf\color{black!90},
-% numberstyle=\color[RGB]{0,192,192}\tiny,
-% commentstyle=\it\color[RGB]{0,96,96},
-% stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},
-% showstringspaces=false % 显示空格
-% }
+% \setlength{\parindent}{2em}
 
 \renewcommand{\baselinestretch}{1.3}
 \renewcommand{\contentsname}{\setmainfont{WenQuanYi Micro Hei}目录\setmainfont{SimSun}}
@@ -221,7 +207,6 @@
 \setmonofont[Mapping=tex-text]{Consolas}%英文等宽字体
 % SimSun
 \setCJKmainfont{Adobe Song Std}
-% \setCJKmonofont{WenQuanYi Zen Hei Mono}
 \setCJKmonofont{Adobe Heiti Std}
 \setCJKsansfont{Adobe Song Std}
 %% ---------------------------------------------------------------------------- %
@@ -234,37 +219,79 @@
 
 \frame{\titlepage}
 
-\part{综述}
+\part{课题综述}
 \frame{\partpage}
+
+\begin{frame}[<+-|alert@+>]
+  \frametitle{研究背景}
+  程序演化过程中经常需要修复程序中的{\color{mygreen}错误}，不恰当的{\color{mygreen}补丁程序}会造成极大的后果；\structure{正确}并\structure{高效}地进行补丁验证对提高软件质量及程序员生产效率至关重要。\pause
+  常见的提高补丁程序质量的方法：\pause
+  \begin{enumerate}
+  \item \structure{静态分析}
+    \begin{itemize}
+    \item 检查是否满足特定的错误模式
+    \item 分析可能出错的程序片段
+    \end{itemize}
+  \item \structure{软件测试}
+    \begin{itemize}
+    \item 手动测试
+    \item 自动化测试 $\rightarrow$ 符号执行
+    \end{itemize}
+  \end{enumerate}
+  \pause
+  \centering{\Ovalbox{存在各自的缺陷，扩展性较差}}
+\end{frame}
 
 \begin{frame}
   \frametitle{主要工作}
-  \begin{enumerate}
-  \item 提出了一种新的补丁验证的方法,使得可以通过有选择的符号执行对补丁进行有效并高效地验证。
-  \item 计算所有可能的从补丁处至错误发生处的极小相关程序范围。
-  \item 给出了如何由现有程序的\rbscope 生成可供验证驱动程序进行交叉验证 的算法,使得可以通过符号执行结果对“补丁程序是否完整或引入新的错误”这一问题给出正确解释。
-  \item 实现了该思想的工具原型 \dryrun ,使得可以对 Coreutils 等实际复杂程序中的补丁进行验证。
+  \begin{enumerate}[<+-|structure@+>]
+  \item 提出了一种新的补丁验证的方法,使得可以通过\alert{有选择的符号执行}对补丁进行有效并高效地验证。
+  \item 给出了从程序补丁处至错误发生处的\alert{极小相关程序片}段的算法。
+  \item 给出了如何由现有程序的\rbscope 生成可供验证驱动程序进行\alert{交叉验证}的算法,使得可以通过符号执行结果对\underline{“补丁程序是否完整或引入新的错误”}这一问题给出正确解释。
+  \item 实现了该思想的\alert{工具原型} \dryrun ,使得可以对 Coreutils 等实际复杂程序中的补丁进行验证。
   \end{enumerate}
 \end{frame}
 
 \part{ \dryrun 的实现}
 \frame{\partpage}
 
-\section{\rbscope 生成}
-\label{sec:gen}
+% \section{\rbscope 生成}
+% \label{sec:gen}
 
 \begin{frame}
-  \frametitle{生成\rbscope 的流程图}
+  \frametitle{\dryrun 完整工作流程}
   \begin{figure}[t]
     \begin{center}
-      \includegraphics[height=.85\textheight]{fig/rb_gen.pdf}
-      \bicaption[fig:rb-gen]{生成\rbscope 的流程图}{生成\rbscope 的流程图}{Fig}{Flowchart of \rbscope{} Generation}
+      \includegraphics[width=.95\textwidth]{fig/workflow.pdf}
     \end{center}
   \end{figure}
 \end{frame}
 
-\label{sec:validate}
-\section{交叉验证}
+\begin{frame}
+  \frametitle{\rbscope 的生成流程}
+  \begin{columns}
+    \column{.45\textwidth}
+    \vspace{-30pt}
+    \begin{figure}[t]
+      \begin{center}
+        \includegraphics[height=.85\textheight]{fig/rb_gen.pdf}
+      \end{center}
+    \end{figure}
+    \column{.45\textwidth}
+\pause
+    \footnotesize{
+      通过程序削减生成\rbscope 的过程需遵循下面的基本原则：
+      \begin{itemize}
+      \item[\ding{223}] 保留下的程序必须包含所有可能执行的代码，即削减过程必须是保守的。
+      \item[\ding{223}] 保留下的程序在添加了驱动程序之后必须是可执行的。
+      \item[\ding{223}] 出于选择性符号执行要求，削减程序过程应该尽可能精确。
+      \end{itemize}
+    }
+  \end{columns}
+\end{frame}
+
+% \label{sec:validate}
+% \section{交叉验证}
 
 \begin{frame}[containsverbatim]
   \frametitle{交叉验证的伪代码表示}
@@ -308,6 +335,23 @@
     \end{lstlisting}
 
   \end{columns}
+\end{frame}
+
+\begin{frame}[<+-|alert@+>]
+  \frametitle{\dryrun 的使用方法}
+  \begin{itemize}
+  \item[\ding{43}] 给定程序\prog ，通过提供的Emacs扩展将\prog\entry , \prog\bs , \prog\ps 信息写入配置文件config.json中。
+  \item[\ding{43}] 将\prog 通过llvm-gcc(或clang)转换成LLVM的中间形式
+  \item[\ding{43}] 装载LLVM的opt扩展rb\_gen，根据需要执行下面的转换
+    \begin{enumerate}
+    \item \textmd{rb-md} 将config.json中的信息以元数据形式写入LLVM的IR中
+    \item \textmd{rb-uncall} 删除编译单元中未被调用函数
+    \item \textmd{rb-reach} 分析对\prog\ps 和\prog\bs 的过程间可达性，并依此削减程序
+    \item \textmd{rb-slice} 对得到的程序进行过程间切片
+    \end{enumerate}
+  \item[\ding{43}] 利用驱动程序合成工具\textmd{rb\_link}，添加程序入口及符号执行语义，得到klee-input.bc
+  \item[\ding{43}] 调用KLEE对klee-input.bc进行符号执行
+  \end{itemize}
 \end{frame}
 
 \part{实验与评估}
@@ -426,6 +470,43 @@
     \end{tabular}
     \label{tab:eval2}
   \end{table}
+\end{frame}
+
+\part{总结与展望}
+\label{part:summary}
+\frame{\partpage}
+
+\begin{frame}
+  \frametitle{总结}
+  本文在开源编译器框架LLVM、符号执行引擎KLEE及STP约束求解器的基础上实现了反映上述想法的工具原型\dryrun 。从GNU Coreutils程序集合选取了数十个补丁程序对它进行评估,\dryrun 成功地找出了所有不正确补丁; 同时,和KLEE对完整的程序执行相比,检测程序中的错误的性能大大提高, 速度上最高有1000倍的提升。这样的结果说明通过剔除不相关代码而有选择地进行符号执行的思路是可行的。
+\end{frame}
+
+\begin{frame}
+  \frametitle{未来的改进}
+  \begin{itemize}
+  \item[\ding{47}] 结合LLVM提供的编译优化,优化Andersen指向分析算法的实现
+  \item[\ding{47}] 在程序依赖图上采用更精确的过程间切片
+  \item[\ding{47}] 通过静态分析的方法得到程序执行到\rbscope 时的最弱前置条件给出符号变量的上下界
+  \item[\ding{47}] 不直接削减程序本身而采用添加注解(annotation)的方式标记程序中的\rbscope ，并以此修改KLEE执行方式
+  \item[\ding{47}] 使用\textbf{$S^2E$}等扩展性更好的符号执行框架
+  \end{itemize}
+\end{frame}
+
+\appendix
+\newcount\opaqueness
+\begin{frame}
+  \itshape
+  \animate<1-5>
+  \Large
+
+  \only<1-5>{
+    \animatevalue<1-5>{\opaqueness}{20}{100}
+    \begin{colormixin}{\the\opaqueness!averagebackgroundcolor}
+      \begin{centering}
+        \Huge\color{green!60!black} 谢谢各位老师!\par
+      \end{centering}
+    \end{colormixin}
+  }
 \end{frame}
 
 \end{document}
