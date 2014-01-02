@@ -1,6 +1,6 @@
 % -*- TeX-engine: xetex; TeX-PDF-mode: t; -*-
-
 %% ---------------------------------------------------------------------------- %
+% Beamer basics
 % The beamer class automatically loads some other LATEX packages, including
 % xcolor, amsmath, amsthm, calc, geometry, hyperref, extsizes.
 % color predefined:red, blue, green, cyan, magenta, yellow, black, darkgray, gray,
@@ -64,14 +64,15 @@
 % \setbeamercolor{alerted text}{fg=cyan}
 
 \setbeamertemplate{headline}[default]
+\setbeamerfont{frametitle}{family=\sffamily,series=\bfseries,size={\fontsize{10}{10}}}
 
 % \beamertemplateshadingbackground{blue!5}{yellow!10}
-\setbeamertemplate{background canvas}[vertical
-shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
-\setbeamertemplate{sidebar canvas
-  left}[horizontal shading][left=white!40!black,right=black]
-\setbeamertemplate{navigation symbols}{}
-\mode<beamer>{\setbeamertemplate{blocks}[rounded][shadow=true]}
+% \setbeamertemplate{background canvas}[vertical
+% shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
+% \setbeamertemplate{sidebar canvas
+% left}[horizontal shading][left=white!40!black,right=black]
+% \setbeamertemplate{navigation symbols}{}
+% \mode<beamer>{\setbeamertemplate{blocks}[rounded][shadow=true]}
 % transparent,highly dynamic,dynamic,
 \setbeamercovered{invisible}
 \setbeamercolor{body}{fg=blue!80, bg=black!20}
@@ -90,15 +91,40 @@ shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
 
 \usepackage{graphicx}
 
-% shadowbox,fbox,Ovalbox,ovalbox,doublebox
-\usepackage{fancybox}
+\usepackage{fancybox} % shadowbox,fbox,Ovalbox,ovalbox,doublebox
 \usepackage{multimedia}
 \usepackage{listings}
 \usepackage{boxedminipage}
+\usepackage{ccaption}
+\usepackage{multirow, multicol, pdflscape}
 % \usepackage{babel}
-% \usepackage{enumitem}
 \usepackage{array}
+\usepackage[normalem]{ulem}
+% \usepackage{enumitem}
 %% ---------------------------------------------------------------------------- %
+% definitions
+
+\definecolor{mygreen}{rgb}{0,0.6,0}
+\definecolor{mygray}{rgb}{0.5,0.5,0.5}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+\newenvironment{CenteredBox}{%
+  \begin{Sbox}}{% Save the content in a box
+  \end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}% And output it centered
+\makeatother
+
+\newenvironment<>{varblock}[2][\textwidth]{%
+  \setlength{\textwidth}{#1}
+  \begin{actionenv}#3%
+    \def\insertblocktitle{#2}%
+    \par%
+    \usebeamertemplate{block begin}}
+  {\par%
+    \usebeamertemplate{block end}%
+  \end{actionenv}}
+
+%% ---------------------------------------------------------------------------- %
+% settings
 
 \makeatletter
 \def\beamer@linkspace#1{%
@@ -120,37 +146,50 @@ shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
 \hypersetup{pdfpagemode={FullScreen}}
 \hypersetup{pdfstartview={FitH}}
 
-\newenvironment{CenteredBox}{%
-  \begin{Sbox}}{% Save the content in a box
-  \end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}% And output it centered
-\makeatother
-
-\newenvironment<>{varblock}[2][\textwidth]{%
-  \setlength{\textwidth}{#1}
-  \begin{actionenv}#3%
-    \def\insertblocktitle{#2}%
-    \par%
-    \usebeamertemplate{block begin}}
-  {\par%
-    \usebeamertemplate{block end}%
-  \end{actionenv}}
-
-\lstset{
-  numbers=left, % 行号
-  framexleftmargin=10mm, % 背景框
-  frame=none,
-  captionpos=b,
-  % 背景色
-  % backgroundcolor=\color[rgb]{1,1,0.76},
-  % backgroundcolor=\color[RGB]{245,245,244},
-  % 样式
-  keywordstyle=\bf\color{blue},
-  identifierstyle=\bf\color{black!90},
-  numberstyle=\color[RGB]{0,192,192}\tiny,
-  commentstyle=\it\color[RGB]{0,96,96},
-  stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},
-  showstringspaces=false % 显示空格
+\lstset{ %
+  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
+  basicstyle=\ttfamily\tiny,        % the size of the fonts that are used for the code
+  breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                 % sets automatic line breaking
+  captionpos=b,                    % sets the caption-position to bottom
+  commentstyle=\color{mygray}\itshape,    % comment style
+  deletekeywords={...},            % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+  extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  % frame=single,                    % adds a frame around the code
+  keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue},       % keyword style
+  identifierstyle=\texttt,
+  language=C,                      % the language of the code
+  morekeywords={*,...},            % if you want to add more keywords to the set
+  numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                   % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray}, % the style that is used for the line-numbers
+  rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+  showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,          % underline spaces within strings only
+  showtabs=false,                  % show tabs within strings adding particular underscores
+  stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},     % string literal style
+  tabsize=2,                       % sets default tabsize to 2 spaces
+  title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
+% \lstset{
+% numbers=left, % 行号
+% framexleftmargin=10mm, % 背景框
+% frame=none,
+% captionpos=b,
+%   % 背景色
+%   % backgroundcolor=\color[rgb]{1,1,0.76},
+%   % backgroundcolor=\color[RGB]{245,245,244},
+%   % 样式
+% keywordstyle=\bf\color{blue},
+% identifierstyle=\bf\color{black!90},
+% numberstyle=\color[RGB]{0,192,192}\tiny,
+% commentstyle=\it\color[RGB]{0,96,96},
+% stringstyle=\rmfamily\slshape\color[RGB]{128,0,0},
+% showstringspaces=false % 显示空格
+% }
 
 \renewcommand{\baselinestretch}{1.3}
 \renewcommand{\contentsname}{\setmainfont{WenQuanYi Micro Hei}目录\setmainfont{SimSun}}
@@ -161,7 +200,7 @@ shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
 
 %% ---------------------------------------------------------------------------- %
 % specific for this article
-\newcommand{\dryrun}{\textsf{SERAPH}}
+\newcommand{\dryrun}{\textmd{SERAPH}}
 \newcommand{\rbscope}{\texttt{rbscope}}
 
 \newcommand{\bug}{\ensuremath{\mathcal{B}}}
@@ -181,9 +220,10 @@ shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
 \setsansfont[Mapping=tex-text]{Consolas}%英文无衬线字体
 \setmonofont[Mapping=tex-text]{Consolas}%英文等宽字体
 % SimSun
-\setCJKmainfont{Adobe Song Std}%设置正文为黑体
-\setCJKmonofont{Adobe Heiti Std}%设置等距字体
-\setCJKsansfont{Adobe Song Std}%设置无衬线字体
+\setCJKmainfont{Adobe Song Std}
+% \setCJKmonofont{WenQuanYi Zen Hei Mono}
+\setCJKmonofont{Adobe Heiti Std}
+\setCJKsansfont{Adobe Song Std}
 %% ---------------------------------------------------------------------------- %
 
 \title{基于选择性符号执行的补丁验证}
@@ -194,26 +234,198 @@ shading][top=blue!30,bottom=white,middle=blue!20,midpoint=.4]
 
 \frame{\titlepage}
 
-\section{背景介绍}
+\part{综述}
+\frame{\partpage}
 
 \begin{frame}
-  \frametitle{good}
-  好
-\end{frame}
-
-% \begin{frame}
-%   \frametitle{bad2}
-%   shi
-% \end{frame}
-
-\begin{frame}
-  \frametitle{工作}
-  \begin{itemize}
+  \frametitle{主要工作}
+  \begin{enumerate}
   \item 提出了一种新的补丁验证的方法,使得可以通过有选择的符号执行对补丁进行有效并高效地验证。
   \item 计算所有可能的从补丁处至错误发生处的极小相关程序范围。
   \item 给出了如何由现有程序的\rbscope 生成可供验证驱动程序进行交叉验证 的算法,使得可以通过符号执行结果对“补丁程序是否完整或引入新的错误”这一问题给出正确解释。
-  \item 实现了该思想的工具原型 SERAPH,使得可以对 Coreutils 等实际复杂程序中的补丁进行验证。
-  \end{itemize}
+  \item 实现了该思想的工具原型 \dryrun ,使得可以对 Coreutils 等实际复杂程序中的补丁进行验证。
+  \end{enumerate}
+\end{frame}
+
+\part{ \dryrun 的实现}
+\frame{\partpage}
+
+\section{\rbscope 生成}
+\label{sec:gen}
+
+\begin{frame}
+  \frametitle{生成\rbscope 的流程图}
+  \begin{figure}[t]
+    \begin{center}
+      \includegraphics[height=.85\textheight]{fig/rb_gen.pdf}
+      \bicaption[fig:rb-gen]{生成\rbscope 的流程图}{生成\rbscope 的流程图}{Fig}{Flowchart of \rbscope{} Generation}
+    \end{center}
+  \end{figure}
+\end{frame}
+
+\label{sec:validate}
+\section{交叉验证}
+
+\begin{frame}[containsverbatim]
+  \frametitle{交叉验证的伪代码表示}
+  \begin{columns}
+    \column{.45\textwidth}
+    \begin{lstlisting}[language={[ANSI]C}]
+      int patch_error = 0, bug_error = 0;
+      void cross_validate() {
+        if (bug_error && patch_error)
+        assert(0, "incomplete patch!");
+        else if (bug_error && !patch_error)
+        assert(0, "bug fixed!");
+        else if (!bug_error && patch_error)
+        assert(0, "regression patch!");
+        else
+        assert(0, "correct and no change!");
+      }
+      int main(void) {
+        make_symbolic(symargs);
+        buggyRB();
+      }
+    \end{lstlisting}
+
+    \column{.45\textwidth}
+    \begin{lstlisting}[language={[ANSI]C}]
+      void patchedRB() {
+        { // the rbscope of patched program
+          ...
+          patch_error = 1; // replace patch program assert
+        }
+        cross_Validate();
+      }
+
+      void buggyRB(void) {
+        { // the rbscope of buggy program
+          ...
+          bug_error = 1; // replace bug program assert
+          patchedRB();
+        }
+      }
+    \end{lstlisting}
+
+  \end{columns}
+\end{frame}
+
+\part{实验与评估}
+\frame{\partpage}
+
+\begin{frame}
+  \frametitle{测试用例及\rbscope 生成}
+  \begin{table}
+    \centering
+    \tiny
+    \begin{tabular}{|c|c|c|c|c|c|c|c|}
+      \hline
+      编号 & 程序名 & \patch\ps & \patch\bs 行号 & 类型 & \patch\scope 大小(Kb) & $T_{rbc}$(ms)& \patch 大小(Kb) \\
+      \hline
+      01 & cut & 620 & 624 &  添加 &2.6 & 106 & 181\\ \hline
+      02 & factor & 114 & 121 &  修改 & 2.2 & 62 & 139\\ \hline
+      03 & join & 642 & 586 & 修改 & 1.8& 54& 168\\ \hline
+      04 & mv & 461 & 465 &  修改 & 2.8 & 62 & 404 \\ \hline
+      05 & od & 881 & 991 &  修改 & 2.0 & 60 & 193 \\ \hline
+      06 & od & 1,290 & 1,389 &  修改 & 3.7 & 60 & 193\\ \hline
+      07 & rm & 322 & 347 &  修改 & 1.8 & 71 & 257 \\ \hline
+      08 & tail & 139 & 638 &  修改 & 2.7 & 89 & 210 \\ \hline
+      09 & tr & 419 & 1,107 & 修改 & 2.1 & 56 & 187 \\ \hline
+      10 & tr & 898 & 810 &  修改 & 8.9 & 55 & 187 \\ \hline
+      11 & tr & 422 & 1,107 & 删除 & 2.2 & 54 & 187 \\ \hline
+      12 & tsort & 140 & 170 &  修改 & 4.9 & 63 & 141 \\ \hline
+    \end{tabular}
+    \label{tab:cases}
+  \end{table}
+\end{frame}
+
+\begin{frame}
+  \frametitle{对补丁验证的可行性和高效性的评估}
+  \vspace{-8pt}
+  \begin{table}
+    \centering
+    \tiny
+    \begin{tabular}{|p{0.80cm}|c|c|c|c|r|}
+      \hline
+      编号 & 版本 & 是否有效 & 验证时间(s)& 指令数(K) & 查询次数 \\
+      \hline
+      \multirow{2}{0.80cm}{01}
+      & $rb\_scope$ &是 &  0.47  & 5.1 & 63  \\  \cline{2-6}
+      & original &  否 & 超时 &   84,869.0 & 3,968  \\
+      \hline
+      \multirow{2}{0.80cm}{02}
+      & $rb\_scope$ &否 & 0.49 & 6.2 & 120  \\  \cline{2-6}
+      & original & 是 & 57.251 &  137.1 & 504  \\
+      \hline
+      \multirow{2}{0.80cm}{03}
+      & $rb\_scope$ &否 & 1.09 & 9.8 & 69  \\  \cline{2-6}
+      & original &  否 & 超时 &  1,433,000.1 & 4,319  \\
+      \hline
+      \multirow{2}{0.80cm}{04}
+      & $rb\_scope$ &是 &  1046.17 & 1,027.4 & 4,121  \\  \cline{2-6}
+      & original & 否 & x &  x & x  \\
+      \hline
+      \multirow{2}{0.80cm}{05}
+      & $rb\_scope$ &是 &  26.80 & 6.7 & 338  \\  \cline{2-6}
+      & original & 否 & 超时 &  363,301.0 & 1,983   \\
+      \hline
+      \multirow{2}{0.80cm}{06}
+      & $rb\_scope$ &是 &  3.48 & 5.3 & 74  \\  \cline{2-6}
+      & original & 否 &超时  & 276,434.2 & 7,0982  \\
+      \hline
+      \multirow{2}{0.80cm}{07}
+      & $rb\_scope$ &是 &  1.02 & 5.5 & 77  \\  \cline{2-6}
+      & original & 是 & 1.06 & 18.9   & 148  \\
+      \hline
+      \multirow{2}{0.80cm}{08}
+      & $rb\_scope$ &是 &  1.80 & 5.2 & 60  \\  \cline{2-6}
+      & original & 否 & 超时 &  2,422,569.1 & 270  \\
+      \hline
+      \multirow{2}{0.80cm}{09}
+      & $rb\_scope$ &是 &  3.41 & 18.5 & 79  \\  \cline{2-6}
+      & original & 否 & 超时 &  245.7 & 775  \\
+      \hline
+      \multirow{2}{0.80cm}{10}
+      & $rb\_scope$ &是 &  2.64 ms & 6.1 & 13  \\  \cline{2-6}
+      & original & 是 & 672.69  &  1,299.6 & 3,021  \\
+      \hline
+      \multirow{2}{0.80cm}{11}
+      & $rb\_scope$ &是 &  20.13 & 2.3 & 838  \\  \cline{2-6}
+      & original & 否 & 超时  &  4,521.9 & 8,432  \\
+      \hline
+      \multirow{2}{0.80cm}{12}
+      & $rb\_scope$ &是 &  3.02 & 5.5 & 88  \\  \cline{2-6}
+      & original & 否 & 超时 &  4,651.3 & 4,648  \\
+      \hline
+    \end{tabular}
+    \label{tab:eval1}
+  \end{table}
+\end{frame}
+
+\begin{frame}
+  \frametitle{对回归错误和错误肯定的评估}
+  \begin{table}
+    \centering
+    \tiny
+    \begin{tabular}{|l|c|c|c|r|}
+      \hline
+      编号 & \footnotesize{Regression} & $T_{cv}$(s) & \footnotesize{FP} &$T_{fp}$(s) \\
+      \hline
+      01 & 是 & 1.08 & 否 & 0.79 \\ \hline
+      02 & - & 超时 & - &超时\\ \hline
+      03 & 是 & 1.09 & 否 &5.64\\ \hline
+      04 & - & 超时 & - &超时\\ \hline
+      05 & - & 超时 & - &超时\\ \hline
+      06 & 是 & 114.54 & 否 & 540.84\\ \hline
+      07 & 否 & 9.17 & 是 & 2.09\\ \hline
+      08 & 否 & 7.26 & 否 & 8.50\\ \hline
+      09 & 是 & 2.01 & 否 & 8.03\\ \hline
+      10 & - & 超时 & - &超时\\ \hline
+      11 & 是 & 2.11 & 否 & 93.40\\ \hline
+      12 & 是 & 3.02 & 否 & 7.94\\ \hline
+    \end{tabular}
+    \label{tab:eval2}
+  \end{table}
 \end{frame}
 
 \end{document}
