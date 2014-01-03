@@ -1,7 +1,3 @@
-*.pdf
-!res/*.pdf
-!images/*.pdf
-
 *.log
 *.nav
 *.snm
@@ -19,12 +15,13 @@
 *.swo
 *.xdv
 *.dvi
+
 *~
 *.fdb_latexmk
-main.pdf
 auto/
 *.txt
 _*_.tex
 _*_.pdf
-/20130704/
-/materials/
+main.pdf
+document.pdf
+!fig/

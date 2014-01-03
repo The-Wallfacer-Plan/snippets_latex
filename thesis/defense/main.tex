@@ -26,7 +26,7 @@
 {
   \usepackage{beamerbasearticle}
   \usepackage{fullpage}
-  \usepackage{hyperref}
+  \usepackage[xetex]{hyperref}
 }
 
 % font theme
@@ -85,22 +85,33 @@
 %% ---------------------------------------------------------------------------- %
 % useful packages
 
+% math (symbols) related
 \usepackage{pifont}
+\usepackage{mathrsfs}
+\usepackage{bbding}
+\usepackage{amsmath, amsfonts, amssymb}
 % \usepackage{textcomp}
-% \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
 \usepackage{indentfirst}
-\usepackage{graphicx}
+
+% \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+\usepackage{graphicx, subfigure}
+\usepackage{ccaption}
+\graphicspath{{figure/}{fig/}{logo/}{logos/}{graph/}{graphs}}
+\DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.jpeg}
 
 \usepackage{fancybox} % shadowbox,fbox,Ovalbox,ovalbox,doublebox
 \usepackage{multimedia}
 \usepackage{listings}
 \usepackage{boxedminipage}
-\usepackage{ccaption}
 \usepackage{multirow, multicol, pdflscape}
 % \usepackage{babel}
 \usepackage{array}
 \usepackage[normalem]{ulem}
 % \usepackage{enumitem}
+
+%% randomly add text
+% \usepackage{lipsum}
+% \usepackage{blindtext}
 %% ---------------------------------------------------------------------------- %
 % definitions
 
@@ -177,6 +188,7 @@
 }
 % \setlength{\parindent}{2em}
 
+\DeclareRobustCommand\nobreakspace{\leavevmode\nobreak\ }
 \renewcommand{\baselinestretch}{1.3}
 \renewcommand{\contentsname}{\setmainfont{WenQuanYi Micro Hei}目录\setmainfont{SimSun}}
 \renewcommand{\figurename}{\setmainfont{WenQuanYi Micro Hei}图\setmainfont{SimSun}}
@@ -198,17 +210,17 @@
 \newcommand{\ps}{\ensuremath{_{root}}}
 \newcommand{\scope}{\ensuremath{_{scope}}}
 %% ---------------------------------------------------------------------------- %
-
 % font related
 \usepackage[T1]{fontenc}
-\usepackage{xeCJK}
-\setmainfont[Mapping=tex-text]{TeX Gyre Termes}%英文衬线字体
-\setsansfont[Mapping=tex-text]{Consolas}%英文无衬线字体
-\setmonofont[Mapping=tex-text]{Consolas}%英文等宽字体
-% SimSun
-\setCJKmainfont{Adobe Song Std}
-\setCJKmonofont{Adobe Heiti Std}
-\setCJKsansfont{Adobe Song Std}
+\usepackage{xeCJK}  %specified for XeTeX, based on fontenc
+% \usepackage[UTF-8, nofonts]{ctex}
+\setmainfont[Mapping=tex-text]{TeX Gyre Termes}
+\setsansfont[Mapping=tex-text]{TeX Gyre Termes}
+\setmonofont[Mapping=tex-text]{Consolas}
+% fontenc: BoldItalicFont, SlantedFont, BoldSlantedFont, SmallCapsFont
+\setCJKmainfont[BoldFont={Adobe Heiti Std},ItalicFont={Adobe Kaiti Std}]{Adobe Song Std}
+\setCJKmonofont{Adobe Heiti Std} %\ttfamily
+\setCJKsansfont{Adobe Song Std} %\sffamily
 %% ---------------------------------------------------------------------------- %
 
 \title{基于选择性符号执行的补丁验证}

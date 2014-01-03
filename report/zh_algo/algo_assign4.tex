@@ -1,0 +1,148 @@
+%Assignment for course 'Algorithms'
+\documentclass[a4paper,onecolumn,12pt]{article}
+
+\usepackage{fancyhdr} \pagestyle{fancy} \lhead{陈泓旭1110379002}
+\chead{} \cfoot{} \renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\usepackage{enumerate} \usepackage[lined,boxed,commentsnumbered,
+ruled]{algorithm2e} \usepackage[margin=2.5cm]{geometry}
+\usepackage{fontspec} \usepackage[slantfont, boldfont]{xeCJK} % 允许斜体和粗体
+\setCJKmonofont{Adobe Heiti Std} % 设置等宽字体
+\setCJKsansfont{Adobe Song Std} \setCJKmainfont{Adobe Song Std}
+\setmainfont[Mapping=tex-text]{Liberation Serif} % 英文衬线字体
+\setsansfont{Liberation Sans} % 英文无衬线字体
+\setmonofont{Liberation Mono} % 英文等宽字体
+\punctstyle{kaiming} % 开明式标点格式
+\usepackage{indentfirst} % 首段缩进
+\setlength{\parindent}{2em}
+
+\usepackage{xcolor} \usepackage{graphicx}
+
+\usepackage{mathrsfs} \usepackage{bbding}
+
+\usepackage{amsmath} \usepackage{amsfonts} \usepackage{amssymb}
+
+\usepackage[xetex]{hyperref} \hypersetup{colorlinks, linkcolor=black,
+  filecolor=black, urlcolor=black, citecolor=black, pdftitle={AKS素性测
+    试算法的证明m}, pdfauthor={陈泓旭}, pdfsubject={算法，素数判定},
+  pdfkeywords={AKS primality testing}, pdfproducer={xelatex} }
+
+\usepackage{listings} \usepackage{boxedminipage}
+% \usepackage{multicol}
+
+\newtheorem{theorem}{定理}
+% \newtheorem{lemma}{引理}[section] \newtheorem{definition}{定
+% 义}[section]
+% 
+% \renewcommand{\abstractname}{摘要} \renewcommand{\figurename}{图}
+% \renewcommand\refname{参考文献}
+
+% \title{AKS素性测试算法的证明} \author{整理：陈泓旭\footnote{软件学
+% 院\quad 学号：1110379002}} \date{}
+
+\numberwithin{equation}{section}
+\begin{document}
+\section*{习题7.6}
+只需让最优解取在处于``有限''的那个边界即可。比如：
+\begin{align*}
+\min{x+3y}\\
+x\ge 0\\
+y\geq 0\\
+x+y\geq 1
+\end{align*}
+可以看出，当$x=1,y=0$时取得目标函数取得最小值$1+0\cdot 3=1$，而此时的可行域是无限的。
+\section*{习题 7.21}
+\begin{boxedminipage}{.9\columnwidth}
+\textbf{求流中的关键边的算法}\\
+输入：网络为$(G,s,t,c)$\\
+输出：$G$的关键边集\\
+1.根据最小路径长度增值法（MPLA）等方法，求得最大流；记得到的流为$f$；
+记只存在反向边集的顶点对集为$E$，生成的剩余图为$R(V,E_f)$，其中$E_f=\{(u,r)|r(u,v)=c(u,v)-f(u,v)>0\}$。\\
+2.令$C_1=\emptyset$，在剩余图$R(V,E_f)$中从$s$开始进行$DFS$，若某个边容量为0则将改边加入$C_1$中。\\
+3.令$C_2=\emptyset$，把剩余图$R(V,E_f)$中的所有边反向，从$t$开始进行$DFS$，若某个边容量为0则将改边加入$C$中。\\
+4.则$C=C_1\bigcup C_2$就是关键边集。
+\end{boxedminipage}\vskip11pt
+
+说明：步骤1指出，若$(i,j)\in
+  C$，则必有$f(i,j)=c(i,j)$，即在$R$中仅存在反向边$(j,i)$；但是反之不成立，即存在$R$中只有反向边，其对应的原来的流中的边不是关键边。因此需要精化。
+这样的边$(u,v)$满足$s\rightarrow u$存在一条所有的边$>0$的路径，$v\rightarrow t$存在一条该路径上所有
+的边容量都$>0$的路径。这样的话，增加$u\rightarrow v$的容量就可以出现增广路。枚举残余网络中的所有边，
+用一次从$S\rightarrow T$的$DFS$来标记该性质第一种情况的边（步骤2），从$T\rightarrow
+S$一次$DFS$来标记第二种情况的边（步骤3）。步骤2，3产生的边的并就是所有的关键边。
+
+\section*{习题7.23}
+\textbf{证明：}由最大流最小割定理，只要将最小顶点覆盖问题规约为最小割就可以了。
+
+设二分图为$G(U,E,W),W=V\backslash
+U$，另设图$G$的最小顶点覆盖为$C$。令$C_{u}=U\cap C,C_{w}=W\cap
+C$，且令$C_{\bar{u}}=U-C_{u},C_{\bar{w}}=U-C_{w}$。添加源点$s$和汇点$t$，并令$S=\{s\}\cup
+C_{u}\cup C_{w},T=\{t\}\cup C_{\bar{u}}\cup C_{\bar{w}}$。由于$C=C_{u}\cup
+C_{w}$，且$U\cap V=\emptyset$，则$\forall i\in C_{\bar{u}},j\in
+C_{\bar{w}}, \text{有}(i,j)\not\in
+E$。对于$U$和$W$部分，只可能$C_{u}$和$C_{w}$之间存在边，$C_{\bar{u}}$和$C_{\bar{w}}$之间不存在边；
+而对于$s$、$t$和$U$、$W$的组合，有两条分割边，正好对应$s$和$t$作为覆盖顶点。
+这样，$(S,T)$的边数就是最小顶点覆盖的顶点数。从而，求$G$最小顶点覆盖$C$就规约成求$(G,s,t,c)$的最小割，其中$c:V\times
+V\rightarrow \mathbb{R}$为网的一个合适的容量。\P
+
+\section*{习题7.29}
+\begin{enumerate}
+  \item 分别用bool变量$y_j\in J$表示投资商$j$的是否投资，用bool变量$x_i\in
+  I$表示是否雇用演员$i$。则问题转化为整数线性规划：
+\begin{equation*}
+\begin{split}
+\max \quad&\Sigma y_j p_j-\Sigma x_i s_i\\
+& y_j\leq x_i,\text{对}j\in \{1,2,\dots ,n\},i\in L_j\\
+& x_i,y_j\in \{0,1\},\text{对}x_i\in I,y_j\in J
+\end{split}
+\end{equation*}
+  \item
+  {
+  \begin{equation*}
+\begin{split}
+\max \quad&z=\Sigma y_j p_j-\Sigma x_i s_i\\
+& y_j\leq x_i,\text{对}j\in \{1,2,\dots ,n\},i\in L_j\\
+& x_i,y_j\in\left[0,1\right],\text{对}x_i\in I,y_j\in J
+\end{split}
+\end{equation*}
+不难看出，给定一组$x_i,i\in I$，只需取$y=\min_i\{\in L_j\}x_i$，所得的值就是可能的最优解。故只需分析$x_i$的值。
+下面说明，对于任意非整数解的$\{x_i,i\in I\}$，总存在更优的整数解$\{\hat{x}_i,i\in I\}$。\\
+若$x_t=0$则问题可以退化成原问题的子问题，故考虑$x_i\neq 0,\forall i\in I$。\\
+不妨假定$x_1,x_2,\ldots,x_t\in(0,1)$，其余$x_i=1$。对$t$作数学归纳。
+问题对$t=1$显然是成立的，因为当$x_1$从原值变为1时，对应的$y_1$也变为了原来的$\frac{1}{x_1}$倍（如果存在的话）。这样，$x_i=1,\forall
+i\in I$的解显然比原来的解更优。\\
+假设结论对$t=k$成立。令$x_0=f=\max\{x_1,x_2,\ldots,x_{k+1}\}$，令$x_i^{\prime}=x_i/f,i\in\{1,2,\ldots
+k+1\}$，则对应的$y_0^{\prime}$变为了原来的$\frac{1}{f}$倍，新的解$z^\prime$比原来的解$z$更优。而所得的$z^\prime$的解正是由$k$个大于0小于1的$x_i$生成的，
+由假设这个解没有全由$0,1$生成的解更优。从而结论对t=k+1也成立。\P
+  } 
+\end{enumerate}
+
+\section*{习题7.30}
+设$V_1\text{是男孩的集合},V_2\text{是女孩的集合},E=\{(i,j)|i\in V_1,j\in
+V_2\text{男孩女孩匹配}$，则$G(V,E)$是一个二分图。完全匹配$M\subseteq
+E$是$m=|V_1|$条相互独立的边。在完全匹配$M$中，每个$v\in V_1$都附属于某个$e\in M$。对于$S\subseteq V_1$，记
+$\Gamma (S)=\{v\in V_2,\text{存在}u,\text{s.t.}(u,v)\in E\}\in V_2$。则问题转化为证明下面的定理：
+\begin{theorem}[Hall]
+\upshape 二分图$G(V_1,V_2,E)$包含从$V_1$到$V_2$的完全匹配当且仅当满足Hall条件：
+$\text{对每个}S\subset V_1,|\Gamma(S)|\geq |S|$
+\end{theorem}
+\textbf{证明：}$(\Rightarrow)$ 如果存在完全匹配，则$S\in V_1$必然可以与至少$|\Gamma (S)|$个$V_2$中的元匹配。\\
+$(\Leftarrow)$ 对$m$进行数学归纳。结论对于$m=1$显然成立。假设$m\geq 2$且Hall条件满足。
+\begin{enumerate}[(I)]
+  \item 假设对所有合适的$\emptyset\neq S\subseteq V_1$，有
+\begin{equation*}
+|\Gamma(S)|\geq |S|+1
+\end{equation*}
+则可以从任意边$e=(v_1,v_2)\in
+E$开始，将$e$放入$M$中，图$G^{\prime}=G-\{v_1,V_2\}$仍然满足Hall条件，根据归纳可以完全匹配。
+\item 假设对于某个合适的$\emptyset\neq T\subseteq V_1$，有
+\begin{equation*}
+|\Gamma(T)|=|T|
+\end{equation*}
+对$G^{\prime}=G\left[T\cup
+\Gamma(T)\right]$和$G^{\prime\prime}=G\left[(V_1\backslash T)\cup
+(V_2\backslash
+\Gamma(T))\right]$，则$G^{\prime\prime}$满足Hall条件。则我们分别得到了不相交包含$|T|$和$m-|T|$条边的匹配。两者的并正好是从
+$V_1$到$V_2$的匹配。\P
+\end{enumerate}
+\end{document}
