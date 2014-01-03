@@ -262,7 +262,14 @@
   \frametitle{\dryrun 完整工作流程}
   \begin{figure}[t]
     \begin{center}
-      \includegraphics[width=.95\textwidth]{fig/workflow.pdf}
+      \includegraphics[width=.75\textwidth]{fig/se_workflow.pdf}\\
+      {\scriptsize{符号执行引擎的工作流}}\pause
+    \end{center}
+  \end{figure}
+  \begin{figure}[t]
+    \begin{center}
+      \includegraphics[width=.95\textwidth]{fig/workflow.pdf}\\
+      {\scriptsize{\dryrun 的工作流}}
     \end{center}
   \end{figure}
 \end{frame}
@@ -278,13 +285,13 @@
       \end{center}
     \end{figure}
     \column{.45\textwidth}
-\pause
+    \pause
     \footnotesize{
       通过程序削减生成\rbscope 的过程需遵循下面的基本原则：
       \begin{itemize}
-      \item[\ding{223}] 保留下的程序必须包含所有可能执行的代码，即削减过程必须是保守的。
-      \item[\ding{223}] 保留下的程序在添加了驱动程序之后必须是可执行的。
-      \item[\ding{223}] 出于选择性符号执行要求，削减程序过程应该尽可能精确。
+      \item[\ding{223}] 保留下的程序必须包含\structure{所有}可能执行的代码，即削减过程必须是保守的。
+      \item[\ding{223}] 保留下的程序在添加了驱动程序之后必须是\structure{可执行}的。
+      \item[\ding{223}] 出于选择性符号执行要求，削减程序过程应该尽可能\structure{精确}。
       \end{itemize}
     }
   \end{columns}
@@ -482,6 +489,10 @@
 \end{frame}
 
 \begin{frame}
+  \frametitle{缺陷与不足}
+\end{frame}
+
+\begin{frame}
   \frametitle{未来的改进}
   \begin{itemize}
   \item[\ding{47}] 结合LLVM提供的编译优化,优化Andersen指向分析算法的实现
@@ -492,21 +503,12 @@
   \end{itemize}
 \end{frame}
 
-\appendix
-\newcount\opaqueness
-\begin{frame}
-  \itshape
-  \animate<1-5>
-  \Large
-
-  \only<1-5>{
-    \animatevalue<1-5>{\opaqueness}{20}{100}
-    \begin{colormixin}{\the\opaqueness!averagebackgroundcolor}
-      \begin{centering}
-        \Huge\color{green!60!black} 谢谢各位老师!\par
-      \end{centering}
-    \end{colormixin}
-  }
-\end{frame}
+% \appendix
+% \newcount\opaqueness
+% \begin{frame}
+%   \begin{centering}
+%     \Huge\color{green!60!black} 谢谢各位老师!\par
+%   \end{centering}
+% \end{frame}
 
 \end{document}
