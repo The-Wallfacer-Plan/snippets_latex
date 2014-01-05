@@ -1,4 +1,5 @@
 % -*- TeX-engine: xetex; TeX-PDF-mode: t; -*-
+\def\pgfsysdriver{pgfsys-dvipdfmx.def}
 %% ---------------------------------------------------------------------------- %
 % Beamer basics
 % The beamer class automatically loads some other \LaTeX packages, including
@@ -17,7 +18,6 @@
   \usepackage[xetex]{hyperref}
 }
 
-
 %% ---------------------------------------------------------------------------- %
 % themes
 
@@ -25,10 +25,12 @@
 % Antibes, Bergen, Berkeley, Berlin, Boadilla, Copenhagen, Darmstadt, Dresden,
 % Frankfurt, Goettingen, Hannover, Ilmenau, Juanlespins, Madrid, Malmoe,
 % Marburg, Montpellier, Paloalto, Pittsburgh, Rochester, Singapore, Warsaw
-% \usetheme[compress]{Singapore} %title at the top-middle
-% \usecolortheme{freewilly}
-\usetheme{Boadilla}
-% \beamertemplatetransparentcoveredhigh
+\usetheme[compress]{Singapore} %title at the top-middle
+% \usetheme{Manhattan}
+% \usetheme{Boadilla}
+\usetheme{keynote-gradient}
+% \usetheme{lankton-keynote}
+\beamertemplatetransparentcoveredhigh
 % \beamertemplatetransparentcovereddynamicmedium
 
 % font themes
@@ -52,8 +54,8 @@
 \useinnertheme{rectangles}
 % \useinnertheme[shadow]{rounded}
 % infolines miniframes shadow sidebar c smoothtree split tree progressbar
-\setbeamertemplate{navigation symbols}{} % no navigation
-\useoutertheme{progressbar}
+% \setbeamertemplate{navigation symbols}{} % no navigation
+% \useoutertheme{progressbar}
 
 % define colors
 % \setbeamercolor{uppercol}{fg=white,bg=blue}%
@@ -63,12 +65,18 @@
 \xdefinecolor{mygreen}{rgb}{0,0.6,0}
 \xdefinecolor{mygray}{rgb}{0.5,0.5,0.5}
 \xdefinecolor{mymauve}{rgb}{0.58,0,0.82}
+\xdefinecolor{mycolor}{rgb}{0.08,0.08,0.16}
 
 % redefine structure color
 % \usecolortheme[named=yellow]{structure}
 % redefine alert color
 % \setbeamercolor{alerted text}{fg=cyan}
-\colorlet{structure}{green!60!black}
+\setbeamercolor{block title alerted}{fg=white,bg=violet!40!gray}
+\setbeamercolor{block body alerted}{fg=black!90,bg=white}
+% \setbeamercolor{alerted text}{fg=green}
+
+% \colorlet{structure}{green!60!black}
+\colorlet{alert}{green!60!black}
 
 \setbeamertemplate{headline}[default]
 
@@ -85,9 +93,9 @@
 
 \setbeamerfont{title}{shape=\slshape,family=\ttfamily,series=\bfseries}
 
-\addtobeamertemplate{block begin}{%
-  \setlength{\textwidth}{0.9\textwidth}%
-}{}
+% \addtobeamertemplate{block begin}{%
+%   \setlength{\textwidth}{0.9\textwidth}%
+% }{}
 
 \beamertemplateballitem
 
@@ -103,7 +111,12 @@
 \usepackage{indentfirst}
 
 % \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
-\usepackage{graphicx, subfigure}
+% \usepackage{subfigure}
+\usepackage{times}
+\usepackage{tikz}
+\usepackage[tikz]{bclogo}
+\usepackage{graphicx}
+\usepackage{graphviz}
 \usepackage{ccaption}
 \graphicspath{{figure/}{fig/}{logo/}{logos/}{graph/}{graphs}}
 \DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.jpeg}
@@ -116,7 +129,7 @@
 \usepackage{array}
 \usepackage{ulem,soul}
 % \usepackage{enumitem}
-\usepackage[lined,boxed,commentsnumbered,ruled,linesnumbered]{algorithm2e}
+\usepackage[lined,boxed,ruled,linesnumbered]{algorithm2e}
 
 %% randomly add text
 % \usepackage{lipsum}
@@ -166,8 +179,8 @@
 \setbeamertemplate{itemize/enumerate body begin}{\small}
 \setbeamertemplate{itemize/enumerate subbody begin}{\footnotesize}
 \lstset{ %
-  backgroundcolor=\color{white},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}
-  basicstyle=\ttfamily\tiny,        % the size of the fonts that are used for the code
+  backgroundcolor=\color{white},   % choose the background color
+  basicstyle=\color{black}\ttfamily\tiny,        % the size of the fonts that are used for the code
   breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
   breaklines=true,                 % sets automatic line breaking
   captionpos=b,                    % sets the caption-position to bottom
@@ -177,9 +190,9 @@
   extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
   % frame=single,                    % adds a frame around the code
   keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
-  keywordstyle=\color{blue},       % keyword style
+  keywordstyle=\color{blue!70},       % keyword style
   identifierstyle=\texttt,
-  language=C,                      % the language of the code
+  % language=C,                      % the language of the code
   morekeywords={*,...},            % if you want to add more keywords to the set
   numbers=left,                    % where to put the line-numbers; possible values are (none, left, right)
   numbersep=5pt,                   % how far the line-numbers are from the code
@@ -200,6 +213,7 @@
 \renewcommand{\figurename}{\setmainfont{Heiti}图\setmainfont{SimSun}}
 \renewcommand{\tablename}{\setmainfont{Heiti}表\setmainfont{SimSun}}
 \renewcommand{\refname}{\setmainfont{Heiti}参考文献\setmainfont{SimSun}}
+% \renewcommand{\algorithmcfname}{算法}
 \renewcommand{\today}{\number\year 年 \number\month 月 \number\day 日}
 
 %% ---------------------------------------------------------------------------- %
@@ -219,6 +233,7 @@
 % font related
 \usepackage[T1]{fontenc}
 \usepackage[CJKchecksingle, CJKnumber]{xeCJK}  %specified for XeTeX, based on fontenc
+\punctstyle{kaiming} % quanjiao, banjiao, hangmobanjiao, plain
 % \usepackage[UTF-8, nofonts]{ctex}
 \setmainfont[Mapping=tex-text]{TeX Gyre Termes}
 \setsansfont[Mapping=tex-text]{TeX Gyre Termes}
@@ -230,12 +245,15 @@
 \setCJKmonofont{Adobe Heiti Std} %\ttfamily
 \setCJKsansfont{Adobe Fangsong Std} %\sffamily
 
-\punctstyle{kaiming} % quanjiao, banjiao, hangmobanjiao, plain
+\newCJKfontfamily[youyuan]\youyuan{YouYuan}
+\newCJKfontfamily[lishu]\lishu{LiSu}
+\newCJKfontfamily[shuti]\shuti{FZShuTi}
+\newCJKfontfamily[xinkai]\xinkai{STXingkai}
 
 %% ---------------------------------------------------------------------------- %
 
 \title{基于选择性符号执行的补丁验证}
-\author{\textit{陈泓旭}}
+\author{\\指导老师：\textit{赵建军}\\学\quad\quad 生：\textit{陈泓旭}}
 % \date{\today}
 \date{2014年1月7日}
 
@@ -248,29 +266,35 @@
 
 \begin{frame}
   \frametitle{研究背景}
-  \quad\quad 程序演化过程中经常需要修复程序中的\textit{错误}，不恰当的
-  {\textit{补丁程序}}会造成极大的后果；\structure{正确}并\structure{高效}
-  地进行补丁验证对提高软件质量及程序员生产效率至关重要。\\
-\pause
-  \quad\quad\textit{常见的提高补丁程序质量的方法}：\pause
-  \begin{enumerate}[<+-|structure@+>]
-  \item \textsf{静态分析}
+  \transdissolve<1-5>
+  \transblindshorizontal<6>
+  \onslide<1->{程序演化过程中经常需要修复程序中的\textit{错误}，不恰当的
+  \textit{补丁程序}会造成极大的后果；\alert<6->{正确}并\alert<6->{高效}
+  地进行补丁验证对提高软件质量及程序员生产效率至关重要。}\\
+\vspace{2pt}
+
+  \onslide<3->{\textit{常见的提高补丁程序质量的方法}：}
+  \begin{enumerate}
+  \onslide<4->{\item \textsf{静态分析}
     \begin{itemize}
     \item 检查是否满足特定的错误模式
     \item 分析可能出错的程序片段
-    \end{itemize}
-  \item \textsf{软件测试}
+    \end{itemize}}
+
+  \onslide<5->{\item \textsf{软件测试}
     \begin{itemize}
     \item 手动测试
     \item 自动化测试 $\rightarrow$ 符号执行
-    \end{itemize}
+    \end{itemize}}
+
   \end{enumerate}
-  \pause
+
 \end{frame}
 
 \begin{frame}[containsverbatim]
   \frametitle{一个典型的例子}
-  \begin{CenteredBox}
+  \vspace{-5pt}
+  % \begin{CenteredBox}
 \begin{lstlisting}[language={[ANSI]C}]
  %* \color{mygray}{{case PSP\_COMP\_RLE: { }} *)
  %* \color{mygray}{{q = pixels[0] + offset;}} *)
@@ -299,7 +323,7 @@
       }} }
   %* \color{mygray}{{g\_free (buf); break; }} *)
 \end{lstlisting}
-  \end{CenteredBox}
+  % \end{CenteredBox}
 \end{frame}
 
 \begin{frame}
@@ -318,23 +342,28 @@
 
 \begin{frame}
   \frametitle{\dryrun 完整工作流程}
+  \transdissolve<1-2>
+  \only<1>{{\begin{alertblock}{\lishu{符号执行引擎的工作流}}
   \begin{figure}[t]
     \begin{center}
       \includegraphics[width=.75\textwidth]{fig/se_workflow.pdf}\\
-      {\scriptsize{符号执行引擎的工作流}}\pause
     \end{center}
   \end{figure}
+  \end{alertblock}}}
+\pause
+  \only<2>{{\begin{alertblock}{\lishu{\dryrun 的工作流}}
   \begin{figure}[t]
     \begin{center}
       \includegraphics[width=.95\textwidth]{fig/workflow.pdf}\\
-      {\scriptsize{\dryrun 的工作流}}
     \end{center}
   \end{figure}
+  \end{alertblock}}}
 \end{frame}
 
 \section{\rbscope 的生成}
 
 \begin{frame}
+  \transblindsvertical<2>
   \frametitle{\rbscope 的生成流程}
   \begin{columns}
     \column{.45\textwidth}
@@ -374,8 +403,8 @@
 
 \begin{frame}[containsverbatim]
   \frametitle{自动确定入口函数的算法}
-  \centering{\scalebox{0.65}{%
-      \begin{algorithm}[H]
+  \centering{\scalebox{0.75}{%
+      \begin{algorithm*}[H]
         \caption{入口函数定位算法}
         \SetAlgoNoLine
         将直接包含 \prog\ps 的函数标记为 $\mathcal{F}{_{pfn}}$, 直接包含 \prog\ps 的函数标记为 $\mathcal{F}{_{pfn}}$
@@ -385,15 +414,15 @@
         根据调用图，计算得到所有直接或通过函数指针间接调用 $\mathcal{F}{_{bfn}}$ 的函数集合$\mathcal{F}_{b}$; 计算可以调用$\mathcal{F}_{b}$所有函数的闭包，记为$\widehat{\mathcal{F}_{b}}$
 
         计算$\widehat{\mathcal{F}_{p}}$ 和$\widehat{\mathcal{F}_{b}}$的共同主调函数，将之作为入口函数\prog\entry
-      \end{algorithm}}}
+      \end{algorithm*}}}
 
 \end{frame}
 
 \begin{frame}
   \frametitle{调用图的建立}
-\centering\shadowbox{\scriptsize{LLVM \textit{框架自身提供的调用图过于粗糙，准确的调用图算法实现如下:}}}\\
+\centering\doublebox{\scriptsize{LLVM \textit{框架自身提供的调用图过于粗糙，{\alert{准确}}的调用图算法实现如下:}}}\\
 \vspace{10pt}
-  \centering{\scalebox{0.65}{
+  \centering{\scalebox{0.75}{
 \begin{algorithm}[H]
 \caption{准确调用图的生成}
 \SetAlgoNoLine
@@ -456,17 +485,22 @@
 \begin{frame}
   \frametitle{不同的调用图}
   \begin{columns}
-    \column{.45\textwidth}
-    \includegraphics[width=\textwidth]{cg_llvm.pdf}
-    \column{.45\textwidth}
-    \includegraphics[width=\textwidth]{cg.pdf}
+    \column{.48\textwidth}
+  \begin{alertblock}{}
+    \includegraphics[width=\textwidth, height=.6\textheight]{cg_llvm.pdf}
+  \end{alertblock}
+    \column{.42\textwidth}
+  \begin{alertblock}{}
+    \includegraphics[width=\textwidth, height=.6\textheight]{cg.pdf}
+  \end{alertblock}
   \end{columns}
 \end{frame}
 
 \begin{frame}
   \frametitle{基于关注点可达性的削减}
+  \transboxin<2>
   \vspace{2pt}
-  \centering\scalebox{0.65}{
+  \only<1>{\centering\scalebox{0.75}{
 \begin{algorithm}[H]
 \caption{可达性算法}
 \SetAlgoNoLine
@@ -477,8 +511,9 @@
 
 根据directCallee2CSMap得到关注点所在函数的所有未被访问的被调用点（采用队列的方式）。
 将每个被调用点作为间接关注点，标记重复step2，step3中的操作直至（1）所有函数中的调用点都被访问过。
-\end{algorithm}}
-\centering\doublebox{在保证程序语义正确的基础上进行削减}
+\end{algorithm}}}
+
+\only<2>{\centering\doublebox{在保证程序语义正确的基础上进行削减}}
 \end{frame}
 
 \section{补丁验证}
@@ -494,7 +529,7 @@
 
 为\prog\entry 中的函数参数在编译单元模块上分配存储空间(类似于全局变量)。根据变量的类型信息，将这些全局变量转化为“符号变量”。
 
-将函数中所关注的\prog\ass 转化为条件分支语句$if\cdots else$的形式，当满足assert被触发的条件时对应的标记位为\textsl{True}。
+将函数中所关注的\prog\ass 转化为条件分支语句$if\ldots else$的形式，当满足assert被触发的条件时对应的标记位为\textsl{True}。
 
 给编译单元添加main函数(若入口函数本身为main函数则需将之重命名以示区别)，将上述转化而来的“符号变量”以实参形式带入函数中。
 
@@ -625,7 +660,7 @@
       \hline
       \multirow{2}{0.80cm}{04}
       & $rb\_scope$ &是 &  1046.17 & 1,027.4 & 4,121  \\  \cline{2-6}
-      & original & 否 & x &  x & x  \\
+      & original & 否 & \alert{x} &  \alert{x} & \alert{x}  \\
       \hline
       \multirow{2}{0.80cm}{05}
       & $rb\_scope$ &是 &  26.80 & 6.7 & 338  \\  \cline{2-6}
@@ -665,13 +700,14 @@
 \end{frame}
 
 \begin{frame}
+  \transdissolve<2->
   \frametitle{对回归错误和错误肯定的评估}
   \begin{table}
     \centering
     \tiny
     \begin{tabular}{|l|c|c|c|r|}
       \hline
-      编号 & \footnotesize{Regression} & $T_{cv}$(s) & \footnotesize{FP} &$T_{fp}$(s) \\
+      编号 & \textit{回归错误} & $T_{cv}$(s) & \textit{错误肯定} &$T_{fp}$(s) \\
       \hline
       01 & 是 & 1.08 & 否 & 0.79 \\ \hline
       02 & - & 超时 & - &超时\\ \hline
@@ -679,8 +715,8 @@
       04 & - & 超时 & - &超时\\ \hline
       05 & - & 超时 & - &超时\\ \hline
       06 & 是 & 114.54 & 否 & 540.84\\ \hline
-      07 & 否 & 9.17 & 是 & 2.09\\ \hline
-      08 & 否 & 7.26 & 否 & 8.50\\ \hline
+      07 & \alert<3->{否} & 9.17 & \alert<2->{是} & 2.09\\ \hline
+      08 & \alert<3->{否} & 7.26 & 否 & 8.50\\ \hline
       09 & 是 & 2.01 & 否 & 8.03\\ \hline
       10 & - & 超时 & - &超时\\ \hline
       11 & 是 & 2.11 & 否 & 93.40\\ \hline
@@ -695,9 +731,10 @@
 \frame{\partpage}
 
 \begin{frame}
+  \transboxin
   \frametitle{总结}
   \begin{center}
-  \begin{block}{总结}
+  \begin{block}{}
     \begin{itemize}
       \item 展示了一种结合静态分析手段和动态符号执行的程序验证的新方法
       \item 在开源编译器框架LLVM、符号执行引擎KLEE及STP约束求解器的基础上实现了
@@ -711,35 +748,37 @@
 \end{frame}
 
 \begin{frame}
+  \transblindshorizontal
   \frametitle{缺陷与不足}
   \begin{itemize}
-\item[\ding{45}] \dryrun 并没有对符号执行工具KLEE的核心算法做修改，因此它受限于KLEE的执行机制
-\item[\ding{45}] 尽管通过程序削减减少了程序的大小，然而保留下来的程序中仍然可能存在大量的分支循环结构，这种情况下符号执行的代价仍然很大
-\item[\ding{45}] 忽略了程序实际执行时的该参数的前置条件，增大了符号执行的开销
+\item[\ding{235}] \dryrun 并没有对符号执行工具KLEE的核心算法做修改，因此它受限于KLEE的执行机制
+\item[\ding{235}] 尽管通过程序削减减少了程序的大小，然而保留下来的程序中仍然可能存在大量的分支循环结构，这种情况下符号执行的代价仍然很大
+\item[\ding{235}] 忽略了程序实际执行时的该参数的前置条件，增大了符号执行的开销
   \end{itemize}
 \end{frame}
 
 \begin{frame}
+  \transboxout
   \frametitle{未来的改进}
   \begin{block}{}
       \begin{itemize}
-  \item[\ding{47}] 结合LLVM提供的编译优化,优化Andersen指向分析算法在LLVM IR上的
+  \item[\ding{37}] 结合LLVM提供的编译优化,优化Andersen指向分析算法在LLVM IR上的
     实现
-  \item[\ding{47}] 在程序依赖图上采用更精确的过程间切片
-  \item[\ding{47}] 通过静态分析的方法得到程序执行到\rbscope 时的最弱前置条件给出符号变量的上下界
-  \item[\ding{47}] 不直接削减程序本身而采用添加注解(annotation)的方式标记程序中的\rbscope ，并以此修改KLEE执行方式
-  \item[\ding{47}] 使用\textbf{$S^2E$}等扩展性更好的符号执行框架
+  \item[\ding{37}] 在程序依赖图上采用更精确的过程间切片
+  \item[\ding{37}] 通过静态分析的方法得到程序执行到\rbscope 时的最弱前置条件给出符号变量的上下界
+  \item[\ding{37}] 不直接削减程序本身而采用添加注解(annotation)的方式标记程序中的\rbscope ，并以此修改KLEE执行方式
+  \item[\ding{37}] 使用\textbf{$S^2E$}等扩展性更好的符号执行框架
   \end{itemize}
 
   \end{block}
 \end{frame}
 
-% \appendix
-% \newcount\opaqueness
-% \begin{frame}
-%   \begin{centering}
-%     \Huge\color{green!60!black} 谢谢各位老师!\par
-%   \end{centering}
-% \end{frame}
+\appendix
+\begin{frame}
+  \transdissolve
+  \begin{centering}
+    \Huge\color{green!60!black} {\shuti{谢谢各位老师!}}\par
+  \end{centering}
+\end{frame}
 
 \end{document}
