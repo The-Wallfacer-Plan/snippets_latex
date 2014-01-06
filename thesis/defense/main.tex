@@ -208,6 +208,7 @@
   stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
   % stringstyle=\color{mymauve},     % string literal style
   % tabsize=2,                       % sets default tabsize to 2 spaces
+  upquote=true,
   title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
 }
 
@@ -231,7 +232,7 @@
 
 %% ---------------------------------------------------------------------------- %
 % specific for this article
-\newcommand{\dryrun}{\textmd{SERAPH}}
+\newcommand{\dryrun}{\texttt{SERAPH}}
 \newcommand{\rbscope}{\texttt{rbscope}}
 
 \newcommand{\bug}{\ensuremath{\mathcal{B}}}
@@ -262,6 +263,7 @@
 \newCJKfontfamily[lishu]\lishu{LiSu}
 \newCJKfontfamily[shuti]\shuti{FZShuTi}
 \newCJKfontfamily[xinkai]\xinkai{STXingkai}
+\newCJKfontfamily[weiti]\weiti{STXinwei}
 
 %% ---------------------------------------------------------------------------- %
 
@@ -274,7 +276,7 @@
 
 \frame{\titlepage}
 
-\section{课题综述}
+\section{背景和综述}
 
 \begin{frame}
   \frametitle{研究背景}
@@ -295,7 +297,7 @@
     \item 自动化测试 \onslide<4->{\color{yellow}{$\Rightarrow$ 符号执行}}
     \end{itemize}}
   \end{enumerate}
-\onslide<5->{\fbox{\textbf{正确}并\alert{高效}地进行补丁验证}}\\
+\onslide<5->{\fbox{\textbf{正确}并\textbf{高效}地进行补丁验证} $\Rightarrow$ \fbox{有选择的符号执行}}\\
 
 \end{frame}
 
@@ -371,7 +373,7 @@
     {
   \item 提出通过\textit{有选择的符号执行}对补丁进行\textbf{有效}并\textbf{高效}地验证的方法
   \item 给出从程序补丁处\prog\ps 至错误发生处\prog\bs 的\textit{极小相关程序片段}(\rbscope )的算法
-  \item 给出由现有程序的\rbscope 生成可供验证驱动程序进行\textit{交叉验证} 的实现
+  \item 给出由 \rbscope 生成可供验证驱动程序进行\textit{交叉验证} 的算法
   \item 实现\textit{工具原型} \dryrun ,对Coreutils等复杂程序的补丁进行验证}
   \end{enumerate}
 \end{frame}
@@ -432,36 +434,11 @@ font=\footnotesize, text=blue]
 }
 \end{frame}
 
-\begin{frame}
-  \transfade
-  % \transpush[direction=0, duration=1]
-  \frametitle{\rbscope 的生成流程}
-  \begin{columns}
-    \column{.45\textwidth}
-    \vspace{-30pt}
-    \begin{figure}[t]
-      \begin{center}
-        \includegraphics[height=.85\textheight]{fig/rb_gen.pdf}
-      \end{center}
-    \end{figure}
-    \column{.45\textwidth}
-    \pause
-    \footnotesize{
-      \Large{削减原则：}
-      \begin{itemize}
-      \item[\ding{223}] 保守
-      \item[\ding{223}] 可执行
-      \item[\ding{223}] 精确
-      \end{itemize}
-    }
-  \end{columns}
-\end{frame}
-
 \begin{frame}[containsverbatim]
   \frametitle{交叉验证的伪代码表示}
   \begin{columns}
     \column{.45\textwidth}
-\begin{lstlisting}[language={[ANSI]C}]
+\begin{lstlisting}[language={[ANSI]C}, upquote=true]
    int patch_error = 0, bug_error = 0;
 
    void cross_validate() {
@@ -472,7 +449,7 @@ font=\footnotesize, text=blue]
      else if (!bug_error && patch_error)
        assert("补丁引入了新bug");
      else
-       assert("%* \bug\scope 和\patch\scope 正确 *) ");
+       assert("%*\bug\scope 和\patch\scope 正确*)");
    }
 
    int main(void) {
@@ -512,18 +489,18 @@ font=\footnotesize, text=blue]
 \begin{frame} %[<+->]
   \frametitle{实验方法}
   \begin{itemize}
-  \item[\ding{43}] 通过Emacs扩展将程序\prog 的\prog\entry , \prog\bs , \prog\ps 信息写入配置文件config.json中。
-  \item[\ding{43}] 将\prog 通过llvm-gcc(或clang)转换成LLVM的中间形式
-  \item[\ding{43}] 装载LLVM的opt扩展rb\_gen，根据需要执行下面的转换
+  \item[\ding{235}] 通过Emacs Lisp将程序\prog 的\prog\entry , \prog\bs , \prog\ps 信息写入配置config.json中
+  \item[\ding{235}] 将\prog 通过llvm-gcc(或clang)转换成LLVM的中间形式(IR)
+  \item[\ding{235}] 装载LLVM的opt扩展rb\_gen，根据需要执行下面的转换
     \begin{enumerate}
     \item \textmd{rb-md} 将config.json中的信息以元数据形式写入LLVM的IR中
     \item \textmd{rb-uncall} 删除编译单元中未被调用函数
     \item \textmd{rb-reach} 分析对\prog\ps 和\prog\bs 的过程间可达性，并依此削减程序
     \item \textmd{rb-slice} 对得到的程序进行过程间切片
     \end{enumerate}
-  \item[\ding{43}] 利用驱动程序合成工具\textmd{rb\_link}，添加程序入口及符号执行语义，得到klee-input.bc
-  \item[\ding{43}] 调用KLEE对klee-input.bc进行符号执行 
-  \item[\ding{43}] 对klee-input.bc 进行符号执行，判断补丁正确性
+  \item[\ding{235}] 利用驱动程序合成工具\textmd{rb\_link}，添加程序入口及符号执行语义，得到klee-input.bc
+  \item[\ding{235}] 调用KLEE对klee-input.bc进行符号执行 
+  \item[\ding{235}] 对klee-input.bc 进行符号执行，判断补丁正确性
   \end{itemize}
 \end{frame}
 
@@ -651,24 +628,13 @@ font=\footnotesize, text=blue]
   \begin{block}{}
     \begin{itemize}
       \item 提出了一种结合\textit{静态分析手段}和\textit{动态符号执行}的程序验证的方法
-      \item 在LLVM、KLEE及STP的基础上实现了反映该思想的工具\dryrun
+      \item 在LLVM、KLEE及STP的基础上实现了验证的工具\dryrun
       \item 从Coreutils中选取数十个补丁程序针对\dryrun 的\textit{高效性}、
         \textit{有效性}、\textit{回归错误}及\textit{程序错误肯定}进行了评估
     \end{itemize}
   \end{block}
   \end{center}
 \end{frame}
-
-% \begin{frame}
-%   \transblindshorizontal
-%   \frametitle{缺陷与不足}
-%   \begin{itemize}
-% \item[\ding{235}] \dryrun 并没有修改符号执行工具KLEE的核心算法，因此它受限于KLEE的执行机制
-% \item[\ding{235}] 尽管通过程序削减减少了程序的大小，然而保留下来的程序中仍然可能存在
-% 大量的分支循环结构，这种情况下符号执行的代价仍然较大
-% \item[\ding{235}] \dryrun 忽略或弱化了程序实际执行时的该参数的前置条件，增大了符号执行的开销
-%   \end{itemize}
-% \end{frame}
 
 \begin{frame}
   \transboxout
@@ -687,7 +653,7 @@ font=\footnotesize, text=blue]
 \begin{frame}
   \transdissolve
   \begin{centering}
-    \Huge\color{yellow} {\shuti{谢\quad 谢!}}\par
+    \Huge\color{yellow!20} {\weiti{谢谢!}}\par
   \end{centering}
 \end{frame}
 
@@ -845,6 +811,20 @@ font=\footnotesize, text=blue]
 使用KLEE对新生成的编译单元进行符号执行，从得到的符号执行结果中得到该\rbscope 对应的原有程序的正确性。
 \end{algorithm}}
 \end{frame}
+
+\section{缺陷与不足}
+
+\begin{frame}
+  \transblindshorizontal
+  \frametitle{\secname}
+  \begin{itemize}
+\item[\ding{235}] \dryrun 并没有修改符号执行工具KLEE的核心算法，因此它受限于KLEE的执行机制
+\item[\ding{235}] 尽管通过程序削减减少了程序的大小，然而保留下来的程序中仍然可能存在
+大量的分支循环结构，这种情况下符号执行的代价仍然较大
+\item[\ding{235}] \dryrun 忽略或弱化了程序实际执行时的该参数的前置条件，增大了符号执行的开销
+  \end{itemize}
+\end{frame}
+
 
 \backupend
 
