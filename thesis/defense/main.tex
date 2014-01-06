@@ -114,9 +114,6 @@
 
 % \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
 % \usepackage{subfigure}
-\usepackage{times}
-\usepackage{tikz}
-\usepackage[tikz]{bclogo}
 \usepackage{graphicx}
 \usepackage{graphviz}
 \usepackage{ccaption}
@@ -132,6 +129,11 @@
 \usepackage{ulem,soul}
 % \usepackage{enumitem}
 \usepackage[lined,boxed,ruled,linesnumbered]{algorithm2e}
+
+\usepackage{times}
+% \usepackage[tikz]{bclogo}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows}
 
 %% randomly add text
 % \usepackage{lipsum}
@@ -379,7 +381,7 @@
 \begin{frame}
   \frametitle{\dryrun 完整工作流程}
   \transdissolve<2>
-  \only<1>{{\begin{alertblock}{\lishu{符号执行引擎的工作流}}
+  \onslide*<1>{{\begin{alertblock}{\lishu{符号执行引擎的工作流}}
   \begin{figure}[t]
     \begin{center}
       \includegraphics[width=.75\textwidth]{fig/se_workflow.pdf}\\
@@ -387,13 +389,47 @@
   \end{figure}
   \end{alertblock}}}
 \pause
-  \only<2>{{\begin{alertblock}{\lishu{\dryrun 的工作流}}
+  \onslide*<2>{{\begin{alertblock}{\lishu{\dryrun 的工作流}}
   \begin{figure}[t]
     \begin{center}
       \includegraphics[width=.95\textwidth]{fig/workflow.pdf}\\
     \end{center}
   \end{figure}
   \end{alertblock}}}
+\end{frame}
+
+\begin{frame}
+\frametitle{\rbscope 的生成流程}
+\transfade<1->
+\tikzstyle{format} = [draw, thin, rounded corners, fill=blue!20, font=\footnotesize, text=red]
+\tikzstyle{medium} = [ellipse, draw, thin, fill=green!20, minimum height=1.5em,
+font=\footnotesize, text=blue]
+\tikzstyle{line} = [draw, -latex']
+  \begin{center}
+\begin{tikzpicture}[node distance=3.5cm, auto,>=latex', thick]
+    \path[use as bounding box] (-2,-1) rectangle (16,-4);
+    \path[->]<1-> node[format] (pt) {\textbf{指向分析}};
+    \path[->]<2-> node[format, right of=pt] (cg) {构建调用图}
+                  (pt) edge node {} (cg);
+    \path[->]<3-> node[format, right of=cg] (conf) {\textbf{配置关注点}};
+    \path[->]<4-> node[format, below of=conf] (cgp) {未调函数削减}
+                  (conf) edge node {} (cgp)
+                  (pt) edge node {} (cgp)
+                  (cg) edge node {} (cgp);
+    \path[->]<5-> node[medium, below of=pt] (rrp) {可达性削减}
+                  (conf) edge node {} (rrp)
+                  (cgp) -- +(0,-1) |-  node[near start] {} (rrp);
+    \path[->]<6-> node[medium, right of=rrp] (sli) {程序切片}
+                  (pt) edge node {} (sli)
+                  (cg) edge node {} (sli)
+                  (conf) edge node {} (sli)
+                  (cgp) edge node {} (sli);
+    \path [line,dashed]<6-> (rrp) -- (sli);
+\end{tikzpicture}
+\end{center}
+\onslide<7> {
+  \centering{\doublebox{削减原则： \textit{保守、可执行、精确}}}
+}
 \end{frame}
 
 \begin{frame}
@@ -492,26 +528,27 @@
 \end{frame}
 
 \begin{frame}
+  \transblindsvertical<2-3>
   \frametitle{测试用例及\rbscope 生成}
   \begin{table}
     \centering
     \scriptsize
     \begin{tabular}{|c|c|c|c|c|c|c|c|}
       \hline
-      编号 & 程序名 & \patch\ps & \patch\bs& 类型 & \patch\scope 大小(Kb) & $T_{rbc}$(ms)& \patch 大小(Kb) \\
+      编号 & 程序名 & \patch\ps & \patch\bs& 类型 & \patch 大小(Kb) & \patch\scope 大小(Kb) & $T_{rbc}$(ms)\\
       \hline
-      01 & cut & 620 & 624 &  \onslide*<3->{\color{green}{添加}} &2.6 & 106 & 181\\ \hline
-      02 & factor & 114 & 121 &  \onslide*<2->{\color{yellow}{修改}} & 2.2 & 62 & 139\\ \hline
-      03 & join & 642 & 586 & \onslide*<2->{\color{yellow}{修改}} & 1.8& 54& 168\\ \hline
-      04 & mv & 461 & 465 &  \onslide*<2->{\color{yellow}{修改}} & 2.8 & 62 & 404 \\ \hline
-      05 & od & 881 & 991 &  \onslide*<2->{\color{yellow}{修改}} & 2.0 & 60 & 193 \\ \hline
-      06 & od & 1,290 & 1,389 &  \onslide*<2->{\color{yellow}{修改}} & 3.7 & 60 & 193\\ \hline
-      07 & rm & 322 & 347 &  \onslide*<2->{\color{yellow}{修改}} & 1.8 & 71 & 257 \\ \hline
-      08 & tail & 139 & 638 &  \onslide*<2->{\color{yellow}{修改}} & 2.7 & 89 & 210 \\ \hline
-      09 & tr & 419 & 1,107 & \onslide*<2->{\color{yellow}{修改}} & 2.1 & 56 & 187 \\ \hline
-      10 & tr & 898 & 810 &  \onslide*<2->{\color{yellow}{修改}} & 8.9 & 55 & 187 \\ \hline
-      11 & tr & 422 & 1,107 & \onslide*<4->{\color{red}{删除}} & 2.2 & 54 & 187 \\ \hline
-      12 & tsort & 140 & 170 &  \onslide*<2->{\color{yellow}{修改}} & 4.9 & 63 & 141 \\ \hline
+      01 & cut & 620 & 624 &  \onslide*<2->{\color{green}{添加}}& \onslide*<3->{181} &\onslide*<3->{2.6} & \onslide*<3->{106} \\ \hline
+      02 & factor & 114 & 121 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{139} & \onslide*<3->{2.2} & \onslide*<3->{62} \\ \hline
+      03 & join & 642 & 586 & \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{168} & \onslide*<3->{1.8}& \onslide*<3->{54}\\ \hline
+      04 & mv & 461 & 465 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{404} & \onslide*<3->{2.8} & \onslide*<3->{62}  \\ \hline
+      05 & od & 881 & 991 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{193} & \onslide*<3->{2.0} & \onslide*<3->{60}  \\ \hline
+      06 & od & 1,290 & 1,389 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{193} & \onslide*<3->{3.7} & \onslide*<3->{60} \\ \hline
+      07 & rm & 322 & 347 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{257} & \onslide*<3->{1.8} & \onslide*<3->{71}  \\ \hline
+      08 & tail & 139 & 638 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{210} & \onslide*<3->{2.7} & \onslide*<3->{89}  \\ \hline
+      09 & tr & 419 & 1,107 & \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{187} & \onslide*<3->{2.1} & \onslide*<3->{56}  \\ \hline
+      10 & tr & 898 & 810 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{187} & \onslide*<3->{8.9} & \onslide*<3->{55}  \\ \hline
+      11 & tr & 422 & 1,107 & \onslide*<2->{\color{red}{删除}}& \onslide*<3->{187} & \onslide*<3->{2.2} & \onslide*<3->{54}  \\ \hline
+      12 & tsort & 140 & 170 &  \onslide*<2->{\color{yellow}{修改}}& \onslide*<3->{141} & \onslide*<3->{4.9} & \onslide*<3->{63}  \\ \hline
     \end{tabular}
     \label{tab:cases}
   \end{table}
@@ -519,7 +556,6 @@
 
 \begin{frame}
   \frametitle{对补丁验证的可行性和高效性的评估}
-  \vspace{-4pt}
   \begin{table}
     \centering
     \tiny
@@ -528,52 +564,52 @@
       编号 & 版本 & 是否有效 & 验证时间(s)& 指令数(K) & 查询次数 \\
       \hline
       \multirow{2}{0.80cm}{01}
-      & $rb\_scope$ &是 &  0.47  & 5.1 & 63  \\  \cline{2-6}
-      & original &  否 & \alert<3->{超时} &   84,869.0 & 3,968  \\
+      & $rb\_scope$ &\alert<2>{是} &  0.47  & 5.1 & 63  \\  \cline{2-6}
+      & original &  否 & \alert<3>{超时} &   84,869.0 & 3,968  \\
       \hline
       \multirow{2}{0.80cm}{02}
-      & $rb\_scope$ &是 & 0.49 & 6.2 & 120  \\  \cline{2-6}
+      & $rb\_scope$ &\alert<2>{是} & 0.49 & 6.2 & 120  \\  \cline{2-6}
       & original & 是 & 57.251 &  137.1 & 504  \\
       \hline
       \multirow{2}{0.80cm}{03}
-      & $rb\_scope$ &是 & 1.09 & 9.8 & 69  \\  \cline{2-6}
-      & original &  否 & \alert<3->{超时} &  1,433,000.1 & 4,319  \\
+      & $rb\_scope$ &\alert<2>{是} & 1.09 & 9.8 & 69  \\  \cline{2-6}
+      & original &  否 & \alert<3>{超时} &  1,433,000.1 & 4,319  \\
       \hline
       \multirow{2}{0.80cm}{04}
-      & $rb\_scope$ &是 &  1046.17 & 1,027.4 & 4,121  \\  \cline{2-6}
-      & original & 否 & \alert<2->{\ding{55}} &  \alert<2->{\ding{55}} & \alert<2->{\ding{55}}  \\
+      & $rb\_scope$ &\alert<2>{是} &  1046.17 & 1,027.4 & 4,121  \\  \cline{2-6}
+      & original & 否 & \alert<4>{\ding{55}} &  \alert<4>{\ding{55}} & \alert<4>{\ding{55}}  \\
       \hline
       \multirow{2}{0.80cm}{05}
-      & $rb\_scope$ &是 &  26.80 & 6.7 & 338  \\  \cline{2-6}
-      & original & 否 & \alert<3->{超时} &  363,301.0 & 1,983   \\
+      & $rb\_scope$ &\alert<2>{是} &  26.80 & 6.7 & 338  \\  \cline{2-6}
+      & original & 否 & \alert<3>{超时} &  363,301.0 & 1,983   \\
       \hline
       \multirow{2}{0.80cm}{06}
-      & $rb\_scope$ &是 &  3.48 & 5.3 & 74  \\  \cline{2-6}
-      & original & 否 & \alert<3->{超时}  & 276,434.2 & 7,0982  \\
+      & $rb\_scope$ &\alert<2>{是} &  3.48 & 5.3 & 74  \\  \cline{2-6}
+      & original & 否 & \alert<3>{超时}  & 276,434.2 & 7,0982  \\
       \hline
       \multirow{2}{0.80cm}{07}
-      & $rb\_scope$ &是 &  1.02 & 5.5 & 77  \\  \cline{2-6}
+      & $rb\_scope$ &\alert<2>{是} &  1.02 & 5.5 & 77  \\  \cline{2-6}
       & original & 是 & 1.06 & 18.9   & 148  \\
       \hline
       \multirow{2}{0.80cm}{08}
-      & $rb\_scope$ &是 &  1.80 & 5.2 & 60  \\  \cline{2-6}
-      & original & 否 & \alert<3->{超时} &  2,422,569.1 & 270  \\
+      & $rb\_scope$ &\alert<2>{是} &  1.80 & 5.2 & 60  \\  \cline{2-6}
+      & original & 否 & \alert<3>{超时} &  2,422,569.1 & 270  \\
       \hline
       \multirow{2}{0.80cm}{09}
-      & $rb\_scope$ &是 &  3.41 & 18.5 & 79  \\  \cline{2-6}
-      & original & 否 & \alert<3->{超时} &  245.7 & 775  \\
+      & $rb\_scope$ &\alert<2>{是} &  3.41 & 18.5 & 79  \\  \cline{2-6}
+      & original & 否 & \alert<3>{超时} &  245.7 & 775  \\
       \hline
       \multirow{2}{0.80cm}{10}
-      & $rb\_scope$ &是 &  2.64  & 6.1 & 13  \\  \cline{2-6}
+      & $rb\_scope$ &\alert<2>{是} &  2.64  & 6.1 & 13  \\  \cline{2-6}
       & original & 是 & 672.69  &  1,299.6 & 3,021  \\
       \hline
       \multirow{2}{0.80cm}{11}
-      & $rb\_scope$ &是 &  20.13 & 2.3 & 838  \\  \cline{2-6}
-      & original & 否 & \alert<3->{超时}  &  4,521.9 & 8,432  \\
+      & $rb\_scope$ &\alert<2>{是} &  20.13 & 2.3 & 838  \\  \cline{2-6}
+      & original & 否 & \alert<3>{超时}  &  4,521.9 & 8,432  \\
       \hline
       \multirow{2}{0.80cm}{12}
-      & $rb\_scope$ &是 &  3.02 & 5.5 & 88  \\  \cline{2-6}
-      & original & 否 & \alert<3->{超时} &  4,651.3 & 4,648  \\
+      & $rb\_scope$ &\alert<2>{是} &  3.02 & 5.5 & 88  \\  \cline{2-6}
+      & original & 否 & \alert<3>{超时} &  4,651.3 & 4,648  \\
       \hline
     \end{tabular}
     \label{tab:eval1}
@@ -581,26 +617,26 @@
 \end{frame}
 
 \begin{frame}
-  \transdissolve<2->
-  \frametitle{对{\color{yellow}{错误肯定}}和{\color{yellow}{回归错误}}的评估}
+  \transblindshorizontal<2->
+  \frametitle{对{错误肯定}和{回归错误}的评估}
   \begin{table}
     \centering
     \scriptsize
     \begin{tabular}{|c|c|c|c|c|}
       \hline
       编号 & \textit{错误肯定} &$T_{fp}$(s) & \textit{回归错误} & $T_{cv}$(s) \\ \hline
-      01 & 否 & 0.79 & 是 & 1.08 \\ \hline
-      02 & - &超时 & - & 超时 \\ \hline
-      03 & 否 &5.64 & 是 & 1.09 \\ \hline
-      04 & - &超时 & - & 超时 \\ \hline
-      05 & - &超时 & - & 超时 \\ \hline
-      06 & 否 & 540.84 & 是 & 114.54 \\ \hline
-      07 & \alert<2->{是} & 2.09 & \alert<3->{否} & 9.17 \\ \hline
-      08 & 否 & 8.50 & \alert<3->{否} & 7.26 \\ \hline
-      09 & 否 & 8.03 & 是 & 2.01 \\ \hline
-      10 & - &超时 & - & 超时 \\ \hline
-      11 & 否 & 93.40 & 是 & 2.11 \\ \hline
-      12 & 否 & 7.94 & 是 & 3.02 \\ \hline
+      01 & \alert<2>{否} & 0.79 & \alert<4>{是} & 1.08 \\ \hline
+      02 & \alert<2>{-} &超时 & \alert<6>{-} & 超时 \\ \hline
+      03 & \alert<2>{否} &5.64 & \alert<4>{是} & 1.09 \\ \hline
+      04 & \alert<2>{-} &超时 & \alert<6>{-} & 超时 \\ \hline
+      05 & \alert<2>{-} &超时 & \alert<6>{-} & 超时 \\ \hline
+      06 & \alert<2>{否} & 540.84 & \alert<4>{是} & 114.54 \\ \hline
+      07 & \alert<3>{是} & 2.09 & \alert<5>{否} & 9.17 \\ \hline
+      08 & \alert<2>{否} & 8.50 & \alert<5>{否} & 7.26 \\ \hline
+      09 & \alert<2>{否} & 8.03 & \alert<4>{是} & 2.01 \\ \hline
+      10 & \alert<2>{-} &超时 & \alert<6>{-} & 超时 \\ \hline
+      11 & \alert<2>{否} & 93.40 & \alert<4>{是} & 2.11 \\ \hline
+      12 & \alert<2>{否} & 7.94 & \alert<4>{是} & 3.02 \\ \hline
     \end{tabular}
     \label{tab:eval2}
   \end{table}
