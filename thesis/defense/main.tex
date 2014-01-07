@@ -276,7 +276,7 @@
 
 \frame{\titlepage}
 
-\section{背景和综述}
+\section{背景与综述}
 
 \begin{frame}
   \frametitle{研究背景}
@@ -297,7 +297,7 @@
     \item 自动化测试 \onslide<4->{\color{yellow}{$\Rightarrow$ 符号执行}}
     \end{itemize}}
   \end{enumerate}
-\onslide<5->{\fbox{\textbf{正确}并\textbf{高效}地进行补丁验证} $\Rightarrow$ \fbox{有选择的符号执行}}\\
+\onslide<5->{\fbox{\textbf{有效}并\textbf{高效}地进行补丁验证} $\Rightarrow$ \fbox{有选择的符号执行}}\\
 
 \end{frame}
 
@@ -320,13 +320,13 @@
     %* \sout{\texttt{runcount = MIN(runcount, endq - q);}} *) // 第一次的补丁
     %* \color{mygreen}{\texttt{runcount = MIN(runcount, (endq-q)/bytespp);}} *) // 最终的补丁
     if (bytespp == 1) {
-      assert (q + runcount < endq);
+      assert (q + runcount < endq);  // 断言1
       memmove (q, buf, runcount);
       q += runcount;
     } else {
       p = buf;
       for (i = 0; i < runcount; i++) {
-        assert (q < endq);
+        assert (q < endq);  // 断言2
         *q = *p++;
         q += bytespp;
       }} }
@@ -378,7 +378,7 @@
   \end{enumerate}
 \end{frame}
 
-\section{ 工具的实现}
+\section{方法与实现}
 
 \begin{frame}
   \frametitle{\dryrun 完整工作流程}
@@ -420,7 +420,9 @@ font=\footnotesize, text=blue]
                   (cg) edge node {} (cgp);
     \path[->]<5-> node[medium, below of=pt] (rrp) {可达性削减}
                   (conf) edge node {} (rrp)
-                  (cgp) -- +(0,-1) |-  node[near start] {} (rrp);
+                  (cg) edge node {} (rrp);
+                  % (cgp) -- +(0,-1) |-  node[near start] {} (rrp);
+    \path[->]<5>  (cgp) edge node {} (rrp);
     \path[->]<6-> node[medium, right of=rrp] (sli) {程序切片}
                   (pt) edge node {} (sli)
                   (cg) edge node {} (sli)
@@ -471,7 +473,7 @@ font=\footnotesize, text=blue]
   }
 
   void buggyRB(void) {
-    /** 原错误程序的\rbscope */
+    /** 原错误程序的rbscope */
     {
       ...
       // 替换程序相关断言为分支结构
@@ -499,14 +501,13 @@ font=\footnotesize, text=blue]
     \item \textmd{rb-slice} 对得到的程序进行过程间切片
     \end{enumerate}
   \item[\ding{235}] 利用驱动程序合成工具\textmd{rb\_link}，添加程序入口及符号执行语义，得到klee-input.bc
-  \item[\ding{235}] 调用KLEE对klee-input.bc进行符号执行 
-  \item[\ding{235}] 对klee-input.bc 进行符号执行，判断补丁正确性
+  \item[\ding{235}] 调用KLEE对klee-input.bc进行符号执行，判断补丁正确性 
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \transblindsvertical<2-3>
-  \frametitle{测试用例及\rbscope 生成}
+  \transblindsvertical<2>
+  \frametitle{测试用例的\rbscope 生成}
   \begin{table}
     \centering
     \scriptsize
@@ -594,7 +595,7 @@ font=\footnotesize, text=blue]
 \end{frame}
 
 \begin{frame}
-  \transblindshorizontal<2->
+  % \transdissolve<2->
   \frametitle{对{错误肯定}和{回归错误}的评估}
   \begin{table}
     \centering
@@ -637,7 +638,7 @@ font=\footnotesize, text=blue]
 \end{frame}
 
 \begin{frame}
-  \transboxout
+  % \transboxout
   \frametitle{今后的工作}
   \begin{block}{}
       \begin{itemize}
@@ -815,12 +816,10 @@ font=\footnotesize, text=blue]
 \section{缺陷与不足}
 
 \begin{frame}
-  \transblindshorizontal
   \frametitle{\secname}
   \begin{itemize}
-\item[\ding{235}] \dryrun 并没有修改符号执行工具KLEE的核心算法，因此它受限于KLEE的执行机制
-\item[\ding{235}] 尽管通过程序削减减少了程序的大小，然而保留下来的程序中仍然可能存在
-大量的分支循环结构，这种情况下符号执行的代价仍然较大
+\item[\ding{235}] \dryrun 没有修改符号执行工具KLEE的核心算法，受限于KLEE的执行机制
+\item[\ding{235}] 生成的\rbscope 中仍然可能存在大量的分支循环结构
 \item[\ding{235}] \dryrun 忽略或弱化了程序实际执行时的该参数的前置条件，增大了符号执行的开销
   \end{itemize}
 \end{frame}

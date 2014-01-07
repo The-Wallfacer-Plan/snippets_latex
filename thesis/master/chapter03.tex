@@ -107,7 +107,7 @@ void bar(void) {
   \item 削减中基于\prog\ps 的削减仅在可达性分析上使用，这是建立在基本块上的；故没有必要精确到语句层次。
 \end{enumerate}
 
-算法由算法\autoref{alg:complex} 给出。
+具体的步骤由算法\autoref{alg:complex} 给出。
 \begin{algorithm}\label{alg:complex}
   \caption{复杂补丁配置}
   \SetAlgoNoLine
@@ -132,6 +132,7 @@ void bar(void) {
 \item 上下文（不）敏感(context sensitive/insensitive)：是否区分函数调用点的上下文而只关心程序退出时的指向情况。
 \item 流（不）敏感(flow sensitive/insensitive)：是否区分控制流而对可能指向的集合取并操作。
 \end{itemize}
+
 精确的指向分析的开销很大，实际情况下指针分析的扩展性较差，广泛使用的是上下文不敏感和流不敏感的Andersen算法~\upcite{Andersen94programanalysis}和Steensgaard~\upcite{Steensgaard1996}算法。前者基于子集的指向集求解，更为精确；后者基于类型系统上的等价类划分，时间复杂度低。
 
 \subsection{Andersen算法}
@@ -332,7 +333,7 @@ int main(void) {
 \begin{enumerate}
 \item 由于部分LLVM的IR中的指令的结果值本身为变量（如LoadInst/CastInst或返回值的CallInst等），在实现过程中不严格区分语句和变量而只关心指令和其操作数。对每一读写内存操作，考虑其可能的指针变量的指向集合，并在函数的调用处分析其修改变量信息。
 \item 经典切片算法中不涉及程序Load/Store这类内存相关指令，为此首先使用了LLVM的mem2reg这一转换，消除了程序中不必要的内存读写指令。同时将Store操作的指令所写地址既作为定义（DEF）又作为使用（REF），这是因为LLVM既对所写地址变量直接操作（类似于地址运算），又可以对地址处的内容所存放值运算（通过Load）。对其他切片算法中没有的指令类型，采用类似的手段进行模拟。
-\item LLVM的IR要求每个基本块必须以终结指令结束，故（3）中必须保留分支跳转语句、switch语句等。然而存在跳转的条件变量为undef的削减结果，这对应该分支为不相关分支的情形，可以通过LLVM的PHI函数解决。
+\item LLVM的IR要求每个基本块必须以终结指令结束，故必须保留分支跳转语句、switch语句等。然而存在跳转的条件变量为undef的削减结果，这对应该分支为不相关分支的情形，可以通过LLVM的PHI函数解决。
 \end{enumerate}
 这是一个不动点的算法，每一次相关集的改变都需要重新修改甚至整个编译单元的相关集，代价是巨大的。将\autoref{sec:reach}中的过程间可达性算法与之结合，可以在实际中大大削减分析开销。
 

@@ -19,9 +19,9 @@
 \item \textmd{rb-slice} 根据重建的指向分析结果、调用图信息及修改集合，以\prog\bs 作为切片准则进行后向切片。
 \end{enumerate}
 \item 驱动程序合成器rb\_link，这相当于LLVM链接器(\textmd{llvm-ld})的一个包装器程序(wrapper)。其调用方式为
-  \begin{displaymath}
-rb\_link{\quad} input_1.bc{\quad} \left[\quad input_2.bc{\quad} \cdots{\quad} input_n.bc\quad\right]
-  \end{displaymath}
+  \begin{equation}
+rb\_link{\quad} input_1.bc{\quad} \left[\quad input_2.bc{\quad} \ldots{\quad} input_n.bc\quad\right]
+  \end{equation}
 
 得到可以为KLEE符号执行的\textmd{klee-input.bc}。当仅有单一的输入程序(即$n=1$)时添加驱动程序验证其正确性；当有两个或两个以上程序输入时，添加交叉验证语义，并将多个版本程序依照\autoref{sec:cross}中提到的方法进行拼接。
 \item 对\textmd{klee-input.bc}进行符号执行。由于默认参数下KLEE符号执行时具有较多的不确定性，为了得到相对确定的程序结果，并使得使用的参数统一，设计了下面的参数调用(对这些参数使用的解释参见\autoref{chap:klee_exe})。
@@ -55,6 +55,9 @@ klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable
 \begin{table}
   \centering
   \small
+\bicaption[tab:cases]{测试用例的\rbscope 生成}{测试用例的\rbscope 生
+  成}{Table}{\rbscope{} Generation for Test Cases}
+  % \caption{测试用例及\rbscope 生成}
   \begin{tabular}{|c|c|c|c|c|c|c|c|}
     \hline
     编号 & 程序名 & \patch\ps & \patch\bs 行号 & 类型 & \patch\scope 大小(Kb) & $T_{rbc}$(ms)& \patch 大小(Kb) \\
@@ -72,8 +75,7 @@ klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable
     11 & tr & 422 & 1,107 & 删除 & 2.2 & 54 & 187 \\ \hline
     12 & tsort & 140 & 170 &  修改 & 4.9 & 63 & 141 \\ \hline
   \end{tabular}
-  \caption{测试用例及\rbscope 生成}
-  \label{tab:cases}
+  % \label{tab:cases}
 \end{table}
 
 \section{实验结果}
@@ -85,6 +87,10 @@ klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable
 \begin{table}
   \centering
   \small
+  % \caption{对补丁验证的可行性和高效性的评估}
+  % \label{tab:eval1}
+  \bicaption[tab:eval1]{对补丁验证的可行性和高效性的评估}{对补丁验证的可行性和高
+    效性的评估}{Table}{Evaluation for Effectiveness and Efficiency of Patch Validation}
   \begin{tabular}{|p{0.80cm}|c|c|c|c|r|}
     \hline
     编号 & 版本 & 是否有效 & 验证时间(s)& 指令数(K) & 查询次数 \\
@@ -94,11 +100,11 @@ klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable
     & original &  否 & 超时 &   84,869.0 & 3,968  \\
     \hline
     \multirow{2}{0.80cm}{02}
-    & $rb\_scope$ &否 & 0.49 & 6.2 & 120  \\  \cline{2-6}
+    & $rb\_scope$ &是 & 0.49 & 6.2 & 120  \\  \cline{2-6}
     & original & 是 & 57.251 &  137.1 & 504  \\
     \hline
     \multirow{2}{0.80cm}{03}
-    & $rb\_scope$ &否 & 1.09 & 9.8 & 69  \\  \cline{2-6}
+    & $rb\_scope$ &是 & 1.09 & 9.8 & 69  \\  \cline{2-6}
     & original &  否 & 超时 &  1,433,000.1 & 4,319  \\
     \hline
     \multirow{2}{0.80cm}{04}
@@ -138,13 +144,14 @@ klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable
     & original & 否 & 超时 &  4,651.3 & 4,648  \\
     \hline
   \end{tabular}
-  \caption{对补丁验证的可行性和高效性的评估}
-  \label{tab:eval1}
 \end{table}
 
 \begin{table}
   \centering
   \small
+  % \caption{对回归错误和错误肯定的评估}
+  \bicaption[tab:eval2]{对回归错误和错误肯定的评估}{对回归错误和错误肯定的评
+    估}{Table}{Evaluation for Regression Errors and False Positives}
   \begin{tabular}{|l|c|c|c|r|}
     \hline
     编号 & \footnotesize{Regression} & $T_{cv}$(s) & \footnotesize{FP} &$T_{fp}$(s) \\
@@ -162,8 +169,6 @@ klee --simplify-sym-indices --write-cvcs --write-cov --max-memory=1000 --disable
     11 & 是 & 2.11 & 否 & 93.40\\ \hline
     12 & 是 & 3.02 & 否 & 7.94\\ \hline
   \end{tabular}
-  \caption{对回归错误和错误肯定的评估}
-  \label{tab:eval2}
 \end{table}
 
 

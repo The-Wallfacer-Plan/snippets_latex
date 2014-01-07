@@ -116,10 +116,11 @@ KLEE的这些做法使得它适合处理偏向底层的程序，在对coreutils�
 为方便论述，首先介绍在\nameref{chap:symb}中提到的符号。
 将原先的错误版本程序记为\bug ，而经过修改过的程序记为\patch ，一般意义下的程序使用\prog 来代指。如无特别说明，这3个符号的含义是宽泛的：既可以指代不加修改的源程序，也可以指代程序中的经过转化过的中间代码形式。
 
-对于某一特定程序，将\prog 的出错位置(bug site)记为\prog\bs ，而把修改的补丁位置(可为多处)记为\prog\ps 。下面将会提到，\dryrun 所考虑的\prog\bs 都是程序中可能转化为断言的地方(assertion) \prog\ass ，故在源代码层次上，可以认为\prog\ass 和\prog\bs 都指的是assert宏的调用处(在C代码中一般会扩展为$\_\_assert\_fail$函数调用)，后文将不加地区分使用这两者。\prog\bs 是导致程序执行时触发断言的根源程序片段，在实际中代指\bug 和\patch 中修改的代码对应的所在\bug 或\patch 中的那部分代码。和\prog\bs 不同，\prog\ps 可以为在代码上(源代码层次或中间层次)不连续的多个包含位置信息的代码片段(或仅为占位符性质的空操作)。若赋予程序中的语句以位置信息，在同一层次(可以是源代码或中间形式，也可以是经过若干步相同的优化后的代码)的转化下有如下等式：
-\begin{displaymath}
+对于某一特定程序，将\prog 的出错位置(bug site)记为\prog\bs ，而把修改的补丁位置(可为多处)记为\prog\ps 。下面将会提到，\dryrun 所考虑的\prog\bs 都是程序中可能转化为断言的地方(assertion) \prog\ass ，故在源代码层次上，可以认为\prog\ass 和\prog\bs 都指的是assert宏的调用处(在C代码中一般会扩展为$\_\_assert\_fail$函数调用)，后文将不加地区分使用这两者。\prog\bs 是导致程序执行时触发断言的根源程序片段，在实际中代指\bug 和\patch 中修改的代码对应的所在\bug 或\patch 中的那部分代码。和\prog\bs 不同，\prog\ps 可以为在代码上(源代码层次或中间层次)不连续的多个包含位置信息的代码片段(或仅为占位符性质的空操作)。若赋予程序中的语句以位置信息，在同一层次(可以是源代码或中间形式，也可以是经过若干步相同的优化后的代码)的转化下有等式\ref{eq:1}。
+\begin{equation}
+  \label{eq:1}
   (\bug \setminus \bug\ps )\cup \patch\ps = \patch
-\end{displaymath}
+\end{equation}
 
 程序的\rbscope 是\prog 的一个(非严格意义上的)子集，它包含了以指定的函数为执行入口，所有可能被执行到的程序相关代码片段。这样的\rbscope 有如下三种不同的精确程度：
 \begin{enumerate}
@@ -128,7 +129,12 @@ KLEE的这些做法使得它适合处理偏向底层的程序，在对coreutils�
 \item 基于对\prog\bs 影响性分析上的削减。同样，该削减会添加额外的语义以使得削减结果符合语法。
 \end{enumerate}
 
-对于某个程序\prog ，将其\rbscope 记为\prog\scope 。由于所做改动可能会导致数据流和控制流及指向上较大的变化，\bug\scope 和\patch\scope 会有很大差异，不能保证 $(\bug\scope \setminus \bug\ps )\cup \patch\ps = \patch$ 这样的结论成立。
+对于某个程序\prog ，将其\rbscope 记为\prog\scope 。由于所做改动可能会导致数据流
+和控制流及指向上较大的变化，\bug\scope 和\patch\scope 会有很大差异，并不能保证述等式\ref{eq:2}成立。
+\begin{equation}
+\label{eq:2}
+(\bug\scope \setminus \bug\ps )\cup \patch\ps = \patch
+\end{equation}
 
 \section{一个典型例子}
 \label{sec:gimp_example}
