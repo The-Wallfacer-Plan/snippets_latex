@@ -1,0 +1,147 @@
+%!TeX Program=LuaLaTeX
+%\nonstopmode
+\documentclass{article}
+\usepackage[%
+	twoside,
+	left=23mm,
+	width=170mm,
+	right=17mm,
+	top=25mm,
+	height=231mm,
+	bottom=32mm]{geometry}
+\usepackage{%
+	indentfirst,
+	luatexja-fontspec}
+\parindent=2\zw
+\setmainfont[%
+	BoldFont={TeX Gyre Pagella/B},
+	ItalicFont={TeX Gyre Pagella/I},
+	BoldItalicFont={TeX Gyre Pagella/BI}]{TeX Gyre Pagella}
+\setmainjfont[%
+	BoldFont={SimHei},
+	ItalicFont={FangSong}]{SimSun}
+\def\LuaTeX{LuaTeX}
+\def\LuaLaTeX{LuaLaTeX}
+\def\LuaLaTeXe{Lua\LaTeXe}
+\def\pTeX{pTeX}
+\def\epTeX{$\varepsilon$-\pTeX}
+\def\eTeX{$\varepsilon$-TeX}
+\title{LuaTeX-ja杂言与中文配置初步}
+\author{马起园}
+\begin{document}
+\maketitle
+\section{LuaTeX-ja是什么？}
+可能有的人会认为LuaTeX-ja是一个日本修正版本的LuaTeX，事实远非如此。
+LuaTeX提供的大部分库已经将TeX的扩展可能性放大到最大，所以在功能上没有必要去修正。
+LuaTeX-ja就是一个宏包，主要目的是继承日本广泛应用的pTeX，提供高质量的排版输出。
+日本主要采用的TeX引擎一直为pTeX系列引擎，近几年应用较多的是upTeX，这个引擎是支持Unicode的引擎。
+但是pTeX系列引擎不能直接输出pdf文件，在功能上还有一些瑕疵，所以一群日本开发者进行讨论后决定在LuaTeX上移植pTeX的大部分特性。
+
+我也是LuaTeX-ja的开发者之一，不过就水平来说，完全是打酱油的份（那些日本大牛下文介绍），我主要的工作是增加中文支持和翻译文档。现在LuaTeX-ja的中文支持已经差不多了，因为本身一个支持Unicode的引擎能支持日文，那就差不多能支持中文了，需要配置的地方不太多。文档方面，中日英三语文档齐发，最近更新进度太快了，我还没有跟上进度。
+
+有的读者可能接触过LuaTeX-ko，没接触过的第一感觉是：这个是不是韩国人做的？对，这个是韩国人做得一个包，但是很可惜的是这个包也就是处理韩语比较麻利，日文中文支持不太好，也不支持plain TeX格式。LuaTeX-ja现在支持日文和中文，韩文部分缺乏志愿者处理。我个人觉得国人没有必要再开发一套独立的LuaTeX支持宏包，日本的做好了，我们拿来用就可以了，当年CJK不算完美，可不就是有一群人用了好几年么？
+section{LuaTeX-ja的开发者}
+LuaTeX-ja的开发团队集中了现在日本社区里面的一群大牛：
+\begin{itemize}
+\item \textbf{北川弘典} 东京大学。epTeX的开发者，将基于TeX3的pTeX与eTeX融合，TeXLive发行版中的epTeX即为此引擎
+\item \textbf{前田一贵} 京都大学。luajalayout，luafontcomp和luamiragreat开发者，这些宏包是LuaTeX-ja的基础
+\item \textbf{八登崇之} 东京大学。著有大量TeX博文，曾将xeCJK修改为适合日文的样式
+\item \textbf{黑木裕介} 东京大学。ptexlive发行版开发者，ptexlive是日本用户最多的一个发行版，包含很多日本社区开发的宏包，这些宏包并不一定在CTAN上
+\item \textbf{阿部纪行} 北海道大学。秀丸编辑器“祝鳥”插件开发者，并有一些Xy-pic教程文章
+\item \textbf{山本宗宏} 千葉大学。日本Vine Linux开发者，该Linux发行版包含非常完整的TeX环境，集成了ptexlive
+\item \textbf{本田知亮} 三美印刷株式会社。专业排版人员，著有《LaTeXe標準コマンド》
+\item \textbf{斋藤修三郎} OTF包作者，该包提供了多种方式来输入字体中的特殊字
+\item \textbf{马起园} 某大学。给LuaTeX-ja做中文支持，有一个半死不活的Fandol文档项目
+\end{itemize}
+\section{我可以用LuaTeX-ja么？}
+这个问题不是很大，如果你能用xeCJK和CJK，那么使用LuaTeX-ja就不是一个难题。虽然LuaTeX-ja和LuaTeX都在开发之中，但是基本功能已经相当稳定了，出问题的几率相当小。我刚才说过，国人没必要再重复开发一套宏包了，这样重复造轮子，毕竟是很痛苦并且费力不讨好的。所以，用这个包吧，没问题，一切中文排版的问题都可以在LuaTeX-ja的框架下解决。
+\section{准备}
+我们首先需要的是安装了LuaTeX的TeX发行版，可以使用跨平台的TeXLive；Windows平台用户可以选择MikTeX或者W32TeX，Mac OS X可以选用MacTeX（我在这里以TeXLive为例）。
+
+接下来我们需要查看一下LuaTeX的版本，原则上，LuaTeX-ja支持0.65以上版本的LuaTeX。我们需要使用cmd或者powershell或者你喜欢的终端来查看（我在这里以终端为例）：
+\indent\begin{verbatim}
+$ luatex --version
+\end{verbatim}
+
+显示如下：
+\indent\begin{verbatim}
+This is LuaTeX, Version beta-0.70.1-2011082320 (Web2C 2011) (rev 4277)
+
+Execute  'luatex --credits'  for credits and version details.
+
+There is NO warranty. Redistribution of this software is covered by
+the terms of the GNU General Public License, version 2. For more
+information about these matters, see the file named COPYING and
+the LuaTeX source.
+
+Copyright 2011 Taco Hoekwater, the LuaTeX Team.
+\end{verbatim}
+这个LuaTeX版本是0.70，所以这就行了。走向下一步！
+
+下一步，用你习惯的下载工具下载LuaTeX-ja包，如：
+\begin{verbatim}
+$ wget git.sourceforge.jp/view?p=luatex-ja/luatexja.git;a=snapshot;h=HEAD;sf=tgz
+\end{verbatim}
+
+在下载的时候可以打开TeXLive管理器来更新一下最近的宏包，尤其是一些LuaTeX的相关宏包。
+
+将xunicode包更新到最新，这里我们需要为LuaTeX-ja附带的luatexja-fontspec打一个补丁修正一个bug。我们用我们熟悉的编辑器来修改xunicode包中的几行语句，下面是用diff工具比较后的结果：
+\begin{verbatim}
+--- /opt/texlive/2011/texmf-dist/tex/xelatex/xunicode/xunicode.sty	2011-09-12 08:31:47.000000000 +0900
++++ xunicode.sty	2012-11-16 22:06:17.061413113 +0900
+@@ -1475,7 +1475,11 @@
+ 
+ \newtoks\tipasavetokens
+ \newtoks\tipachecktokens
++
++\fi
+ \newif\iftipaonetoken
++\expandafter\ifx\csname ReloadXunicode\endcsname\relax
++
+ \def\tipalasttoken{!@! do nothing with this !@!}
+ \def\tipacatchonechar#1{\begingroup
+  \def\textipa##1{##1}% prevent recursion
+\end{verbatim}
+
+接下来我们安装下载好的LuaTeX-ja宏包放到TeXLive中去，我建议放在texmf-local文件夹下，我们先查找一下这个文件夹的位置：
+\begin{verbatim}
+$ kpeswhich -expand-var "$TEXMFLOCAL"
+\end{verbatim}
+我们将下载好的包放置在上面路径下的tex文件夹下。
+
+接下来我们要使用工具来让TeXLive来能够查找到刚放到文件夹下的各种宏包：
+\begin{verbatim}
+$ texhash
+或
+$ mktexlsr
+\end{verbatim}
+
+接下来是处理装在你系统中的字体，得到字体名数据库，运行：
+\begin{verbatim}
+$ mkluatexfontdb
+\end{verbatim}
+
+这个时候你可以稍等一会。
+\section{使用luatexja-fontspec}
+我们这里首先介绍最简单的，运用fontspec语法的来编译第一份中文的LuaLaTeX文档。我们先建立一个.tex文件：
+\begin{verbatim}
+\documentclass{article}
+\usepackage{luatexja-fontspec}
+\setmainfont[%
+	BoldFont={TeX Gyre Pagella/B},
+	ItalicFont={TeX Gyre Pagella/I},
+	BoldItalicFont={TeX Gyre Pagella/BI}]{TeX Gyre Pagella}
+\setmainjfont[%
+	BoldFont={SimHei},
+	ItalicFont={FangSong}]{SimSun}
+\begin{document}
+我能吞下玻璃而不伤身体。Amazingly few discotheques provide jukeboxes.\par
+\textbf{我能吞下玻璃而不伤身体。Amazingly few discotheques provide jukeboxes.}\par
+\textit{我能吞下玻璃而不伤身体。Amazingly few discotheques provide jukeboxes.}
+\end{document}
+\end{verbatim}
+
+编译，稍等片刻，你会看见一个中文的pdf生成。
+
+行了，就介绍到这里，你刚才下载的包里面有大量的测试，去看看测试文件吧！
+\end{document}
