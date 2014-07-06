@@ -1,0 +1,195 @@
+% -*- TeX-engine: pdflatex; TeX-PDF-mode: t; -*-
+
+\documentclass[11pt]{beamer}
+
+\mode<article> {
+  \usepackage{beamerbasearticle}
+  \usepackage[pdflatex]{hyperref}
+}
+
+\usetheme[compress]{Singapore} %Boadilla
+
+% \beamertemplatetransparentcoveredhigh
+% \beamertemplatetransparentcovereddynamicmedium
+
+% color themes:albatross crane beetle dove fly seagull wolverine beaver
+% \usecolortheme{beaver}
+% Outer color themes:whale, seahorse, dolphin
+\usecolortheme{whale}
+% Inner color themes: lily, orchid,rose
+\usecolortheme{orchid}
+
+% available: rectangles circles inmargin rounded
+\useinnertheme[shadow]{rounded}
+% \setbeamertemplate{navigation symbols}{} % no navigation
+% \useoutertheme{progressbar}
+
+\usefonttheme[onlymath]{serif}
+\usepackage[small]{eulervm} % Euler VM for math font
+% \usepackage{helvet}
+
+% define colors
+\setbeamercolor{uppercol}{fg=white,bg=blue}%
+\setbeamercolor{lowercol}{fg=black,bg=gray}%
+\xdefinecolor{lavendar}{rgb}{0.8,0.6,1}
+\xdefinecolor{olive}{cmyk}{0.64,0,0.95,0.4}
+\xdefinecolor{mygreen}{rgb}{0,0.6,0}
+\xdefinecolor{mygray}{rgb}{0.5,0.5,0.5}
+\xdefinecolor{mymauve}{rgb}{0.58,0,0.82}
+\xdefinecolor{mycolor}{rgb}{0.08,0.08,0.16}
+
+%% redefine structure/alert color
+% \usecolortheme[named=yellow]{structure}
+% \setbeamercolor{alerted text}{fg=mygreen}
+% \setbeamercolor{block title alerted}{fg=white,bg=violet!40!gray}
+% \setbeamercolor{block body alerted}{fg=black!90,bg=white}
+% \setbeamercolor{alerted text}{fg=yellow}
+% \setbeamercolor{structured text}{fg=green}
+% \setbeamercolor{structure}{fg=beamer@blendedblue}
+% \colorlet{structure}{yellow!60!black}
+% \colorlet{alert}{green!60!black}
+
+\setbeamertemplate{headline}[default]
+
+\beamertemplateshadingbackground{blue!5}{yellow!10}
+% available: transparent,highly dynamic,dynamic, invisible
+\setbeamercovered{invisible}
+
+\setbeamercolor{body}{fg=blue!80, bg=black!20}
+\setbeamercolor{head}{fg=blue,bg=blue!30}
+
+% \addtobeamertemplate{block begin}{%
+%   \setlength{\textwidth}{0.9\textwidth}%
+% }{}
+
+\beamertemplateballitem
+
+%% --------------------------------------------------------------------------- %
+% math (symbols) related
+\usepackage{pifont}
+\usepackage{mathrsfs}
+\usepackage{bbding}
+\usepackage{amsmath, amsfonts, amssymb}
+% \usepackage{textcomp}
+\usepackage{indentfirst}
+
+% \usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps}
+% \usepackage{subfigure}
+\usepackage{graphicx}
+\usepackage{graphviz}
+\usepackage{ccaption}
+\graphicspath{{figure/}{fig/}{logo/}{logos/}{graph/}{graphs}}
+\DeclareGraphicsExtensions{.pdf,.eps,.png,.jpg,.jpeg}
+
+\usepackage{fancybox} %including shadowbox,fbox,Ovalbox,ovalbox,doublebox
+\usepackage{multimedia}
+\usepackage{listings}
+\usepackage{boxedminipage}
+\usepackage{multirow, multicol, pdflscape}
+\usepackage{array}
+\usepackage{ulem,soul}
+% \usepackage{enumitem}
+\usepackage[lined,boxed,ruled,linesnumbered]{algorithm2e}
+
+\usepackage{times}
+% \usepackage[tikz]{bclogo}
+\usepackage{tikz}
+\usetikzlibrary{shapes, arrows}
+
+% definitions
+
+\makeatletter
+\newenvironment{CenteredBox}{
+  \begin{Sbox}}{
+  \end{Sbox}\centerline{\parbox{\wd\@Sbox}{\TheSbox}}}
+\makeatother
+
+\newenvironment<>{varblock}[2][\textwidth]{
+  \setlength{\textwidth}{#1}
+  \begin{actionenv}#3
+    \def\insertblocktitle{#2}
+    \par
+    \usebeamertemplate{block begin}}
+  {\par
+    \usebeamertemplate{block end}
+  \end{actionenv}}
+
+\makeatletter
+\def\beamer@linkspace#1{
+  \begin{pgfpicture}{0pt}{-1.5pt}{#1}{5.5pt}
+    \pgfsetfillopacity{0}
+    \pgftext[x=0pt,y=-1.5pt]{.}
+    \pgftext[x=#1,y=5.5pt]{.}
+  \end{pgfpicture}}
+\makeatother
+
+
+\AtBeginSection[]{
+  \frame<handout:0>{
+    \frametitle{Outline}
+    \tableofcontents[current,currentsubsection,shaded]
+  }
+  \addtocounter{framenumber}{-1}
+}
+
+\hypersetup{pdfpagemode={FullScreen}}
+\hypersetup{pdfstartview={FitH}}
+\setbeamertemplate{itemize/enumerate body begin}{\small}
+\setbeamertemplate{itemize/enumerate subbody begin}{\footnotesize}
+
+\lstset{
+  backgroundcolor=\color{white!90!yellow},   % choose the background color
+  basicstyle=\color{black}\ttfamily\tiny,    % the size of the fonts that are used for the code
+  breakatwhitespace=false,                   % sets if automatic breaks should only happen at whitespace
+  breaklines=true,                           % sets automatic line breaking
+  captionpos=b,                              % sets the caption-position to bottom
+  commentstyle=\color{mygray}\itshape,       % comment style
+  deletekeywords={...},                      % if you want to delete keywords from the given language
+  escapeinside={\%*}{*)},                    % if you want to add LaTeX within your code
+  extendedchars=true,                        % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+  frame=single,                              % adds a frame around the code
+  keepspaces=true,                           % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+  keywordstyle=\color{blue!70},              % keyword style
+  identifierstyle=\texttt,
+  % language=C,                               % the language of the code
+  morekeywords={*,...},                      % if you want to add more keywords to the set
+  numbers=left,                              % where to put the line-numbers; possible values are (none, left, right)
+  numbersep=5pt,                             % how far the line-numbers are from the code
+  numberstyle=\tiny\color{mygray},           % the style that is used for the line-numbers
+  rulecolor=\color{black},                   % if not set, the frame-color may be changed on line-breaks within not-black text
+  showspaces=false,                          % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+  showstringspaces=false,                    % underline spaces within strings only
+  showtabs=false,                            % show tabs within strings adding particular underscores
+  stepnumber=1,                              % the step between two line-numbers. If it's 1, each line will be numbered
+  stringstyle=\color{mymauve},               % string literal style
+  tabsize=2,                                 % sets default tabsize to 2 spaces
+  upquote=true,
+  title=\lstname                             % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+% for title page
+% \setbeamerfont{title}{shape=\slshape,family=\ttfamily,series=\bfseries}
+\title{Search Strategies in Symbolic Execution}
+\author{Presented by CHEN Hongxu}
+\date{\today}
+
+%% --------------------------------------------------------------------------- %
+
+\begin{document}
+
+\frame{\titlepage}
+
+\section{Summary}
+
+\begin{frame}
+  \frametitle{Backgrounds}
+\end{frame}
+
+\section{Strategies}
+
+\begin{frame}
+  \frametitle{Subpath-Guided Path Exploration}
+\end{frame}
+
+
+\end{document}
