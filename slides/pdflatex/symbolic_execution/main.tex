@@ -1,5 +1,3 @@
-% -*- TeX-engine: pdflatex; TeX-PDF-mode: t; -*-
-
 \documentclass[11pt]{beamer}
 
 \mode<article> {
@@ -12,7 +10,7 @@
 % \beamertemplatetransparentcoveredhigh
 % \beamertemplatetransparentcovereddynamicmedium
 
-% color themes:albatross crane beetle dove fly seagull wolverine beaver
+% color themes: albatross crane beetle dove fly seagull wolverine beaver
 % \usecolortheme{beaver}
 % Outer color themes:whale, seahorse, dolphin
 \usecolortheme{whale}
@@ -21,8 +19,8 @@
 
 % available: rectangles circles inmargin rounded
 \useinnertheme[shadow]{rounded}
-% \setbeamertemplate{navigation symbols}{} % no navigation
-% \useoutertheme{progressbar}
+\setbeamertemplate{navigation symbols}{} % no navigation
+\useoutertheme{progressbar}
 
 \usefonttheme[onlymath]{serif}
 \usepackage[small]{eulervm} % Euler VM for math font
@@ -59,7 +57,7 @@
 \setbeamercolor{head}{fg=blue,bg=blue!30}
 
 % \addtobeamertemplate{block begin}{%
-%   \setlength{\textwidth}{0.9\textwidth}%
+% \setlength{\textwidth}{0.9\textwidth}%
 % }{}
 
 \beamertemplateballitem
@@ -171,7 +169,7 @@
 % \setbeamerfont{title}{shape=\slshape,family=\ttfamily,series=\bfseries}
 \title{Search Strategies in Symbolic Execution}
 \author{Presented by CHEN Hongxu}
-\date{\today}
+\date{July 8, 2014}
 
 %% --------------------------------------------------------------------------- %
 
@@ -185,7 +183,107 @@
   \frametitle{Backgrounds}
 \end{frame}
 
-\section{Strategies}
+\section{Path Selection Strategies}
+
+\begin{frame}
+  \frametitle{Concolic Execution}
+  \begin{itemize}
+  \item Use \alert{concrete} execution to produce a \structure{trace} of a program execution. \alert{Forward symbolic} execution then follows \structure{the same path}
+  \item Generate other conditions by negating the conditons in later branch conditions
+  \item[\ding{51}] Fast than traditional symbolic execution
+  \item[\ding{51}] Bypass some of the difficulties for NON-linear constraints solving or library calls
+  \item[\ding{55}] Miss quite a lot of cases during negating the path regarding to concrete value
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Concolic Execution -- An Example}
+  \begin{columns}
+    \column{.5\textwidth}
+\begin{lstlisting}[language=C]
+int double(int x) {
+  return 2 * x;
+}
+
+void test_me(int x, int y) {
+  int z = double(x);
+  if (z == y) {
+    if (x != y + 10) {
+      printf("I am fine here");
+    } else {
+      printf("I should not reach here");
+      abort();
+    }
+}
+\end{lstlisting}
+\begin{lstlisting}[language=C, numbers=none]
+int main(void){
+    int t1 = randomInt();
+    int t2 = randomInt();
+    test_me(t1,t2);
+    return 0;
+}
+\end{lstlisting}
+    \column{.4\textwidth}
+    \begin{block}{}
+      \begin{enumerate}
+      \item $t_1:=36, t_2:=-7 \Rightarrow z=y\Big{|}_{\#7}$
+      \item $t_1:=1, t_2=:2 \Rightarrow z\neq y\Big{|}_{\#7} \wedge x\neq y+10\Big{|}_{\#8} $
+      \item $t_1:=-10, t_2:=-20 \Rightarrow z\neq y\Big{|}_{\#7} \wedge x=y+10\Big{|}_{\#8}$
+      \end{enumerate}
+    \end{block}
+  \end{columns}
+
+\end{frame}
+
+\begin{frame}
+  \frametitle{Depth-First-Search(DFS)}
+  \begin{itemize}
+  \item Select the LATEST execution state
+  \item[\ding{51}] Little overhead in selecting a state
+  \item[\ding{55}] lower statement/branch coverage
+  \item[\ding{55}] get stuck when encountering loops
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Random State Search(RSS)}
+  \begin{itemize}
+  \item Randomly select a pending state to explore
+  \item[\ding{51}] explore programs uniformly
+  \item[\ding{51}] avoid tight loops with a symbolic condition creating new states
+  \item[\ding{55}] may generate redundant test cases
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Random Path Selection(RPS)}
+  \begin{itemize}
+  \item Use a binary execution tree to record information on explored program parts
+    \begin{itemize}
+    \item leaves: current states
+    \item internal nodes: forks
+    \end{itemize}
+  \item Select state by traversing tree from root and randomly pick a
+    direction when encountering a branch until reaching a leaf
+  \item[\ding{51}] states high in the tree have greater chance to be chosen
+  \item[\ding{51}] may explore more unexplored program parts
+  \item[\ding{51}] avoid fork bombing affecting DFS
+  \item[\ding{55}] may still generate similar test cases
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Coverage-Optimized Search(COS)}
+  \begin{itemize}
+  \item Use heuristics to compute which state has better chance to cover new code
+  \item Calculate a weight and select states w.r.t. the weight
+  \item[\ding{51}] Should gain the highest coverage
+  \item[\ding{55}] The weight is various(e.g. query cost, minimum distance to an
+    uncovered instruction thus not general, and the algorithm may be costly
+  \item[\ding{55}] May not work for every program
+  \end{itemize}
+\end{frame}
 
 \begin{frame}
   \frametitle{Subpath-Guided Path Exploration}
@@ -193,3 +291,5 @@
 
 
 \end{document}
+
+% LocalWords:  mycolor mymauve mygray LocalWords
