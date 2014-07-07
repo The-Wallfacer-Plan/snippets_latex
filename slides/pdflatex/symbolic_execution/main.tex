@@ -49,7 +49,7 @@
 
 \setbeamertemplate{headline}[default]
 
-\beamertemplateshadingbackground{blue!5}{yellow!10}
+% \beamertemplateshadingbackground{blue!5}{yellow!10}
 % available: transparent,highly dynamic,dynamic, invisible
 \setbeamercovered{invisible}
 
@@ -182,11 +182,10 @@
 \begin{frame}
   \frametitle{Symbolic Execution}
   \begin{itemize}
-  \item Execute programs with \alert{symbol values} rather
-    than concrete inputs
+  \item Execute programs with \alert{symbol values} rather than concrete inputs
   \item Keep path conditons and let solver to decide the satisfiability
-  \item[\ding{51}] explore execution space systematically
-  \item[\ding{51}] Generate test with higher coverage
+  \item[\ding{51}] Explore execution space systematically
+  \item[\ding{51}] Generate tests with higher coverage
   \item[\ding{55}] Suffer from \uline{\structure{path explosion}}
   \end{itemize}
   \begin{center}
@@ -203,7 +202,9 @@
   \item Generate other conditions by negating the conditons in later branch conditions
   \item[\ding{51}] Faster than traditional symbolic execution
   \item[\ding{51}] Bypass some of the difficulties for NON-linear constraints solving or library calls
-  \item[\ding{55}] Miss quite a lot of cases during negating the path regarding to concrete value
+  \item[\ding{55}] Miss lots of cases during negating the path regarding to
+    concrete value
+  \item[\ding{43}] Tools: CUTE(FSE2005),  DART(PLDI2005)
   \end{itemize}
 \end{frame}
 
@@ -254,6 +255,7 @@ int main(void){
   \item[\ding{51}] Little overhead in selecting a state
   \item[\ding{55}] lower statement/branch coverage
   \item[\ding{55}] get stuck when encountering loops
+  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
 
@@ -264,6 +266,7 @@ int main(void){
   \item[\ding{51}] explore programs uniformly
   \item[\ding{51}] avoid tight loops with a symbolic condition creating new states
   \item[\ding{55}] may generate redundant test cases
+  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
 
@@ -281,6 +284,7 @@ int main(void){
   \item[\ding{51}] avoid starvation when part of the program is rapidly creating new states
   \item[\ding{51}] avoid fork bombing affecting DFS
   \item[\ding{55}] may still generate similar test cases
+  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
 
@@ -289,31 +293,46 @@ int main(void){
   \begin{itemize}
   \item Use heuristics to compute which state has better chance to cover new code
   \item Calculate a weight and select states w.r.t. the weight
+  \item Various weights(not general)
+    \begin{description}
+    \item [nurs:covnew]  Non Uniform Random Search (NURS) with Coverage-New heuristic
+    \item [nurs:md2u  ]  NURS with Min-Dist-to-Uncovered heuristic
+    \item [nurs:depth ]  NURS with $2^{depth}$ heuristic
+    \item [nurs:icnt  ]  NURS with Instr-Count heuristic
+    \item [nurs:cpicnt]  NURS with CallPath-Instr-Count heuristic
+    \item [nurs:qc    ]  NURS with Query-Cost heuristic
+    \end{description}
   \item[\ding{51}] Should gain the highest coverage
-  \item[\ding{55}] The weight is various(e.g. query cost, minimum distance to an
-    uncovered instruction, call stack,etc) thus not general, and the algorithm may be costly
   \item[\ding{55}] May not work for every program
+  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
+
 
 \begin{frame}
   \frametitle{Subpath-Guided Search(SGS)}
-  Complete path:
-  \begin{equation}
-    \pi=\langle s_0, s_1, \ldots s_k \rangle\label{eq:1}
-  \end{equation}
-  $length-n$ subpath:
-  \begin{equation}
-    \pi_{i,n}=\langle s_i+1, s_i+2, \ldots s_n \rangle\label{eq:2}
-  \end{equation}
   \begin{itemize}
-  \item $n=1$ $\Rightarrow$ branch coverage
-  \item $n=\infty$ $\Rightarrow$ path coverage
+  \item Profiling based Symbolic Execution using length-n spectra
+  \item[\ding{51}] Priorize ``less traveled'' paths to improve coverage
+  \item[\ding{43}] Steering Symbolic Execution to Less Traveled Paths (OOPSLA2013)
+  \item Approximate full paths information\linebreak\linebreak
+    Full path:
+    \begin{equation}
+      \pi=\langle s_0, s_1, \ldots s_k \rangle\label{eq:1}
+    \end{equation}
+    $length-n$ subpath:
+    \begin{equation}
+      \pi_{i,n}=\langle s_i+1, s_i+2, \ldots s_n \rangle\label{eq:2}
+    \end{equation}
+    \begin{itemize}
+    \item $n=1$ $\Rightarrow$ branch coverage
+    \item $n=\infty$ $\Rightarrow$ path coverage
+    \end{itemize}
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{An Example}
+  \frametitle{SGS -- An Example}
   \begin{center}
     \includegraphics[totalheight=0.8\textheight]{example.png}
   \end{center}
@@ -343,13 +362,126 @@ int main(void){
   \end{center}
 \end{frame}
 
+% \begin{frame}
+%   \frametitle{Length-2 Subpath}
+%   \begin{center}
+%     \includegraphics[totalheight=0.8\textheight]{Len2.png}
+%   \end{center}
+% \end{frame}
+
 \begin{frame}
-  \frametitle{Length-2 Subpath}
+  \frametitle{Redundant State Detection}
+  \begin{itemize}
+  \item \textbf{Insight} Prune states that must execute identically to a previously explored state
+  \item \textbf{Goal}: high-coverage test case generation
+  \item \textbf{Challenge}: how to detect redundant w/o executing it $\Leftarrow$ We do not know in advance what lines a state will cover
+  \item \textbf{Approach}: compare state to previously executed states to see
+    if it definitely does not cover a new line of code
+  \item[\ding{43}] Redundant State Detection for Dynamic Symbolic Execution(atc2013)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Redundant State Detection -- An Example}
   \begin{center}
-    \includegraphics[totalheight=0.8\textheight]{Len2.png}
+    \includegraphics[height=.9\textheight]{detector_eg.png}
   \end{center}
 \end{frame}
 
+\begin{frame}
+  \frametitle{Redundant State Dection Algorithm}
+  \begin{center}
+    \includegraphics[height=.9\textheight]{detector.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rule-Directed Symbolic Execution}
+  \begin{itemize}
+  \item \textbf{Insight:} For a checked rule, only a portion of \alert{paths} are relevant
+    \begin{itemize}
+    \item[-] the rest(majority) \alert{paths} do not need to be verified
+    \end{itemize}
+  \item Modeled Rules:
+    \begin{enumerate}[i]
+    \item Assertion
+    \item Memory Leak
+    \item File Open/Close pairs
+    \item File Read/Write when opened
+    \item Data Loss(e.g. atomic \uline{\textsl{rename}})
+    \end{enumerate}
+  \item Woodpecker(ASPLOS2013)
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rule-Directed Symbolic Execution -- An Example}
+  \begin{columns}
+    \column{.5\textwidth}
+    \begin{center}
+      \includegraphics[width=.95\textwidth]{woodpecker_eg.png}
+    \end{center}
+    \column{.4\textwidth}
+    \begin{center}
+      \includegraphics[width=.95\textwidth]{woodpecker_result.png}
+    \end{center}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Rule-Directed Symbolic Execution -- Architecture}
+  \begin{columns}
+    \column{.55\textwidth}
+    \begin{center}
+      \includegraphics[width=.9\textwidth]{woodpecker.png}
+    \end{center}
+    \column{.45\textwidth}
+    \begin{enumerate}[(1)]
+      \tiny{
+      \item Given a \structure{bitcode program}, invoke KLEE to interpret instructions
+      \item If executing an instruction(e.g., BranchInst) on a state leads to \uline{\textsc{new}} states, adds to the \structure{state queue} for future exploration
+      \item Pass executed instruction and its operands to the \structure{checker} for errors
+      \item If the instruction executed is at the \uline{end} of a path, apply \ovalbox{\structure{\textsc{path slicing}}} to compute \uline{redundant} branches(w.r.t \uline{event sequence})
+      \item As part of the computation to determine if a branch is redundant, \uline{statically} visit off-the-path instructions a branch may reach.
+      \item For each instruction visited, \structure{checker} to determine whether the instruction may be an \uline{event}.
+      \item Given the redundant branches, search a branch tree to find the corresponding states \uline{forked} from the branches, and \uline{removes} the states from the queue.
+      }
+    \end{enumerate}
+  \end{columns}
+\end{frame}
+
+\begin{frame}[containsverbatim]
+  \frametitle{Path Slice}
+  \begin{columns}
+    \column{.4\textwidth}
+    A \uline{path slice}{(PLDI2005)} is a subsequence $\pi^\prime$  of a path $\pi$, which is:
+    \begin{itemize}
+    \item \textbf{Sound:} $\forall s\in S$, $s$ can execute $\pi$
+      $\Rightarrow$ $s$ can execute $\pi^\prime$
+    \item \textbf{Complete:}
+      \begin{enumerate}
+      \item There exists a path $\pi^{\prime\prime}$ from $pc_{0}$ to $pc_\varepsilon$ s.t. s
+        can execute $\pi^{\prime\prime}$
+      \item s cannot reach $pc_{out}$
+      \end{enumerate}
+    \end{itemize}
+    \column{.5\textwidth}
+\begin{lstlisting}[language=C]
+void MyExample(int a) {
+  int counter = 0;
+  int *myPointer = NULL ;
+  int increment = anyFunction();
+  while (counter < a)
+  counter += increment;
+  if (counter == 0)
+  counter = myPointer[0];
+  // ERROR Location
+}
+\end{lstlisting}
+  \end{columns}
+\end{frame}
+
+
 \end{document}
 
-% LocalWords:  mycolor mymauve mygray LocalWords
+% LocalWords:  mycolor mymauve mygray LocalWords png Subpath
