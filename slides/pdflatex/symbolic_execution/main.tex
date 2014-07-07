@@ -177,10 +177,21 @@
 
 \frame{\titlepage}
 
-\section{Summary}
+\section{Fundamentals}
 
 \begin{frame}
-  \frametitle{Backgrounds}
+  \frametitle{Symbolic Execution}
+  \begin{itemize}
+  \item Execute programs with \alert{symbol values} rather
+    than concrete inputs
+  \item Keep path conditons and let solver to decide the satisfiability
+  \item[\ding{51}] explore execution space systematically
+  \item[\ding{51}] Generate test with higher coverage
+  \item[\ding{55}] Suffer from \uline{\structure{path explosion}}
+  \end{itemize}
+  \begin{center}
+    \shadowbox{Proper path search strategies}
+  \end{center}
 \end{frame}
 
 \section{Path Selection Strategies}
@@ -190,7 +201,7 @@
   \begin{itemize}
   \item Use \alert{concrete} execution to produce a \structure{trace} of a program execution. \alert{Forward symbolic} execution then follows \structure{the same path}
   \item Generate other conditions by negating the conditons in later branch conditions
-  \item[\ding{51}] Fast than traditional symbolic execution
+  \item[\ding{51}] Faster than traditional symbolic execution
   \item[\ding{51}] Bypass some of the difficulties for NON-linear constraints solving or library calls
   \item[\ding{55}] Miss quite a lot of cases during negating the path regarding to concrete value
   \end{itemize}
@@ -227,9 +238,9 @@ int main(void){
     \column{.4\textwidth}
     \begin{block}{}
       \begin{enumerate}
-      \item $t_1:=36, t_2:=-7 \Rightarrow z=y\Big{|}_{\#7}$
-      \item $t_1:=1, t_2=:2 \Rightarrow z\neq y\Big{|}_{\#7} \wedge x\neq y+10\Big{|}_{\#8} $
-      \item $t_1:=-10, t_2:=-20 \Rightarrow z\neq y\Big{|}_{\#7} \wedge x=y+10\Big{|}_{\#8}$
+      \item $t_1:=36, t_2:=-7 \Rightarrow \alert{z=y\Big{|}_{\#7}}$
+      \item $t_1:=1, t_2=:2 \Rightarrow z\neq y\Big{|}_{\#7} \wedge \alert{x\neq y+10\Big{|}_{\#8}} $
+      \item $t_1:=-10, t_2:=-20 \Rightarrow z\neq y\Big{|}_{\#7} \wedge \uline{x=y+10\Big{|}_{\#8}}$
       \end{enumerate}
     \end{block}
   \end{columns}
@@ -266,8 +277,8 @@ int main(void){
     \end{itemize}
   \item Select state by traversing tree from root and randomly pick a
     direction when encountering a branch until reaching a leaf
-  \item[\ding{51}] states high in the tree have greater chance to be chosen
-  \item[\ding{51}] may explore more unexplored program parts
+  \item[\ding{51}] favor states high in the branch tree
+  \item[\ding{51}] avoid starvation when part of the program is rapidly creating new states
   \item[\ding{51}] avoid fork bombing affecting DFS
   \item[\ding{55}] may still generate similar test cases
   \end{itemize}
@@ -280,15 +291,64 @@ int main(void){
   \item Calculate a weight and select states w.r.t. the weight
   \item[\ding{51}] Should gain the highest coverage
   \item[\ding{55}] The weight is various(e.g. query cost, minimum distance to an
-    uncovered instruction thus not general, and the algorithm may be costly
+    uncovered instruction, call stack,etc) thus not general, and the algorithm may be costly
   \item[\ding{55}] May not work for every program
   \end{itemize}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Subpath-Guided Path Exploration}
+  \frametitle{Subpath-Guided Search(SGS)}
+  Complete path:
+  \begin{equation}
+    \pi=\langle s_0, s_1, \ldots s_k \rangle\label{eq:1}
+  \end{equation}
+  $length-n$ subpath:
+  \begin{equation}
+    \pi_{i,n}=\langle s_i+1, s_i+2, \ldots s_n \rangle\label{eq:2}
+  \end{equation}
+  \begin{itemize}
+  \item $n=1$ $\Rightarrow$ branch coverage
+  \item $n=\infty$ $\Rightarrow$ path coverage
+  \end{itemize}
 \end{frame}
 
+\begin{frame}
+  \frametitle{An Example}
+  \begin{center}
+    \includegraphics[totalheight=0.8\textheight]{example.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SGS Algorithm (Part 1)}
+  \begin{columns}
+    \column{.45\textwidth}
+    \includegraphics[totalheight=0.6\textheight]{SGS_1_1.png}
+    \column{.45\textwidth}
+    \includegraphics[totalheight=0.6\textheight]{SGS_1_2.png}
+  \end{columns}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SGS Algorithm (Part 2)}
+  \begin{center}
+    \includegraphics[totalheight=0.8\textheight]{SGS_2.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Length-1 Subpath}
+  \begin{center}
+    \includegraphics[totalheight=0.8\textheight]{Len1.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Length-2 Subpath}
+  \begin{center}
+    \includegraphics[totalheight=0.8\textheight]{Len2.png}
+  \end{center}
+\end{frame}
 
 \end{document}
 
