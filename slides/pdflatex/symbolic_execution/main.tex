@@ -169,7 +169,7 @@
 % \setbeamerfont{title}{shape=\slshape,family=\ttfamily,series=\bfseries}
 \title{Search Strategies in Symbolic Execution}
 \author{Presented by CHEN Hongxu}
-\date{July 8, 2014}
+\date{\today}
 
 %% --------------------------------------------------------------------------- %
 
@@ -177,34 +177,34 @@
 
 \frame{\titlepage}
 
-\section{Fundamentals}
+\section{Problems}
 
 \begin{frame}
   \frametitle{Symbolic Execution}
   \begin{itemize}
-  \item Execute programs with \alert{symbol values} rather than concrete inputs
-  \item Keep path conditons and let solver to decide the satisfiability
+  \item Execute programs with \alert{symbol values} rather than \alert{concrete inputs}
+  \item Keep path conditions and let solver to decide the satisfiability
   \item[\ding{51}] Explore execution space systematically
   \item[\ding{51}] Generate tests with higher coverage
   \item[\ding{55}] Suffer from \uline{\structure{path explosion}}
   \end{itemize}
   \begin{center}
-    \shadowbox{Proper path search strategies}
+    \uncover<2>{\shadowbox{Proper path search strategies}}
   \end{center}
 \end{frame}
 
-\section{Path Selection Strategies}
+\section{Strategies}
 
 \begin{frame}
   \frametitle{Concolic Execution}
   \begin{itemize}
-  \item Use \alert{concrete} execution to produce a \structure{trace} of a program execution. \alert{Forward symbolic} execution then follows \structure{the same path}
-  \item Generate other conditions by negating the conditons in later branch conditions
-  \item[\ding{51}] Faster than traditional symbolic execution
-  \item[\ding{51}] Bypass some of the difficulties for NON-linear constraints solving or library calls
+  \item[\ding{43}] CUTE(FSE2005),  DART(PLDI2005)
+  \item Use \alert{concrete} execution to produce an \structure{execution trace} of the program. \alert{Symbolic} execution then follows \structure{the same path}
+  \item Generate other conditions by \structure{negating} the conditions in later branch conditions
+  \item[\ding{51}] Faster than vanilla symbolic execution
+  \item[\ding{51}] Bypass some difficulties due to NON-linear constraints solving or library calls
   \item[\ding{55}] Miss lots of cases during negating the path regarding to
     concrete value
-  \item[\ding{43}] Tools: CUTE(FSE2005),  DART(PLDI2005)
   \end{itemize}
 \end{frame}
 
@@ -251,28 +251,29 @@ int main(void){
 \begin{frame}
   \frametitle{Depth-First-Search(DFS)}
   \begin{itemize}
+  \item[\ding{43}] KLEE(OSDI2008)
   \item Select the LATEST execution state
   \item[\ding{51}] Little overhead in selecting a state
   \item[\ding{55}] lower statement/branch coverage
   \item[\ding{55}] get stuck when encountering loops
-  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Random State Search(RSS)}
   \begin{itemize}
+  \item[\ding{43}] KLEE(OSDI2008)
   \item Randomly select a pending state to explore
   \item[\ding{51}] explore programs uniformly
   \item[\ding{51}] avoid tight loops with a symbolic condition creating new states
   \item[\ding{55}] may generate redundant test cases
-  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Random Path Selection(RPS)}
   \begin{itemize}
+  \item[\ding{43}] KLEE(OSDI2008)
   \item Use a binary execution tree to record information on explored program parts
     \begin{itemize}
     \item leaves: current states
@@ -282,17 +283,16 @@ int main(void){
     direction when encountering a branch until reaching a leaf
   \item[\ding{51}] favor states high in the branch tree
   \item[\ding{51}] avoid starvation when part of the program is rapidly creating new states
-  \item[\ding{51}] avoid fork bombing affecting DFS
-  \item[\ding{55}] may still generate similar test cases
-  \item[\ding{43}] KLEE(OSDI2008)
+  \item[\ding{55}] may still generate \structure{similar} test cases
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Coverage-Optimized Search(COS)}
   \begin{itemize}
+  \item[\ding{43}] KLEE(OSDI2008)
   \item Use heuristics to compute which state has better chance to cover new code
-  \item Calculate a weight and select states w.r.t. the weight
+  \item Calculate a \structure{weight} and select states w.r.t. the weight
   \item Various weights
     \begin{description}
     \item [nurs:covnew]  Non Uniform Random Search (NURS) with Coverage-New heuristic
@@ -302,9 +302,8 @@ int main(void){
     \item [nurs:cpicnt]  NURS with CallPath-Instr-Count heuristic
     \item [nurs:qc    ]  NURS with Query-Cost heuristic
     \end{description}
-  \item[\ding{51}] Should gain the higher coverage
+  \item[\ding{51}] Should gain higher coverage
   \item[\ding{55}] Specific to different programs
-  \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
 
@@ -312,10 +311,10 @@ int main(void){
 \begin{frame}
   \frametitle{Subpath-Guided Search(SGS)}
   \begin{itemize}
-  \item Profiling based Symbolic Execution using length-n spectra
-  \item[\ding{51}] Priorize ``less traveled'' paths to let those
-    \structure{uncovered paths} executed first $\Rightarrow$ increase coverage within a \structure{given time}
   \item[\ding{43}] Steering Symbolic Execution to Less Traveled Paths (OOPSLA2013)
+  \item Profiling based Symbolic Execution using length-n spectra
+  \item[\ding{51}] Prioritize ``less traveled'' paths to let those
+    \structure{uncovered paths} executed first $\Rightarrow$ increase coverage within a \structure{given time}
   \item Approximate full paths information\linebreak\linebreak
     Full path:
     \begin{equation}
@@ -323,7 +322,7 @@ int main(void){
     \end{equation}
     $length-n$ subpath:
     \begin{equation}
-      \pi_{i,n}=\langle s_i+1, s_i+2, \ldots s_n \rangle\label{eq:2}
+      \pi_{i,n}=\langle s_{i+1}, s_{i+2}, \ldots s_n \rangle\label{eq:2}
     \end{equation}
     \begin{itemize}
     \item $n=1$ $\Rightarrow$ branch coverage
@@ -373,11 +372,10 @@ int main(void){
 \begin{frame}
   \frametitle{Redundant State Detection}
   \begin{itemize}
-  \item \textbf{Insight} Prune states that must execute identically to a previously explored state
-  \item \textbf{Challenge}: how to detect redundant w/o executing it $\Leftarrow$ We do not know in advance what lines a state will cover
-  \item \textbf{Approach}: compare state to previously executed states to see
-    if it definitely does not cover a new line of code
-  \item[\ding{43}] Redundant State Detection for Dynamic Symbolic Execution(atc2013)
+  \item[\ding{43}] Redundant State Detection for Dynamic Symbolic Execution(ATC2013)
+  \item \textbf{Insight} Prune states that execute identically to an explored state
+  \item \textbf{Challenge}: how to detect the redundant w/o executing it $\Leftarrow$ We do not know in advance what lines a state will cover
+  \item \textbf{Approach}: compare \uline{current} state to \uline{executed} states to see whether it covers a \structure{new line} of code
   \end{itemize}
 \end{frame}
 
@@ -389,7 +387,7 @@ int main(void){
 \end{frame}
 
 \begin{frame}
-  \frametitle{Redundant State Dection -- Algorithm}
+  \frametitle{Redundant State Detection -- Algorithm}
   \begin{center}
     \includegraphics[height=.9\textheight]{detector.png}
   \end{center}
@@ -398,6 +396,7 @@ int main(void){
 \begin{frame}
   \frametitle{Rule-Directed Symbolic Execution}
   \begin{itemize}
+  \item[\ding{43}] Woodpecker(ASPLOS2013)
   \item \textbf{Insight:} For a checked rule, only a portion of \alert{paths} are relevant
     \begin{itemize}
     \item[-] the rest(majority) \alert{paths} do not need to be verified
@@ -410,7 +409,6 @@ int main(void){
     \item File Read/Write when opened
     \item Data Loss(e.g. atomic \uline{\textsl{rename}})
     \end{enumerate}
-  \item Woodpecker(ASPLOS2013)
   \end{itemize}
 \end{frame}
 
@@ -443,7 +441,7 @@ int main(void){
       \item Pass executed instruction and its operands to the \structure{checker} for errors
       \item If the instruction executed is at the \uline{end} of a path, apply \ovalbox{\structure{\textsc{path slicing}}} to compute \uline{redundant} branches(w.r.t \uline{event sequence})
       \item As part of the computation to determine if a branch is redundant, \uline{statically} visit off-the-path instructions a branch may reach.
-      \item For each instruction visited, \structure{checker} to determine whether the instruction may be an \uline{event}.
+      \item For each instruction visited, query \structure{checker} to determine whether the instruction may be an \uline{event}.
       \item Given the redundant branches, search a branch tree to find the corresponding states \uline{forked} from the branches, and \uline{removes} the states from the queue.
       }
     \end{enumerate}
@@ -453,24 +451,27 @@ int main(void){
 \begin{frame}[containsverbatim]
   \frametitle{Rule-Directed Symbolic Execution -- Path Slice}
   \begin{columns}
-    \column{.4\textwidth}
-    A \uline{path slice}{(PLDI2005)} is a subsequence $\pi^\prime$  of a path $\pi$, which is:
+    \column{.6\textwidth}
     \begin{itemize}
-    \item \textbf{Sound:} $\forall s\in S$, $s$ can execute $\pi$
-      $\Rightarrow$ $s$ can execute $\pi^\prime$
-    \item \textbf{Complete:}
-      \begin{enumerate}
-      \item There exists a path $\pi^{\prime\prime}$ from $pc_{0}$ to $pc_\varepsilon$ s.t. $s$
-        can execute $\pi^{\prime\prime}$
-      \item $s$ cannot reach $pc_{out}$
-      \end{enumerate}
+    \item[\ding{43}] Path Slicing(PLDI2005)
+    \item A \uline{path slice} is a subsequence $\pi^\prime$  of a path $\pi$, which is:
+      \begin{itemize}
+      \item \textbf{Sound:} $\forall s\in S$, $s$ can execute $\pi$
+        $\Rightarrow$ $s$ can execute $\pi^\prime$
+      \item \textbf{Complete:}
+        \begin{enumerate}[a)]
+        \item There exists a path $\pi^{\prime\prime}$ from $pc_{0}$ to $pc_\varepsilon$ s.t. $s$
+          can execute $\pi^{\prime\prime}$
+        \item $s$ cannot reach $pc_{out}$
+        \end{enumerate}
+      \end{itemize}
     \end{itemize}
-    \column{.5\textwidth}
+    \column{.35\textwidth}
 \begin{lstlisting}[language=C]
 void MyExample(int a) {
   int counter = 0;
   int *myPointer = NULL ;
-  int increment = anyFunction();
+  %*  \color{mygreen}{int increment = anyFunction();} *)
   while (counter < a)
   counter += increment;
   if (counter == 0)
@@ -484,4 +485,6 @@ void MyExample(int a) {
 
 \end{document}
 
-% LocalWords:  mycolor mymauve mygray LocalWords png Subpath
+% LocalWords:  mycolor mymauve mygray LocalWords png Subpath nurs covnew NURS
+%  LocalWords:  md icnt cpicnt CallPath qc SGS OOPSLA subpath atc pc MyExample
+%  LocalWords:  myPointer
