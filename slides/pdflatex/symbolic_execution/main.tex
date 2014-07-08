@@ -293,7 +293,7 @@ int main(void){
   \begin{itemize}
   \item Use heuristics to compute which state has better chance to cover new code
   \item Calculate a weight and select states w.r.t. the weight
-  \item Various weights(not general)
+  \item Various weights
     \begin{description}
     \item [nurs:covnew]  Non Uniform Random Search (NURS) with Coverage-New heuristic
     \item [nurs:md2u  ]  NURS with Min-Dist-to-Uncovered heuristic
@@ -302,8 +302,8 @@ int main(void){
     \item [nurs:cpicnt]  NURS with CallPath-Instr-Count heuristic
     \item [nurs:qc    ]  NURS with Query-Cost heuristic
     \end{description}
-  \item[\ding{51}] Should gain the highest coverage
-  \item[\ding{55}] May not work for every program
+  \item[\ding{51}] Should gain the higher coverage
+  \item[\ding{55}] Specific to different programs
   \item[\ding{43}] KLEE(OSDI2008)
   \end{itemize}
 \end{frame}
@@ -313,7 +313,8 @@ int main(void){
   \frametitle{Subpath-Guided Search(SGS)}
   \begin{itemize}
   \item Profiling based Symbolic Execution using length-n spectra
-  \item[\ding{51}] Priorize ``less traveled'' paths to improve coverage
+  \item[\ding{51}] Priorize ``less traveled'' paths to let those
+    \structure{uncovered paths} executed first $\Rightarrow$ increase coverage within a \structure{given time}
   \item[\ding{43}] Steering Symbolic Execution to Less Traveled Paths (OOPSLA2013)
   \item Approximate full paths information\linebreak\linebreak
     Full path:
@@ -339,7 +340,21 @@ int main(void){
 \end{frame}
 
 \begin{frame}
-  \frametitle{SGS Algorithm (Part 1)}
+  \frametitle{SGS -- Length-1 Subpath}
+  \begin{center}
+    \includegraphics[totalheight=0.8\textheight]{Len1.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SGS -- Length-2 Subpath}
+  \begin{center}
+    \includegraphics[totalheight=0.8\textheight]{Len2.png}
+  \end{center}
+\end{frame}
+
+\begin{frame}
+  \frametitle{SGS -- Algorithm (Part 1)}
   \begin{columns}
     \column{.45\textwidth}
     \includegraphics[totalheight=0.6\textheight]{SGS_1_1.png}
@@ -349,31 +364,16 @@ int main(void){
 \end{frame}
 
 \begin{frame}
-  \frametitle{SGS Algorithm (Part 2)}
+  \frametitle{SGS -- Algorithm (Part 2)}
   \begin{center}
     \includegraphics[totalheight=0.8\textheight]{SGS_2.png}
   \end{center}
 \end{frame}
 
 \begin{frame}
-  \frametitle{Length-1 Subpath}
-  \begin{center}
-    \includegraphics[totalheight=0.8\textheight]{Len1.png}
-  \end{center}
-\end{frame}
-
-% \begin{frame}
-%   \frametitle{Length-2 Subpath}
-%   \begin{center}
-%     \includegraphics[totalheight=0.8\textheight]{Len2.png}
-%   \end{center}
-% \end{frame}
-
-\begin{frame}
   \frametitle{Redundant State Detection}
   \begin{itemize}
   \item \textbf{Insight} Prune states that must execute identically to a previously explored state
-  \item \textbf{Goal}: high-coverage test case generation
   \item \textbf{Challenge}: how to detect redundant w/o executing it $\Leftarrow$ We do not know in advance what lines a state will cover
   \item \textbf{Approach}: compare state to previously executed states to see
     if it definitely does not cover a new line of code
@@ -389,7 +389,7 @@ int main(void){
 \end{frame}
 
 \begin{frame}
-  \frametitle{Redundant State Dection Algorithm}
+  \frametitle{Redundant State Dection -- Algorithm}
   \begin{center}
     \includegraphics[height=.9\textheight]{detector.png}
   \end{center}
@@ -429,7 +429,7 @@ int main(void){
 \end{frame}
 
 \begin{frame}
-  \frametitle{Rule-Directed Symbolic Execution -- Architecture}
+  \frametitle{Rule-Directed Symbolic Execution -- Algorithm}
   \begin{columns}
     \column{.55\textwidth}
     \begin{center}
@@ -451,7 +451,7 @@ int main(void){
 \end{frame}
 
 \begin{frame}[containsverbatim]
-  \frametitle{Path Slice}
+  \frametitle{Rule-Directed Symbolic Execution -- Path Slice}
   \begin{columns}
     \column{.4\textwidth}
     A \uline{path slice}{(PLDI2005)} is a subsequence $\pi^\prime$  of a path $\pi$, which is:
@@ -460,9 +460,9 @@ int main(void){
       $\Rightarrow$ $s$ can execute $\pi^\prime$
     \item \textbf{Complete:}
       \begin{enumerate}
-      \item There exists a path $\pi^{\prime\prime}$ from $pc_{0}$ to $pc_\varepsilon$ s.t. s
+      \item There exists a path $\pi^{\prime\prime}$ from $pc_{0}$ to $pc_\varepsilon$ s.t. $s$
         can execute $\pi^{\prime\prime}$
-      \item s cannot reach $pc_{out}$
+      \item $s$ cannot reach $pc_{out}$
       \end{enumerate}
     \end{itemize}
     \column{.5\textwidth}
