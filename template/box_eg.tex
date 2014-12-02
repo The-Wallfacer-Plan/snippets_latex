@@ -1,5 +1,6 @@
 \documentclass{article}
 \usepackage{tcolorbox}
+\usepackage{fancyvrb}
 \begin{document}
 
 \begin{tcolorbox}[colback=blue!5,colframe=blue!75!black,title=My title]
@@ -13,7 +14,9 @@
 \end{tcolorbox}
 
 \begin{tcolorbox}[colback=yellow!10,colframe=red!75!black,title=Here I am]
-Lower part of my box.
+  \immediate\write18{ls -aF / > /tmp/temp.dat}
+  \VerbatimInput{/tmp/temp.dat}
 \end{tcolorbox}
+
 
 \end{document} 
