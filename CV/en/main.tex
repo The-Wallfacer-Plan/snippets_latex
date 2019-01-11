@@ -22,9 +22,9 @@
 % http://en.wikibooks.org/wiki/LaTeX
 %
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[paper=a4,fontsize=11pt]{scrartcl} % KOMA-article class
+\documentclass[paper=a4,fontsize=11pt]{article} % KOMA-article class
 							
-\usepackage[english]{babel}
+% \usepackage[english]{babel}
 \usepackage[utf8x]{inputenc}
 \usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage{amsmath,amsfonts,amsthm}     % Math packages
@@ -34,6 +34,11 @@
 \usepackage{geometry}
 	\textheight=700px                    % Saving trees ;-)
 \usepackage{url}
+
+
+% \addto{\captionsenglish}{\renewcommand{\bibname}{Publications}}
+% \printbibliography[title={Publications}]
+\renewcommand\refname{Publications}
 
 \frenchspacing              % Better looking spacings after periods
 \pagestyle{empty}           % No pagenumbers/headers/footers
@@ -102,7 +107,7 @@
 %\end{wrapfigure}
 
 \MyName{Hongxu Chen}
-\MySlogan{{https://hongxuchen.github.io/}}
+\MySlogan{{https://hongxuchen.github.io}}
 % \MyName{Hongxu Chen~{}~}
 % \MySlogan{\url{https://hongxuchen.github.io/}}
 
@@ -115,18 +120,19 @@
 % \PersonalEntry{Birth}{August 6, 1989}
 \PersonalEntry{Address}{Cyber Security Lab, N4-B2C-06, NTU, Singapore}
 \PersonalEntry{Phone}{+65 85476746}
-\PersonalEntry{Mail}{\url{hongxuchen@outlook.com}}
+\PersonalEntry{Email}{\url{hongxuchen@outlook.com}, \url{hchen017@e.ntu.edu.sg}}
+\PersonalEntry{LinkedIn}{\url{https://www.linkedin.com/in/hongxu-chen-09a97640}}
 
 %%% ------------------------------------------------------------
 \NewPart{Education}{}
 
 \EducationEntry{Ph.D in Computer Engineering}{2015.8-2019.8(expected)}{Nanyang Technological University}{
-    I have been focusing on Cybersecurity research in mobile applications and software. I developed a permission-dependent security type system for enforcing information flow in Android~\cite{sta}, as well as surveyed the Android Malware~\cite{XueM0TC0Z17}. I also developed a Fuzzing Orchestration Toolkit (FOT)~\cite{fse18-fot} which detected 100+ vulnerabilities in well-known open source projects such as GNU Binutils, GNU diffutils, libjpeg, ffmpeg. On top of FOT, I aslo developed a novel directed greybox fuzzing technique~\cite{hawkeye} that targets on fuzzing specific locations of the program.
+I have been focusing on Cybersecurity research in mobile applications and software. I developed a permission-dependent security type system for enforcing information flow in Android~\cite{sta}, as well as surveyed the Android Malware~\cite{XueM0TC0Z17}. I also developed a Fuzzing Orchestration Toolkit (FOT)~\cite{fse18-fot} which detected 100+ vulnerabilities in well-known open source projects such as GNU Binutils, GNU diffutils, libjpeg, ffmpeg. On top of FOT, I aslo developed a novel directed greybox fuzzing technique~\cite{hawkeye} that targets on fuzzing specific locations of the program.
 }
 \sepspace
 
-\EducationEntry{MSc. in Computer Science}{2011.9-2014.3}{Shanghai Jiaotong University}{}
-  I have been doing LLVM based static analysis for C/C++ programs, as well as SOOT based analysis for Java programs.
+\EducationEntry{MSc. in Computer Science}{2011.9-2014.3}{Shanghai Jiaotong University}{
+  I have been doing LLVM based static analysis for C/C++ programs, as well as SOOT based analysis for Java programs.}
 \sepspace
 
 \EducationEntry{BSc. in Mathematics}{2007.9-2011.6}{Nanjing University of Science and Technology}{}
@@ -134,23 +140,25 @@
 %%% ------------------------------------------------------------
 \NewPart{Work experience}{}
 
-\EducationEntry{Research Associate}{2014.5-2015-8}{Nanyang Technological University}{}
-  I have been involved in a symbolic analysis on C/C++ programs and developed a static bug detection tool with precise points-to analysis and loop summarization based on LLVM~\cite{XieLLLC15}.
+\EducationEntry{Research Associate}{2014.5-2015-8}{Nanyang Technological University}{
+I have been involved in a symbolic analysis on C/C++ programs and developed a static bug detection tool with precise points-to analysis and loop summarization based on LLVM~\cite{XieLLLC15}.}
 \sepspace
 
-\EducationEntry{Research Intern}{2013.2-2013.11}{Microsoft Research Asia, Beijing}{}
-  I have worked in System Research Group in Microsoft Research Asia in developing a scopped symbolic execution backed with LLVM based static program slicing and KLEE symbolic executor.
+\EducationEntry{Research Intern}{2013.2-2013.11}{Microsoft Research Asia, Beijing}{
+I have worked in System Research Group in Microsoft Research Asia in developing a scopped symbolic execution backed with LLVM based static program slicing and KLEE symbolic executor.}
 \sepspace
 
 %%% ------------------------------------------------------------
 \NewPart{Skills}{}
 
 \SkillsEntry{Languages}{Chinese Mandarin, English}
-\SkillsEntry{Software}{\textsc{LLVM, Rust, C/C++, Java, Python, }}
-\SkillsEntry{}{Linux API Programming, Bash, Radare2}
+\SkillsEntry{Software}{{LLVM, Rust, C/C++, Java, Python}}
+\SkillsEntry{}{Linux Programming, Bash, Radare2}
 \SkillsEntry{}{Scala,OCaml, Haskell, Coq, Isabelle}
 
-\NewPart{Discovered Bugs, Vulnerabilities and CVEs}\footnote{See \url{https://hongxuchen.github.io/} for details.}
+\pagebreak
+
+\NewPart{Discovered Bugs, Vulnerabilities and CVEs~\footnote{\lowercase{See \url{https://hongxuchen.github.io/} for details.}}}
 \begin{enumerate}
     \item binaryen: 17 bugs
     \item CImg: 2 bugs
@@ -191,7 +199,6 @@
 \end{enumerate}
 
 
-%%% ------------------------------------------------------------
 \bibliography{pub} 
 \bibliographystyle{plain}
 \end{document}
