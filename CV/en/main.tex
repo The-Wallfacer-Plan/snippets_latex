@@ -29,6 +29,7 @@
 \usepackage[protrusion=true,expansion=true]{microtype}
 \usepackage{amsmath,amsfonts,amsthm}     % Math packages
 \usepackage{graphicx}                    % Enable pdflatex
+\usepackage{hyperref}
 \usepackage[svgnames]{xcolor}            % Colors by their 'svgnames'
 \usepackage{geometry}
 	\textheight=700px                    % Saving trees ;-)
@@ -75,9 +76,9 @@
 		
 \newcommand{\EducationEntry}[4]{
 		\noindent \textbf{#1} \hfill      % Study
-		\colorbox{Gray}{%
-			\parbox{6.4em}{%
-			\hfill\color{White}#2}} \par  % Duration
+		% \colorbox{lightgray}{%
+			\parbox{12em}{%
+			\hfill\color{Black}#2} \par  % Duration
 		\noindent \textit{#3} \par        % School
 		\noindent\hangindent=2em\hangafter=0 \small #4 % Description
 		\normalsize \par}
@@ -91,6 +92,9 @@
 
 %%% ------------------------------------------------------------
 \begin{document}
+
+\nocite{*}
+
 % you can upload a photo and include it here...
 %\begin{wrapfigure}{l}{0.5\textwidth}
 %	\vspace*{-2em}
@@ -108,7 +112,7 @@
 %%% ------------------------------------------------------------
 \NewPart{Personal details}{}
 
-\PersonalEntry{Birth}{August 6, 1989}
+% \PersonalEntry{Birth}{August 6, 1989}
 \PersonalEntry{Address}{Cyber Security Lab, N4-B2C-06, NTU, Singapore}
 \PersonalEntry{Phone}{+65 85476746}
 \PersonalEntry{Mail}{\url{hongxuchen@outlook.com}}
@@ -116,12 +120,13 @@
 %%% ------------------------------------------------------------
 \NewPart{Education}{}
 
-\EducationEntry{Ph.D in Computer Engineering}{2015.8-2019.8\\ {}~{}~{}~{}~(expected)}{Nanyang Technological University}{
-I focus on Cybersecurity research in mobile applications and software. I developed a permission-dependent security type system for enforce information flow in Android, and a novel fuzzing framework by which we detected 100+ vulnerabilities in well-known open source projects.
+\EducationEntry{Ph.D in Computer Engineering}{2015.8-2019.8(expected)}{Nanyang Technological University}{
+    I have been focusing on Cybersecurity research in mobile applications and software. I developed a permission-dependent security type system for enforcing information flow in Android~\cite{sta}, as well as surveyed the Android Malware~\cite{XueM0TC0Z17}. I also developed a Fuzzing Orchestration Toolkit (FOT)~\cite{fse18-fot} which detected 100+ vulnerabilities in well-known open source projects such as GNU Binutils, GNU diffutils, libjpeg, ffmpeg. On top of FOT, I aslo developed a novel directed greybox fuzzing technique~\cite{hawkeye} that targets on fuzzing specific locations of the program.
 }
 \sepspace
 
 \EducationEntry{MSc. in Computer Science}{2011.9-2014.3}{Shanghai Jiaotong University}{}
+  I have been doing LLVM based static analysis for C/C++ programs, as well as SOOT based analysis for Java programs.
 \sepspace
 
 \EducationEntry{BSc. in Mathematics}{2007.9-2011.6}{Nanjing University of Science and Technology}{}
@@ -129,20 +134,64 @@ I focus on Cybersecurity research in mobile applications and software. I develop
 %%% ------------------------------------------------------------
 \NewPart{Work experience}{}
 
+\EducationEntry{Research Associate}{2014.5-2015-8}{Nanyang Technological University}{}
+  I have been involved in a symbolic analysis on C/C++ programs and developed a static bug detection tool with precise points-to analysis and loop summarization based on LLVM~\cite{XieLLLC15}.
+\sepspace
+
 \EducationEntry{Research Intern}{2013.2-2013.11}{Microsoft Research Asia, Beijing}{}
+  I have worked in System Research Group in Microsoft Research Asia in developing a scopped symbolic execution backed with LLVM based static program slicing and KLEE symbolic executor.
 \sepspace
 
 %%% ------------------------------------------------------------
 \NewPart{Skills}{}
 
-\SkillsEntry{Languages}{Chinese Mandarin (mother tongue), English (proficient)}
-\SkillsEntry{Software}{\textsc{Rust}, \textsc{C/C++}, \textsc{Scala}, \textsc{Java}, \textsc{Python}, \textsc{Bash}, \textsc{OCaml}}
-\SkillsEntry{}{Linux, Coq, Isabelle, Haskell}
+\SkillsEntry{Languages}{Chinese Mandarin, English}
+\SkillsEntry{Software}{\textsc{LLVM, Rust, C/C++, Java, Python, }}
+\SkillsEntry{}{Linux API Programming, Bash, Radare2}
+\SkillsEntry{}{Scala,OCaml, Haskell, Coq, Isabelle}
+
+\NewPart{Discovered Bugs, Vulnerabilities and CVEs}\footnote{See \url{https://hongxuchen.github.io/} for details.}
+\begin{enumerate}
+    \item binaryen: 17 bugs
+    \item CImg: 2 bugs
+    \item Espruino: CVE-2018-11590, CVE-2018-11591, CVE-2018-11592, CVE-2018-11593, CVE-2018-11594, CVE-2018-11595, CVE-2018-11596, CVE-2018-11597, CVE-2018-11598
+    \item Exiv2: CVE-2018-19107, CVE-2018-19108, CVE-2018-19535
+    \item FFmpeg: CVE-2018-15822, CVE-2018-14394, CVE-2018-14395
+    \item FLIF: 2 bugs
+    \item GNU bc: 18 bugs
+    \item GNU Binutils: CVE-2018-17794
+    \item GNU diffutils: 2 bugs (git fix)
+    \item GraphicsMagick: 1 performance issue
+    \item GPAC: 15 bugs
+    \item JSMN: 1 bug
+    \item imagemagick: CVE-2018-14560 (RESERVED), CVE-2018-14561 (RESERVED)
+    \item Intel XED: 2 categories of bugs
+    \item libjpeg-turbo: CVE-2018-14498
+    \item libtoml: 6 bugs
+    \item lepton: 4 bugs
+    \item liblnk: 19 bugs (most of the root causes are inside its library libfwsi)
+    \item liblouis: 1 bug(CVE-2018-17294)
+    \item libmobi: 4 bugs
+    \item libpff: 3 bugs
+    \item libsass: 10 bugs, CVE-2018-19837, CVE-2018-19838, CVE-2018-19839,
+    \item libsixel: 5 crashes and 1 performance issue
+    \item libvips: 11 bugs
+    \item MJS: 33 bugs
+    \item mozjpeg: 1 bug
+    \item mxml: CVE-2018-20592, CVE-2018-20593
+    \item poppler: CVE-2018-20662
+    \item radare2: 40+ bugs, CVE-2018-19842, CVE-2018-19843, CVE-2018-20455, CVE-2018-20456, CVE-2018-20457, CVE-2018-20458, CVE-2018-20459, CVE-2018-20460, CVE-2018-20461
+    \item solidity: 2 crashes and 1 performance issue
+    \item Swift: 7 bugs (SR-8467, SR-8468, SR-8476, SR-8483, SR-8576, SR-8577)
+    \item tinyexr: 6 bugs
+    \item WAVM: 2 bugs(CVE-2018-17292, CVE-2018-17293)
+    \item WavPack: CVE-2018-19840, CVE-2018-19841
+    \item xdrpp: 1 bug
+    \item yaml-cpp: 2 bugs
+\end{enumerate}
 
 
 %%% ------------------------------------------------------------
-\NewPart{References}{}
-Available on request.
-% \bibliography{refs} 
-% \bibliographystyle{acm}
+\bibliography{pub} 
+\bibliographystyle{plain}
 \end{document}
