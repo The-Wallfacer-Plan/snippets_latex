@@ -127,12 +127,12 @@
 \NewPart{Education}{}
 
 \EducationEntry{Ph.D in Computer Engineering}{2015.8-2019.9(expected)}{Nanyang Technological University}{
-    I mainly focused on Cybersecurity research in mobile applications and C/C++ written software in POSIX systems. For mobile security, I developed a permission-dependent security type system for enforcing information flow in Android~\cite{sta}, as well as surveyed the Android Malware~\cite{XueM0TC0Z17}. For desktop applicatin security, I developed a Fuzzing Orchestration Toolkit (FOT)~\cite{fse18-fot} which has successfully detected 200+ vulnerabilities with high or critical severity in world-famous open source projects such as glibc, GNU Binutils, GNU diffutils, ImageMagick/GraphicsMagick, FFmpeg, libsass, libjpeg-turbo/mozjpeg, poppler, among these 61 CVEs have been assigned. On top of FOT, I aslo developed a novel directed greybox fuzzing technique~\cite{hawkeye} that targets on fuzzing specific locations of the program. FOT won the first award in the 16th National Software and Application Conference (NASAC 2017) prototype competition (fixed topic).
+    I mainly focused on Cybersecurity research in mobile applications and C/C++ written software in POSIX systems. For mobile security, I developed a permission-dependent type system which allows for secure information flow analysis in Android~\cite{sta}. For desktop software security, I developed a grey-box fuzzing framework named Fuzzing Orchestration Toolkit (FOT)~\cite{fse18-fot}. Till now, FOT has successfully detected 300+ vulnerabilities in world-famous open source projects such as glibc, GNU Binutils, ImageMagick/GraphicsMagick, FFmpeg, libsass, libjpeg-turbo, etc, among which 61 CVEs have been assigned. On top of FOT, I aslo developed a directed greybox fuzzing technique~\cite{hawkeye} that targets on fuzzing specific locations of the program. FOT won the first award in the 16th National Software and Application Conference (NASAC 2017) prototype competition (fixed topic).
 }
 \sepspace
 
 \EducationEntry{MSc. in Computer Science}{2011.9-2014.3}{Shanghai Jiaotong University}{
-  I mainly did some LLVM based static analysis for C/C++ programs to enhance dynamic symbolic execution; in addition, I was also involved in a SOOT based static analysis for Java programs.}
+  I did some LLVM based static analysis for C/C++ programs to enhance dynamic symbolic execution. I was also involved in a SOOT based static analysis for Java programs.}
 \sepspace
 
 \EducationEntry{BSc. in Mathematics}{2007.9-2011.6}{Nanjing University of Science and Technology}{}
@@ -145,7 +145,7 @@ I was involved in a project that did symbolic analysis on C/C++ programs and dev
 \sepspace
 
 \EducationEntry{Research Intern}{2013.2-2013.11}{Microsoft Research Asia, Beijing}{
-    I was an intern in System Research Group in Microsoft Research Asia (MSRA), during which I develped a white-box testing framework backed with static program slicing and KLEE symbolic executor.}
+    I develped a white-box testing framework backed with program slicing and KLEE symbolic executor.}
 \sepspace
 
 %%% ------------------------------------------------------------
@@ -159,10 +159,11 @@ I was involved in a project that did symbolic analysis on C/C++ programs and dev
 \pagebreak
 
 \NewPart{Discovered Bugs}
-Below are the selected bugs or vulnerabilities discovered by me; several of them have been assigned CVE IDs. Latest list is available at \url{https://hongxuchen.github.io/}.
+Below are the selected bugs or vulnerabilities discovered by me; several of them have been assigned CVE IDs. Latest list is available at \url{https://hongxuchen.github.io/} and \url{https://github.com/ntu-sec/pocs}.
 \begin{enumerate}
     \item binaryen: 17 bugs
     \item CImg: 2 bugs
+    \item DjVuLibre: CVE-2019-15142, CVE-2019-15143, CVE-2019-15144, CVE-2019-15145
     \item Espruino: CVE-2018-11590, CVE-2018-11591, CVE-2018-11592, CVE-2018-11593, CVE-2018-11594, CVE-2018-11595, CVE-2018-11596, CVE-2018-11597, CVE-2018-11598
     \item Exiv2: CVE-2018-19107, CVE-2018-19108, CVE-2018-19535
     \item FFmpeg: CVE-2018-15822, CVE-2018-14394, CVE-2018-14395
@@ -171,12 +172,13 @@ Below are the selected bugs or vulnerabilities discovered by me; several of them
     \item GNU bc: 18 bugs
     \item GNU Binutils: CVE-2018-17794
     \item GNU diffutils: 2 bugs (git fix)
-    % \item GNU grep: #34140
-    % \item GNU sed: #34141, #34142
+    \item GNU grep: \#34140
+    \item GNU sed: \#34141, \#34142
     \item GraphicsMagick: 1 performance issue, CVE-2019-11474
     \item GPAC: 15 bugs
+    \item gpmf-parser: CVE-2019-15146, CVE-2019-15147, CVE-2019-15148
     \item JSMN: 1 bug
-    \item imagemagick: CVE-2018-14560 (RESERVED), CVE-2018-14561 (RESERVED), CVE-2019-11470, CVE-2019-11472, CVE-2019-11473
+    \item imagemagick: CVE-2018-14560 (RESERVED), CVE-2018-14561 (RESERVED), CVE-2019-11470, CVE-2019-11472, CVE-2019-11473, CVE-2019-15139, CVE-2019-15140, CVE-2019-15141
     \item Intel XED: 2 categories of bugs
     \item libheif: CVE-2019-11471
     \item libjpeg-turbo: CVE-2018-14498
@@ -187,7 +189,7 @@ Below are the selected bugs or vulnerabilities discovered by me; several of them
     \item libmobi: 4 bugs
     \item libpff: 3 bugs
     \item libsass: 10 bugs, CVE-2018-19837, CVE-2018-19838, CVE-2018-19839, CVE-2018-20821, CVE-2018-20822
-    \item libsixel: 5 crashes and 1 performance issue
+    \item libsixel: 5 crashes and 1 performance issue \\
     \item libvips: 11 bugs
     \item libvpx: CVE-2019-11475
     \item MJS: 33 bugs
