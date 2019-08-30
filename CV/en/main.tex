@@ -31,6 +31,7 @@
 \usepackage{graphicx}                    % Enable pdflatex
 \usepackage{hyperref}
 \usepackage[svgnames]{xcolor}            % Colors by their 'svgnames'
+\usepackage{enumitem}
 \usepackage{geometry}
 	\textheight=700px                    % Saving trees ;-)
 \usepackage{url}
@@ -57,8 +58,8 @@
 \settowidth{\spacebox}{8888888888}			% Box to align text
 \newcommand{\sepspace}{\vspace*{9pt}}		% Vertical space macro
 
-\newcommand{\MyName}[1]{ % Name
-		\Huge \usefont{OT1}{phv}{b}{n} \hfill #1
+\newcommand{\MyName}[2]{ % Name
+		\Huge \usefont{OT1}{phv}{b}{n} \hfill #1 #2
 		\par \normalsize \normalfont}
 		
 \newcommand{\MySlogan}[1]{ % Slogan (optional)
@@ -82,10 +83,10 @@
 \newcommand{\EducationEntry}[4]{
 		\noindent \textbf{#1} \hfill      % Study
 		% \colorbox{lightgray}{%
-			\parbox{12em}{%
+			\parbox{16em}{%
 			\hfill\color{Black}#2} \par  % Duration
 		\noindent \textit{#3} \par        % School
-		\noindent\hangindent=2em\hangafter=0 \small #4 % Description
+        \noindent\hangindent=2em\hangafter=0\small #4 % Description
 		\normalsize \par}
 
 \newcommand{\WorkEntry}[4]{				  % Same as \EducationEntry
@@ -106,7 +107,8 @@
 %		\includegraphics[width=0.15\textwidth]{photo}
 %\end{wrapfigure}
 
-\MyName{Hongxu Chen}
+\MyName{Hongxu Chen}{}
+% \MyName{Hongxu Chen}{\includegraphics[width=0.24\textwidth] {sigs/xingkai_yuhongliang.png}}
 \MySlogan{{https://hongxuchen.github.io}}
 % \MyName{Hongxu Chen~{}~}
 % \MySlogan{\url{https://hongxuchen.github.io/}}
@@ -126,40 +128,49 @@
 %%% ------------------------------------------------------------
 \NewPart{Education}{}
 
-\EducationEntry{Ph.D in Computer Engineering}{2015.8-2019.9(expected)}{Nanyang Technological University}{
+\EducationEntry{Ph.D in Computer Engineering}{2015.08 $\sim$ 2019.10 (expected)}{Nanyang Technological University, Singapore}{
     I mainly focused on Cybersecurity research in mobile applications and C/C++ written software in POSIX systems. For mobile security, I developed a permission-dependent type system which allows for secure information flow analysis in Android~\cite{sta}. For desktop software security, I developed a grey-box fuzzing framework named Fuzzing Orchestration Toolkit (FOT)~\cite{fse18-fot}. Till now, FOT has successfully detected 300+ vulnerabilities in world-famous open source projects such as glibc, GNU Binutils, ImageMagick/GraphicsMagick, FFmpeg, libsass, libjpeg-turbo, etc, among which 61 CVEs have been assigned. On top of FOT, I aslo developed a directed greybox fuzzing technique~\cite{hawkeye} that targets on fuzzing specific locations of the program. FOT won the first award in the 16th National Software and Application Conference (NASAC 2017) prototype competition (fixed topic).
 }
 \sepspace
 
-\EducationEntry{MSc. in Computer Science}{2011.9-2014.3}{Shanghai Jiaotong University}{
-  I did some LLVM based static analysis for C/C++ programs to enhance dynamic symbolic execution. I was also involved in a SOOT based static analysis for Java programs.}
+\EducationEntry{MSc. in Computer Science}{2011.09 $\sim$ 2014.03}{Shanghai Jiaotong University, China}{
+  I did LLVM based static analysis for C/C++ programs to enhance dynamic symbolic execution, and was also involved in a SOOT based static analysis for Java programs.}
 \sepspace
 
-\EducationEntry{BSc. in Mathematics}{2007.9-2011.6}{Nanjing University of Science and Technology}{}
+\EducationEntry{BSc. in Mathematics}{2007.09 $\sim$ 2011.06}{Nanjing University of Science and Technology, China}{}
 
 %%% ------------------------------------------------------------
 \NewPart{Work experience}{}
 
-\EducationEntry{Research Associate}{2014.5-2015-8}{Nanyang Technological University}{
-I was involved in a project that did symbolic analysis on C/C++ programs and developed a static bug detection tool with precise points-to analysis and loop summarization based on LLVM~\cite{XieLLLC15}.}
+\EducationEntry{Research Associate}{2014.05 $\sim$ 2015.08}{Nanyang Technological University, Singapore}{
+% I was involved in a project that did symbolic analysis on C/C++ programs and developed a static bug detection tool with precise points-to analysis and loop summarization based on LLVM~\cite{XieLLLC15}.
+}
 \sepspace
 
-\EducationEntry{Research Intern}{2013.2-2013.11}{Microsoft Research Asia, Beijing}{
-    I develped a white-box testing framework backed with program slicing and KLEE symbolic executor.}
+\EducationEntry{Research Intern}{2013.02 $\sim$ 2013.11}{Microsoft Research Asia, Beijing}{
+    % I develped a white-box testing framework backed with program slicing and KLEE symbolic executor.
+}
 \sepspace
 
 %%% ------------------------------------------------------------
 \NewPart{Skills}{}
 
-\SkillsEntry{Languages}{Chinese Mandarin, English}
+\SkillsEntry{Languages}{Chinese Mandarin (native), English (fluent)}
 \SkillsEntry{Software}{{LLVM, Rust, C/C++, Java, Python}}
 \SkillsEntry{}{Linux Programming, Bash, Radare2}
-\SkillsEntry{}{Scala,OCaml, Haskell, Coq, Isabelle}
+\SkillsEntry{}{Scala, OCaml, Haskell, Coq, Isabelle}
+
+\pagebreak
+
+\bibliography{pub} 
+% \bibliographystyle{plain}
+\bibliographystyle{unsrt}
 
 \pagebreak
 
 \NewPart{Discovered Bugs}
-Below are the selected bugs or vulnerabilities discovered by me; several of them have been assigned CVE IDs. Latest list is available at \url{https://hongxuchen.github.io/} and \url{https://github.com/ntu-sec/pocs}.
+Below are the selected bugs or vulnerabilities discovered by me, several of which have been assigned CVE IDs. Latest list is available at \url{https://hongxuchen.github.io/} and \url{https://github.com/ntu-sec/pocs}.
+% \begin{minipage}[.95\linewidth]
 \begin{enumerate}
     \item binaryen: 17 bugs
     \item CImg: 2 bugs
@@ -178,7 +189,7 @@ Below are the selected bugs or vulnerabilities discovered by me; several of them
     \item GPAC: 15 bugs
     \item gpmf-parser: CVE-2019-15146, CVE-2019-15147, CVE-2019-15148
     \item JSMN: 1 bug
-    \item imagemagick: CVE-2018-14560 (RESERVED), CVE-2018-14561 (RESERVED), CVE-2019-11470, CVE-2019-11472, CVE-2019-11473, CVE-2019-15139, CVE-2019-15140, CVE-2019-15141
+    \item imagemagick: CVE-2018-14560, CVE-2018-14561, CVE-2019-11470, CVE-2019-11472, CVE-2019-11473, CVE-2019-15139, CVE-2019-15140, CVE-2019-15141
     \item Intel XED: 2 categories of bugs
     \item libheif: CVE-2019-11471
     \item libjpeg-turbo: CVE-2018-14498
@@ -189,7 +200,10 @@ Below are the selected bugs or vulnerabilities discovered by me; several of them
     \item libmobi: 4 bugs
     \item libpff: 3 bugs
     \item libsass: 10 bugs, CVE-2018-19837, CVE-2018-19838, CVE-2018-19839, CVE-2018-20821, CVE-2018-20822
-    \item libsixel: 5 crashes and 1 performance issue \\
+\end{enumerate}
+\pagebreak
+\begin{enumerate}[resume]
+    \item libsixel: 5 crashes and 1 performance issue
     \item libvips: 11 bugs
     \item libvpx: CVE-2019-11475
     \item MJS: 33 bugs
@@ -207,8 +221,6 @@ Below are the selected bugs or vulnerabilities discovered by me; several of them
     \item xdrpp: 1 bug
     \item yaml-cpp: 2 bugs
 \end{enumerate}
+% \end{minipage}
 
-
-\bibliography{pub} 
-\bibliographystyle{plain}
 \end{document}
