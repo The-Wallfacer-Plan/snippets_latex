@@ -1,0 +1,166 @@
+%# -*- coding:utf-8 -*-
+%% start of file `template_en.tex'.
+%% Copyright 2006-1008 Xavier Danaux (xdanaux@gmail.com).
+%
+% This work may be distributed and/or modified under the
+% conditions of the LaTeX Project Public License version 1.3c,
+% available at http://www.latex-project.org/lppl/.
+
+
+\documentclass[11pt,a4paper]{moderncv}
+
+\usepackage{fontspec,xunicode}
+\setmainfont{Tahoma}
+\usepackage[slantfont,boldfont]{xeCJK}
+\usepackage{xcolor}
+%\usepackage{biblatex}
+
+
+\setmainfont{Times New Roman}%缺省英文字体.serif是有衬线字体sans serif无衬线字体
+\setCJKmainfont[ItalicFont={KaiTi_GB2312}, BoldFont={SimHei}]{STZhongsong}%衬线字体 缺省中文字体为
+\setCJKsansfont{STZhongsong}
+\setCJKmonofont{STZhongsong}%中文等宽字体
+% \setCJKsansfont{STSong}
+% \setCJKmonofont{STFangsong}%中文等宽字体
+%-----------------------xeCJK下设置中文字体------------------------------%
+\setCJKfamilyfont{song}{SimSun}                             %宋体 song
+\newcommand{\song}{\CJKfamily{song}}
+\setCJKfamilyfont{fs}{FangSong_GB2312}                      %仿宋2312 fs
+\newcommand{\fs}{\CJKfamily{fs}}
+\setCJKfamilyfont{yh}{Microsoft YaHei}                    %微软雅黑 yh
+\newcommand{\yh}{\CJKfamily{yh}}
+\setCJKfamilyfont{hei}{SimHei}                              %黑体  hei
+\newcommand{\hei}{\CJKfamily{hei}}
+\setCJKfamilyfont{hwxh}{STXihei}                                %华文细黑  hwxh
+\newcommand{\hwxh}{\CJKfamily{hwxh}}
+\setCJKfamilyfont{asong}{Adobe Song Std}                        %Adobe 宋体  asong
+\newcommand{\asong}{\CJKfamily{asong}}
+\setCJKfamilyfont{ahei}{Adobe Heiti Std}                            %Adobe 黑体  ahei
+\newcommand{\ahei}{\CJKfamily{ahei}}
+\setCJKfamilyfont{akai}{Adobe Kaiti Std}                            %Adobe 楷体  akai
+\newcommand{\akai}{\CJKfamily{akai}}
+
+
+%------------------------------设置字体大小------------------------%
+\newcommand{\chuhao}{\fontsize{42pt}{\baselineskip}\selectfont}     %初号
+\newcommand{\xiaochuhao}{\fontsize{36pt}{\baselineskip}\selectfont} %小初号
+\newcommand{\yihao}{\fontsize{28pt}{\baselineskip}\selectfont}      %一号
+\newcommand{\erhao}{\fontsize{21pt}{\baselineskip}\selectfont}      %二号
+\newcommand{\xiaoerhao}{\fontsize{18pt}{\baselineskip}\selectfont}  %小二号
+\newcommand{\sanhao}{\fontsize{15.75pt}{\baselineskip}\selectfont}  %三号
+\newcommand{\sihao}{\fontsize{14pt}{\baselineskip}\selectfont}         %四号
+\newcommand{\xiaosihao}{\fontsize{12pt}{\baselineskip}\selectfont}  %小四号
+\newcommand{\wuhao}{\fontsize{10.5pt}{\baselineskip}\selectfont}    %五号
+\newcommand{\subwuhao}{\fontsize{10pt}{\baselineskip}\selectfont}    %次五号
+\newcommand{\xiaowuhao}{\fontsize{9pt}{\baselineskip}\selectfont}   %小五号
+\newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  %六号
+\newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    %七号
+
+
+%\usepackage{fontawesome}
+% \setCJKmainfont[BoldFont={WenQuanYi Micro Hei/Bold}]{WenQuanYi Micro Hei}
+%\defaultfontfeatures{Mapping=tex-text}
+%\XeTeXlinebreaklocale "zh"
+%\XeTeXlinebreakskip = 0pt plus 1pt minus 0.1pt
+% moderncv themes
+\moderncvtheme[blue]{classic}                 % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+%\moderncvtheme[green]{classic}                % idem
+%\moderncvtheme[blue,roman]{hht}
+% character encoding
+
+
+
+% adjust the page margins
+\usepackage[scale=0.9]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}						% if you want to change the width of the column with the dates
+%\AtBeginDocument{\setlength{\maketitlenamewidth}{6cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
+\AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
+
+% personal data
+\firstname{陈泓旭}
+\familyname{}
+% \title{}               % optional, remove the line if not wanted
+% \address{1989/08/06}{}    % optional, remove the line if not wanted
+\mobile{+65 8547 6746}                    % optional, remove the line if not wanted
+\email{hongxuchen@outlook.com}                     % optional, remove the line if not wanted
+\homepage{hongxuchen.github.io} % optional, remove the line if not wanted
+\social[github]{HongxuChen}
+\social[twitter]{hongxuchen}
+\social[linkedin]{hongxu-chen-09a97640}
+\extrainfo{%
+  wechat: hongxu\_chen
+}
+
+\photo[64pt][0pt]{400x514.jpg}                         % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{China\TeX 您的LaTeX乐园，TeX\&\LaTeX 王国}                 % optional, remove the line if not wante
+
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+
+\setlength{\hintscolumnwidth}{3.2cm}
+
+\renewcommand\refname{发表论文}
+
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
+\begin{document}
+\maketitle
+\vspace*{-10mm}
+
+\section{工作经历}
+\cventry{2019.08-目前}{南洋理工大学}{副研究员}{}{}{扩展并维护模糊测试框架FOT, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试, 项目主页\url{https://sites.google.com/view/fot-the-fuzzer}。}
+\cventry{2014.05-2015.08}{南洋理工大学}{副研究员}{}{}{基于LLVM的数据流分析, 该项目主要为了精化数据流分析来指导动态测试的有效性。}
+\cventry{2013.02-2014.11}{微软亚洲研究员}{实习生}{}{}{通过静态分析提高白盒测试程序补丁的有效性; 实现了对补丁程序切片静态代码分析工具,使得被切片后的程序可以有效地用于白盒测试。}
+\section{教育经历}
+\cventry{2015.08-目前}{博士}{南洋理工大学}{计算机科学与技术}{网络安全实验室, 导师: 刘杨教授}{主要关注移动系统安全和软件的实现安全:}
+\cvlistitem{系统安全: 利用类型系统验证依赖于权限的信息流安全, 该类型系统主要对Android系统的App之间的交互进行建模, 我设计了该类型系统并完成对系统健壮性的形式化验证。}
+\cvlistitem{软件安全: 从事对C/C++程序进行模糊测试的研究, 主要思路为利用程序分析的方法来提高模糊测试的有效性。}
+\cventry{2011.09-2014.03}{硕士}{上海交通大学}{计算机科学与技术}{高可靠软件实验室, 导师: 赵建军教授}{关注基于程序分析的软件可靠性研究, 包括指针分析, 程序切片, 符号执行等。}
+\cventry{2007.09-2011.07}{本科}{南京理工大学}{信息与计算科学}{}{}
+\section{科研项目}
+% \subsection{科研项目}
+\cvline{FOT}{2017.07至今\quad 开发并维护模糊测试框架FOT~\cite{fse18-fot}, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 其中61个被赋予CVE编号, 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题组)一等奖, 并作为工具论文被CCF-A类会议ESEC/FSE 2018所接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019所接受。}
+\cvline{Hawkeye}{2018.01-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye~\cite{hawkeye}, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018所接受。}
+\cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。该工作被CCF-B类会议CSF 2018所接受。}
+\cvline{RBScope}{2013.02-2013-11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
+%\subsection{开源项目}
+%\cvline{markvis}{在 markdown 中直接生成可视化图表的插件
+%  \emph{https://markvis.js.org} \textbf{GitHub 1000 stars}}
+%\cvline{netjsongraph.js}{用力导向图可视化出无线路由图谱数据 \emph{https://github.com/netjson/netjsongraph.js}}
+%\cvline{typing}{Hexo 静态博客主题 \emph{https://github.com/geekplux/hexo-theme-typing}}
+%\cvline{UnityVis}{Unity 中的基本可视化图表 \emph{https://github.com/geekplux/Basic-Visualization-in-Unity}}
+\section{技能}
+\cvline{\textbf{精通}}{Java, Python, Rust, 静态分析, 模糊测试, 符号执行}
+\cvline{\textbf{熟练}}{LLVM/GCC, Linux编程, Bash, JVM}
+\cvline{\textbf{了解}}{Radare2, OCaml, Haskell, Coq, Isabelle}
+
+% \renewcommand{\listitemsymbol}{-} % change the symbol for lists
+
+% \section{Extra 1}
+% \cvlistitem{Item 1}
+% \cvlistitem{Item 2}
+%\cvlistitem[+]{Item 3}            % optional other symbol% XeLaTeX can use any Mac OS X font. See the setromanfont command below.
+% Input to XeLaTeX is full Unicode, so Unicode characters can be typed directly into the source.
+
+% The next lines tell TeXShop to typeset with xelatex, and to open and save the source with Unicode encoding.
+
+%!TEX TS-program = xelatex
+%!TEX encoding = UTF-8 Unicode
+
+%\section{Extra 2}
+%\cvlistdoubleitem[\Neutral]{Item 1}{Item 4}
+%\cvlistdoubleitem[\Neutral]{Item 2}{Item 5}
+%\cvlistdoubleitem[\Neutral]{Item 3}{}
+
+%% Publications from a BibTeX file
+\nocite{*}
+\bibliographystyle{unsrt}
+\bibliography{pubs}
+%\printbibliography[title={Peer-Reviewed Journal articles}]
+
+% \begin{thebibliography}{}
+% \bibitem[]{} 移动增强现实可视化综述[C]. ChinaVis 2017.
+% \end{thebibliography}
+
+
+\end{document}
