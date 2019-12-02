@@ -13,6 +13,13 @@
 \setmainfont{Tahoma}
 \usepackage[slantfont,boldfont]{xeCJK}
 \usepackage{xcolor}
+%\usepackage[
+%%backend=biber, 
+%natbib=true,
+%style=numeric,
+%sorting=none
+%]{biblatex}
+%\addbibresource{pubs.bib}
 %\usepackage{biblatex}
 
 
@@ -81,7 +88,7 @@
 \familyname{}
 % \title{}               % optional, remove the line if not wanted
 % \address{1989/08/06}{}    % optional, remove the line if not wanted
-\mobile{+65 8547 6746}                    % optional, remove the line if not wanted
+\mobile{+6585476746/+8613262642393}                    % optional, remove the line if not wanted
 \email{hongxuchen@outlook.com}                     % optional, remove the line if not wanted
 \homepage{hongxuchen.github.io} % optional, remove the line if not wanted
 \social[github]{HongxuChen}
@@ -108,9 +115,9 @@
 \vspace*{-10mm}
 
 \section{工作经历}
-\cventry{2019.08-目前}{南洋理工大学}{副研究员}{}{}{扩展并维护模糊测试框架FOT, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试, 项目主页\url{https://sites.google.com/view/fot-the-fuzzer}。}
-\cventry{2014.05-2015.08}{南洋理工大学}{副研究员}{}{}{基于LLVM的数据流分析, 该项目主要为了精化数据流分析来指导动态测试的有效性。}
-\cventry{2013.02-2014.11}{微软亚洲研究员}{实习生}{}{}{通过静态分析提高白盒测试程序补丁的有效性; 实现了对补丁程序切片静态代码分析工具,使得被切片后的程序可以有效地用于白盒测试。}
+\cventry{2019.08-目前}{南洋理工大学}{Research Associate}{}{}{扩展并维护模糊测试框架FOT, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试, 项目主页\url{https://sites.google.com/view/fot-the-fuzzer}。目前同时进行的项目包括高性能跨CPU二进制模糊测试框架BiFF, 对多线程程序的模糊测试技术MUZZ。}
+\cventry{2014.05-2015.08}{南洋理工大学}{Research Associate}{}{}{基于LLVM的数据流分析, 该项目主要为了精化数据流分析来指导动态测试的有效性。}
+\cventry{2013.02-2014.11}{微软亚洲研究员}{研究实习生}{}{}{通过静态分析提高白盒测试程序补丁的有效性; 实现了对补丁程序切片静态代码分析工具,使得被切片后的程序可以有效地用于白盒测试。}
 \section{教育经历}
 \cventry{2015.08-目前}{博士}{南洋理工大学}{计算机科学与技术}{网络安全实验室, 导师: 刘杨教授}{主要关注移动系统安全和软件的实现安全:}
 \cvlistitem{系统安全: 利用类型系统验证依赖于权限的信息流安全, 该类型系统主要对Android系统的App之间的交互进行建模, 我设计了该类型系统并完成对系统健壮性的形式化验证。}
@@ -119,20 +126,33 @@
 \cventry{2007.09-2011.07}{本科}{南京理工大学}{信息与计算科学}{}{}
 \section{科研项目}
 % \subsection{科研项目}
-\cvline{FOT}{2017.07至今\quad 开发并维护模糊测试框架FOT~\cite{fse18-fot}, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 其中61个被赋予CVE编号, 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题组)一等奖, 并作为工具论文被CCF-A类会议ESEC/FSE 2018所接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019所接受。}
+\cvline{FOT}{2017.07至今\quad 主导开发并维护模糊测试框架FOT \cite{fse18-fot}, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 61个被赋予CVE编号, 这包括GNU libc, FFmpeg, ImageMagick等知名开源项目中的10个严重或高危漏洞。 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题型)一等奖, 并作为工具论文被CCF-A类会议ESEC/FSE 2018所接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019所接受。}
+\cvline{BiFF}{2018.11至今\quad 参与开发高性能跨CPU模糊测试框架BiFF, 该框架致力于改进现有二进制模糊测试技术, 使用轻量级的hooking技术及对"服务型"程序的测试流程优化,提高对不同CPU下IoT设备模糊测试的有效性。该框架获得NASAC2019原型竞赛(自由型)一等奖。}
 \cvline{Hawkeye}{2018.01-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye~\cite{hawkeye}, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018所接受。}
 \cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。该工作被CCF-B类会议CSF 2018所接受。}
-\cvline{RBScope}{2013.02-2013-11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
+\cvline{RBScope}{2013.02-2013.11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
 %\subsection{开源项目}
 %\cvline{markvis}{在 markdown 中直接生成可视化图表的插件
 %  \emph{https://markvis.js.org} \textbf{GitHub 1000 stars}}
 %\cvline{netjsongraph.js}{用力导向图可视化出无线路由图谱数据 \emph{https://github.com/netjson/netjsongraph.js}}
 %\cvline{typing}{Hexo 静态博客主题 \emph{https://github.com/geekplux/hexo-theme-typing}}
 %\cvline{UnityVis}{Unity 中的基本可视化图表 \emph{https://github.com/geekplux/Basic-Visualization-in-Unity}}
+
+%\section{论文评审经历}
+
+\section{助教经历}
+\cvline{面向对象设计编程}{2018年秋学期\quad 负责面向对象设计与编程(Object Oriented Design and Programming, CE/CZ2002)实验指导、答疑及批改。}
+\cvline{软件工程}{2018年春学期\quad 负责软件工程(Software Engineering, CE/CZ2006)实验指导、答疑及批改。}
+\cvline{软件系统分析设计}{2017年秋学期\quad 负责软件系统分析与设计(Software Systems Analysis and Design, CE/CZ3003)实验指导及答疑。}
+\cvline{计算机安全}{2017年秋学期\quad 负责计算机安全(Computer Security, CE/CZ4062)课程设计及批改。}
+\cvline{密码学与网络安全}{2017年春学期\quad 负责密码学与网络安全(Cryptography and Network Security, CE/CZ4024)课程作业设计及批改。}
+\cvline{编译技术}{2016年春学期\quad 负责编译技术(Compiler Techniques, CE/CZ3007)实验指导、答疑及批改。}
+\cvline{数据结构与算法}{2016年秋学期\quad 负责数据结构与算法(Algorithms, CE/CZ2001)实验指导、答疑及批改。}
+
 \section{技能}
-\cvline{\textbf{精通}}{Java, Python, Rust, 静态分析, 模糊测试, 符号执行}
-\cvline{\textbf{熟练}}{LLVM/GCC, Linux编程, Bash, JVM}
-\cvline{\textbf{了解}}{Radare2, OCaml, Haskell, Coq, Isabelle}
+\cvline{\textbf{精通}}{静态分析, 模糊测试, 符号执行, 二进制安全, Java, Python, Rust}
+\cvline{\textbf{熟练}}{程序语言理论, 编译技术, Linux系统编程, 形式化验证, LLVM/GCC, Bash, JVM, C/C++}
+\cvline{\textbf{了解}}{OCaml, Haskell, Coq, Isabelle}
 
 % \renewcommand{\listitemsymbol}{-} % change the symbol for lists
 
@@ -157,10 +177,6 @@
 \bibliographystyle{unsrt}
 \bibliography{pubs}
 %\printbibliography[title={Peer-Reviewed Journal articles}]
-
-% \begin{thebibliography}{}
-% \bibitem[]{} 移动增强现实可视化综述[C]. ChinaVis 2017.
-% \end{thebibliography}
 
 
 \end{document}
