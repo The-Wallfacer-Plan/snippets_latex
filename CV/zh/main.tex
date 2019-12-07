@@ -63,6 +63,8 @@
 \newcommand{\liuhao}{\fontsize{7.875pt}{\baselineskip}\selectfont}  %六号
 \newcommand{\qihao}{\fontsize{5.25pt}{\baselineskip}\selectfont}    %七号
 
+\newcommand{\ccfe}{\underline}
+
 
 %\usepackage{fontawesome}
 % \setCJKmainfont[BoldFont={WenQuanYi Micro Hei/Bold}]{WenQuanYi Micro Hei}
@@ -126,9 +128,9 @@
 \cventry{2007.09-2011.07}{本科}{南京理工大学}{信息与计算科学}{}{}
 \section{科研项目}
 % \subsection{科研项目}
-\cvline{FOT}{2017.07至今\quad 主导开发并维护模糊测试框架FOT \cite{fse18-fot}, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 61个被赋予CVE编号, 这包括GNU libc, FFmpeg, ImageMagick等知名开源项目中的10个严重或高危漏洞。 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题型)一等奖, 并作为工具论文被CCF-A类会议ESEC/FSE 2018所接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019所接受。}
-\cvline{BiFF}{2018.11至今\quad 参与开发高性能跨CPU模糊测试框架BiFF, 该框架致力于改进现有二进制模糊测试技术, 使用轻量级的hooking技术及对"服务型"程序的测试流程优化,提高对不同CPU下IoT设备模糊测试的有效性。该框架获得NASAC2019原型竞赛(自由型)一等奖。}
-\cvline{Hawkeye}{2018.01-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye~\cite{hawkeye}, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018所接受。}
+\cvline{FOT}{2017.07至今\quad 主导开发并维护模糊测试框架FOT, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 61个被赋予CVE编号, 这包括GNU libc, FFmpeg, ImageMagick等知名开源项目中的10个严重或高危漏洞。 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题型)一等奖, 并作为工具论文被CCF-A类会议ESEC/FSE 2018所接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019所接受。}
+\cvline{BiFF}{2018.11至今\quad 参与开发高性能跨CPU模糊测试框架BiFF, 该框架致力于改进现有二进制模糊测试技术, 使用轻量级的hooking技术及对``服务型''程序的测试流程优化,提高对不同CPU下IoT设备模糊测试的有效性。该框架获得NASAC2019原型竞赛(自由型)一等奖。}
+\cvline{Hawkeye}{2018.01-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018所接受。}
 \cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。该工作被CCF-B类会议CSF 2018所接受。}
 \cvline{RBScope}{2013.02-2013.11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
 %\subsection{开源项目}
@@ -149,10 +151,10 @@
 \cvline{编译技术}{2016年春学期\quad 负责编译技术(Compiler Techniques, CE/CZ3007)实验指导、答疑及批改。}
 \cvline{数据结构与算法}{2016年秋学期\quad 负责数据结构与算法(Algorithms, CE/CZ2001)实验指导、答疑及批改。}
 
-\section{技能}
-\cvline{\textbf{精通}}{静态分析, 模糊测试, 符号执行, 二进制安全, Java, Python, Rust}
-\cvline{\textbf{熟练}}{程序语言理论, 编译技术, Linux系统编程, 形式化验证, LLVM/GCC, Bash, JVM, C/C++}
-\cvline{\textbf{了解}}{OCaml, Haskell, Coq, Isabelle}
+% \section{技能}
+% \cvline{\textbf{精通}}{静态分析, 模糊测试, 符号执行, 二进制安全, Java, Python, Rust}
+% \cvline{\textbf{熟练}}{程序语言理论, 编译技术, Linux系统编程, 形式化验证, LLVM/GCC, Bash, JVM, C/C++}
+% \cvline{\textbf{了解}}{OCaml, Haskell, Coq, Isabelle}
 
 % \renewcommand{\listitemsymbol}{-} % change the symbol for lists
 
@@ -163,9 +165,6 @@
 % Input to XeLaTeX is full Unicode, so Unicode characters can be typed directly into the source.
 
 % The next lines tell TeXShop to typeset with xelatex, and to open and save the source with Unicode encoding.
-
-%!TEX TS-program = xelatex
-%!TEX encoding = UTF-8 Unicode
 
 %\section{Extra 2}
 %\cvlistdoubleitem[\Neutral]{Item 1}{Item 4}
