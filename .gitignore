@@ -26,3 +26,4 @@ main.pdf
 document.pdf
 !fig/
 *.synctex.gz
+.textemp/

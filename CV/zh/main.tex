@@ -1,11 +1,4 @@
 %# -*- coding:utf-8 -*-
-%% start of file `template_en.tex'.
-%% Copyright 2006-1008 Xavier Danaux (xdanaux@gmail.com).
-%
-% This work may be distributed and/or modified under the
-% conditions of the LaTeX Project Public License version 1.3c,
-% available at http://www.latex-project.org/lppl/.
-
 
 \documentclass[11pt,a4paper]{moderncv}
 
@@ -24,7 +17,7 @@
 
 
 \setmainfont{Times New Roman}%缺省英文字体.serif是有衬线字体sans serif无衬线字体
-\setCJKmainfont[ItalicFont={KaiTi_GB2312}, BoldFont={SimHei}]{STZhongsong}%衬线字体 缺省中文字体为
+\setCJKmainfont[ItalicFont={KaiTi}, BoldFont={SimHei}]{STZhongsong}%衬线字体 缺省中文字体为
 \setCJKsansfont{STZhongsong}
 \setCJKmonofont{STZhongsong}%中文等宽字体
 % \setCJKsansfont{STSong}
@@ -81,8 +74,8 @@
 
 
 % adjust the page margins
-\usepackage[scale=0.9]{geometry}
-%\setlength{\hintscolumnwidth}{3cm}						% if you want to change the width of the column with the dates
+\usepackage[scale=0.93]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}                                             % if you want to change the width of the column with the dates
 %\AtBeginDocument{\setlength{\maketitlenamewidth}{6cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
 \AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
 
@@ -108,7 +101,7 @@
 
 \setlength{\hintscolumnwidth}{3.2cm}
 
-\renewcommand\refname{发表论文及获奖}
+\renewcommand\refname{论文及获奖}
 
 %----------------------------------------------------------------------------------
 %            content
@@ -118,9 +111,9 @@
 \vspace*{-10mm}
 
 \section{工作经历}
-\cventry{2019.08-目前}{南洋理工大学}{Research Associate}{}{}{扩展并维护模糊测试框架FOT, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试, 项目主页\url{https://sites.google.com/view/fot-the-fuzzer}。目前同时进行的项目包括高性能跨CPU二进制模糊测试框架BiFF, 对多线程程序的模糊测试技术MUZZ。}
+\cventry{2019.08-目前}{南洋理工大学}{Research Associate}{}{}{扩展并维护模糊测试框架FOT, 项目主页\url{https://sites.google.com/view/fot-the-fuzzer}。目前同时进行的项目包括高性能跨CPU二进制模糊测试框架BiFF, 对多线程程序的模糊测试技术MUZZ。}
 \cventry{2014.05-2015.08}{南洋理工大学}{Research Associate}{}{}{基于LLVM的数据流分析, 该项目主要为了精化数据流分析来指导动态测试的有效性。}
-\cventry{2013.02-2014.11}{微软亚洲研究员}{研究实习生}{}{}{通过静态分析提高白盒测试程序补丁的有效性; 实现了对补丁程序切片静态代码分析工具,使得被切片后的程序可以有效地用于白盒测试。}
+\cventry{2013.02-2014.11}{微软亚洲研究员}{研究实习生}{}{}{通过静态分析提高白盒测试程序补丁的有效性; 实现了对补丁程序切片静态代码分析工具, 使得被切片后的程序可以有效地用于白盒测试。}
 \section{教育经历}
 \cventry{2015.08-目前}{博士}{南洋理工大学}{计算机科学与技术}{网络安全实验室, 导师: 刘杨教授}{主要关注移动系统安全和软件的实现安全:}
 \cvlistitem{系统安全: 利用类型系统验证依赖于权限的信息流安全, 该类型系统主要对Android系统的App之间的交互进行建模, 我设计了该类型系统并完成对系统健壮性的形式化验证。}
@@ -129,10 +122,10 @@
 \cventry{2007.09-2011.07}{本科}{南京理工大学}{信息与计算科学}{}{}
 \section{科研项目}
 % \subsection{科研项目}
-\cvline{FOT}{2017.07至今\quad 主导开发并维护模糊测试框架FOT, 该框架结合了现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 61个被赋予CVE编号, 这包括GNU libc, FFmpeg, ImageMagick等知名开源项目中的10个严重或高危漏洞。 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题型)一等奖, 并作为工具论文被CCF-A类会议ESEC/FSE 2018所接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019所接受。}
+\cvline{FOT}{2017.07至今\quad 主导开发并维护模糊测试框架FOT, 该框架结合现有的模糊测试技术, 并强调使用静态分析来指导模糊测试。FOT已经检测了100+开源软件并从其中找到了300+漏洞, 61个被赋予CVE编号, 这包括GNU libc, FFmpeg, ImageMagick等知名开源项目中的10个严重或高危漏洞。 具体漏洞详见\url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT获NASAC2017原型竞赛(命题型)一等奖, 并被CCF-A类会议ESEC/FSE 2018接受。基于该框架的Hawkeye和Cerebro分别被CCF-A类会议CCS 2018和ESEC/FSE 2019接受。}
 \cvline{BiFF}{2018.11至今\quad 参与开发高性能跨CPU模糊测试框架BiFF, 该框架致力于改进现有二进制模糊测试技术, 使用轻量级的hooking技术及对``服务型''程序的测试流程优化,提高对不同CPU下IoT设备模糊测试的有效性。该框架获得NASAC2019原型竞赛(自由型)一等奖。}
-\cvline{Hawkeye}{2018.01-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018所接受。}
-\cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。该工作被CCF-B类会议CSF 2018所接受。}
+\cvline{Hawkeye}{2017.12-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018接受。}
+\cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。该工作被CCF-B类会议CSF 2018接受。}
 \cvline{RBScope}{2013.02-2013.11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
 %\subsection{开源项目}
 %\cvline{markvis}{在 markdown 中直接生成可视化图表的插件
