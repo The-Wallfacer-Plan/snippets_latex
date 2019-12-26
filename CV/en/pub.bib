@@ -1,13 +1,8 @@
-@inproceedings{fse18-fot,
-	author = {\textbf{Hongxu Chen} and Yuekang Li and Bihuan Chen and Yinxing Xue and Yang Liu},
-	title = {FOT: A Versatile, Configurable, Extensible Fuzzing Framework},
-	year = {2018},
-	booktitle = {Proceedings of the 2018 {ACM} Joint Meeting on European Software Engineering
-               Conference and Symposium on the Foundations of Software Engineering,
-               {ESEC/SIGSOFT} {FSE} 2018, Lake Buena Vista, FL, USA, November 04-09,
-               2018},
-    pages  = {867--870},
-    publisher = {ACM Press},
+@misc{muzz,
+    author = {\textbf{Hongxu Chen} and Shengjian Guo and Yinxing Xue and Yulei Sui and Cen Zhang and Yuekang Li and Haijun Wang and Yang Liu},
+    title = {\textsc{MUZZ} : Thread-aware Grey-box Fuzzing for Effective Bug Hunting in Multithreaded Programs},
+    year = {\emph{{submitted to {USENIX Security '20}, under revision}}, 2019},
+    url = {https://sites.google.com/view/mtfuzz/home}
 }
 
 @inproceedings{hawkeye,
@@ -15,10 +10,18 @@
 	title = {Hawkeye: Towards a Desired Directed Grey-box Fuzzing},
 	year = {2018},
 	pages = {2095--2108},
-	booktitle = {Proceedings of the 2018 {ACM} {SIGSAC} Conference on Computer and
-               Communications Security, {CCS} 2018, Toronto, ON, Canada, October
-               15-19, 2018},
+  booktitle = {CCS' 18},
 	doi = {10.1145/3243734.3243849},
+  publisher = {ACM},
+}
+
+@inproceedings{fot-fse2018,
+	author = {\textbf{Hongxu Chen} and Yuekang Li and Bihuan Chen and Yinxing Xue and Yang Liu},
+	title = {\textsc{FOT}: A Versatile, Configurable, Extensible Fuzzing Framework},
+	year = {2018},
+	booktitle = {{ESEC/FSE} '18},
+	pages  = {867--870},
+  publisher = {ACM},
 }
 
 @inproceedings{sta,
@@ -27,10 +30,10 @@
                Zhiwu Xu and
                Yang Liu},
   title     = {A Permission-Dependent Type System for Secure Information Flow Analysis},
-  booktitle = {31st {IEEE} Computer Security Foundations Symposium, {CSF} 2018, Oxford,
-               United Kingdom, July 9-12, 2018},
+  booktitle = {{CSF} '18},
   pages     = {218--232},
   year      = {2018},
+  publisher = {IEEE},
   url       = {https://doi.org/10.1109/CSF.2018.00023},
   doi       = {10.1109/CSF.2018.00023},
   timestamp = {Thu, 23 Aug 2018 17:16:52 +0200},
@@ -38,10 +41,39 @@
   bibsource = {dblp computer science bibliography, https://dblp.org}
 }
 
+@inproceedings{fot-nasac,
+  author = {\textbf{Hongxu Chen} and Yuekang Li and Junjie Wang and Bihuan Chen and Yang Liu},
+  title = {\textsc{FOT}: Fuzzing  Orchestration Toolkit},
+  year = {2017},
+  booktitle = {NASAC 2017 Competition 1st Award},
+}
+
+@inproceedings{Wen2020MemLock,
+  title={MemLock: Memory Usage Guided Fuzzing},
+  author={Wen, Cheng and Wang, Haijun and Li, Yuekang and Qin, Shengchao and Liu, Yang and Xu, Zhiwu and \textbf{Hongxu Chen} and Xie, Xiaofei and Pu, Geguang and Liu, Ting},
+  booktitle={ICSE '20 (accepted)},
+  year={2020}
+}
+
+@inproceedings{Wang2020Typestate,
+ author = {Wang, Haijun and Xie, Xiaofei and Li, Yi and Wen, Cheng and Liu, Yang and Qin, Shengchao and \textbf{Hongxu Chen} and Sui, Yulei},
+ title = {Typestate-Guided Fuzzer for Discovering Use-after-Free Vulnerabilities},
+ booktitle = {ICSE '20 (accepted)},
+ year = {2020},
+} 
+
+
+@inproceedings{biff,
+  author = {Cen Zhang and Yuekang Li and \textbf{Hongxu Chen} and Nguyen Anh Quynh and Yang Liu},
+  title = {BiFF: An Effective Binary Fuzzing Framework with Cross-Architecture Support},
+  year = {2019},
+  booktitle = {NASAC 2019 Competition 1st Award},
+}
+
 @inproceedings{deephunter_demo,
   author = {Xie, Xiaofei and \textbf{Hongxu Chen} and Li, Yi and Ma Lei and Liu, Yang and Zhao, Jianjun},
   title = {DeepHunter: A Coverage-Guided Fuzzer for Deep Neural Networks},
-  booktitle = {ASE '19 (to appear)},
+  booktitle = {ASE '19},
   year = {2019},
   isbn = {},
   location = {},
@@ -50,16 +82,14 @@
   url = {},
   doi = {},
   acmid = {},
-  publisher = {},
-  address = {},
+  publisher = {IEEE},
   keywords = {},
 }
 
 @inproceedings{cerebro,
  author = {Li, Yuekang and Xue, Yinxing and \textbf{Hongxu Chen} and Wu, Xiuheng and Zhang, Cen and Xie, Xiaofei and Wang, Haijun and Liu, Yang},
  title = {Cerebro: Context-aware Adaptive Fuzzing for Effective Vulnerability Detection},
- booktitle = {Proceedings of the 2019 27th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
- series = {ESEC/FSE 2019},
+ booktitle = {ESEC/FSE '19},
  year = {2019},
  isbn = {978-1-4503-5572-8},
  location = {Tallinn, Estonia},
@@ -69,15 +99,13 @@
  doi = {10.1145/3338906.3338975},
  acmid = {3338975},
  publisher = {ACM},
- address = {New York, NY, USA},
  keywords = {Fuzz Testing, Software Vulnerability},
 }
 
 @inproceedings{deephunter_issta,
  author = {Xie, Xiaofei and Ma, Lei and Juefei-Xu, Felix and Xue, Minhui and \textbf{Hongxu Chen} and Liu, Yang and Zhao, Jianjun and Li, Bo and Yin, Jianxiong and See, Simon},
  title = {DeepHunter: A Coverage-guided Fuzz Testing Framework for Deep Neural Networks},
- booktitle = {Proceedings of the 28th ACM SIGSOFT International Symposium on Software Testing and Analysis},
- series = {ISSTA 2019},
+ booktitle = {ISSTA '19},
  year = {2019},
  isbn = {978-1-4503-6224-5},
  location = {Beijing, China},
@@ -87,7 +115,6 @@
  doi = {10.1145/3293882.3330579},
  acmid = {3330579},
  publisher = {ACM},
- address = {New York, NY, USA},
  keywords = {Deep learning testing, coverage-guided fuzzing, metamorphic testing},
 }
 
@@ -101,7 +128,8 @@
                Jie Zhang},
   title     = {Auditing Anti-Malware Tools by Evolving Android Malware and Dynamic
                Loading Technique},
-  journal   = {{IEEE} Trans. Information Forensics and Security},
+  journal   = {TIFS' 17},
+  publisher = {IEEE},
   volume    = {12},
   number    = {7},
   pages     = {1529--1544},
@@ -120,8 +148,8 @@
                Xiaohong Li and
                \textbf{Hongxu Chen}},
   title     = {S-looper: automatic summarization for multipath string loops},
-  booktitle = {Proceedings of the 2015 International Symposium on Software Testing
-               and Analysis, {ISSTA} 2015, Baltimore, MD, USA, July 12-17, 2015},
+  booktitle = {ISSTA '15},
+  publisher = {ACM},
   pages     = {188--198},
   year      = {2015},
   url       = {http://doi.acm.org/10.1145/2771783.2771815},
