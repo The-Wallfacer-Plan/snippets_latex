@@ -1,226 +1,92 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% LaTeX Template: Curriculum Vitae
-%
-% Source: http://www.howtotex.com/
-% Feel free to distribute this template, but please keep the
-% referal to HowToTeX.com.
-% Date: July 2011
-% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% How to use writeLaTeX: 
-%
-% You edit the source code here on the left, and the preview on the
-% right shows you the result within a few seconds.
-%
-% Bookmark this page and share the URL with your co-authors. They can
-% edit at the same time!
-%
-% You can upload figures, bibliographies, custom classes and
-% styles using the files menu.
-%
-% If you're new to LaTeX, the wikibook is a great place to start:
-% http://en.wikibooks.org/wiki/LaTeX
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[paper=a4,fontsize=11pt]{article} % KOMA-article class
-							
-% \usepackage[english]{babel}
-\usepackage[utf8x]{inputenc}
-\usepackage[protrusion=true,expansion=true]{microtype}
-\usepackage{amsmath,amsfonts,amsthm}     % Math packages
-\usepackage{graphicx}                    % Enable pdflatex
-\usepackage{hyperref}
-\usepackage[svgnames]{xcolor}            % Colors by their 'svgnames'
-\usepackage{enumitem}
-\usepackage{geometry}
-	\textheight=700px                    % Saving trees ;-)
-\usepackage{url}
+%# -*- coding:utf-8 -*-
+
+\documentclass[11pt,a4paper]{moderncv}
+
+\usepackage{xcolor}
+%\usepackage[
+%%backend=biber, 
+%natbib=true,
+%style=numeric,
+%sorting=none
+%]{biblatex}
+%\addbibresource{pubs.bib}
+%\usepackage{biblatex}
 
 
-% \addto{\captionsenglish}{\renewcommand{\bibname}{Publications}}
-% \printbibliography[title={Publications}]
-\renewcommand\refname{Publications}
+\newcommand{\ccfe}{\underline}
+\newcommand{\ptype}[1]{}
 
-\frenchspacing              % Better looking spacings after periods
-\pagestyle{empty}           % No pagenumbers/headers/footers
+\moderncvtheme[blue]{classic}                 % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
 
-%%% Custom sectioning (sectsty package)
-%%% ------------------------------------------------------------
-\usepackage{sectsty}
+% adjust the page margins
+\usepackage[scale=0.8]{geometry}
+%\setlength{\hintscolumnwidth}{3cm}                                             % if you want to change the width of the column with the dates
+%\AtBeginDocument{\setlength{\maketitlenamewidth}{6cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
+\AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
 
-\sectionfont{%			            % Change font of \section command
-	\usefont{OT1}{phv}{b}{n}%		% bch-b-n: CharterBT-Bold font
-	\sectionrule{0pt}{0pt}{-5pt}{3pt}}
+% personal data
+\firstname{Hongxu Chen}
+\familyname{}
+\title{Cybersecurity, Program Analysis}               % optional, remove the line if not wanted
+% \address{1989/08/06}{}    % optional, remove the line if not wanted
+\mobile{+6585476746}                    % optional, remove the line if not wanted
+\email{hongxuchen@outlook.com}                     % optional, remove the line if not wanted
+\homepage{hongxuchen.github.io} % optional, remove the line if not wanted
+\social[github]{HongxuChen}
+\social[twitter]{hongxuchen}
+\social[linkedin]{hongxu-chen-09a97640}
+\photo[64pt][0pt]{400x514.jpg}                         % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{China\TeX 您的LaTeX乐园，TeX\&\LaTeX 王国}                 % optional, remove the line if not wante
 
-%%% Macros
-%%% ------------------------------------------------------------
-\newlength{\spacebox}
-\settowidth{\spacebox}{8888888888}			% Box to align text
-\newcommand{\sepspace}{\vspace*{9pt}}		% Vertical space macro
+%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
 
-\newcommand{\MyName}[2]{ % Name
-		\Huge \usefont{OT1}{phv}{b}{n} \hfill #1 #2
-		\par \normalsize \normalfont}
-		
-\newcommand{\MySlogan}[1]{ % Slogan (optional)
-		\large \usefont{OT1}{phv}{m}{n}\hfill \textit{#1}
-		\par \normalsize \normalfont}
+\setlength{\hintscolumnwidth}{3.2cm}
 
-\newcommand{\NewPart}[1]{\section*{\uppercase{#1}}}
+\renewcommand\refname{Publications and Awards}
 
-\newcommand{\PersonalEntry}[2]{
-		\noindent\hangindent=2em\hangafter=0 % Indentation
-		\parbox{\spacebox}{        % Box to align text
-		\textit{#1}}		       % Entry name (birth, address, etc.)
-		\hspace{1.5em} #2 \par}    % Entry value
-
-\newcommand{\SkillsEntry}[2]{      % Same as \PersonalEntry
-		\noindent\hangindent=2em\hangafter=0 % Indentation
-		\parbox{\spacebox}{        % Box to align text
-		\textit{#1}}			   % Entry name (birth, address, etc.)
-		\hspace{1.5em} #2 \par}    % Entry value	
-		
-\newcommand{\EducationEntry}[4]{
-		\noindent \textbf{#1} \hfill      % Study
-		% \colorbox{lightgray}{%
-			\parbox{16em}{%
-			\hfill\color{Black}#2} \par  % Duration
-		\noindent \textit{#3} \par        % School
-        \noindent\hangindent=2em\hangafter=0\small #4 % Description
-		\normalsize \par}
-
-\newcommand{\WorkEntry}[4]{				  % Same as \EducationEntry
-		\noindent \textbf{#1} \hfill      % Jobname
-		\colorbox{Gray}{\color{White}#2} \par  % Duration
-		\noindent \textit{#3} \par              % Company
-		\noindent\hangindent=2em\hangafter=0 \small #4 % Description
-		\normalsize \par}
-
-%%% ------------------------------------------------------------
+%----------------------------------------------------------------------------------
+%            content
+%----------------------------------------------------------------------------------
 \begin{document}
+\maketitle
+\vspace*{-10mm}
+
+\section{Working Experience}
+\cventry{2019.08-Present}{Nanyang Technological University}{Research Associate}{}{}{I maintain the fuzzing framework FOT, project site:\url{https://sites.google.com/view/fot-the-fuzzer}. Meanwhile, I am also involved in high-performance cross-platform binary fuzzing framework BiFF, as well as a fuzzing technique called MUZZ that aims to boost fuzz testing on multithreaded programs. }
+\cventry{2014.05-2015.08}{Nanyang Technological University}{Research Associate}{}{}{I focused on LLVM based data flow analysis which aims to improve the dynamic fuzzing effectiveness by refining the static analysis.}
+\cventry{2013.02-2014.11}{Microsoft Research Asia}{Research Intern}{}{}{I focused on improve the white-box fuzzing technique on patching programs with the help of static analysis; I implemented a static analysis tool that can slice the underlying program for further testing.}
+
+\section{Education Experience}
+\cventry{2015.08-2019.07}{PhD}{Nanyang Technological University}{Cybersecurity}{Cybersecurity Lab, supervisor: Prof. Yang Liu}{I focused on mobile system security and software security.}
+\cvlistitem{Moible System Security: I designed a permission-dependent type system for information flow verification on which inspires from Android permission mechanism where the potentially requested permission can be statically specified. I proved the soundness of the type system which certifies the underlying system to be free of information leaks as long as it can be checked by our system.}
+\cvlistitem{Software Security: Adapt fuzz testing on C/C++ programs with the help of program analysis.}
+\cventry{2011.09-2014.03}{Master}{Shanghai Jiaotong University}{Computer Science and Technique}{Software High-reliability Lab, Supervisor: Prof. Jianjun Zhao}{I focused on software reliability research based on program analysis, including pointer analysis, program slicing, symbolic execution, etc.}
+\cventry{2007.09-2011.07}{Bachelor}{Nanjing University of Science and Technology}{Computing Mathematics}{}{}
+
+\section{Research Projects}
+\cvline{FOT}{2017.07-Present\quad I develop and maintain the grey-box fuzzing framework FOT (Fuzzing Orchestration Toolkit). This framework faciliates static analysis to improve the the overall fuzzing effectiveness. FOT has integrated several existing and we have proposed new fuzzing techniques based on it. Till now, FOT has been successfully detecting 300+ vulnerabilities in 120+ open source projects. Among the detected 0-day vulnerabilities, 61 have been assigned with CVE IDs, including 10 with critical or high severity according CVSS3.0. The vulnerability details are available at \url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT received 1st award in NASAC competition and was accepted by ESEC/FSE 2018; Another two fuzzing work Hawkeye and Cerebro based on FOT have been accepted by CCS 2018 and ESEC/FSE 2019 respectively.}
+% \cvline{BiFF}{2018.11-Present\quad 参与开发高性能跨CPU模糊测试框架BiFF, 该框架致力于改进现有二进制模糊测试技术, 使用轻量级的hooking技术及对``服务型''程序的测试流程优化,提高对不同CPU下IoT设备模糊测试的有效性。该框架获得NASAC2019原型竞赛(自由型)一等奖。}
+% \cvline{Hawkeye}{2017.12-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018接受。}
+% \cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。This work was accepted by Computer Security Foundation (CSF) 2018.}
+% \cvline{RBScope}{2013.02-2013.11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
+
+\section{Teaching Experience}
+\cvline{Programming}{Autumn Semester 2018\quad Lab supervision for ``Object Oriented Design and Programming, CE/CZ2002''.}
+\cvline{Software Engineering}{Spring Semester 2018\quad Lab supervision for ``CE/CZ2006 Software Engineering''.}
+\cvline{Programming}{Autumn Semester 2017\quad Lab supervision for ``CE/CZ3003 Software Systems Analysis and Design''.}
+\cvline{Computer Security}{Autumn Semester 2017\quad Course designing for ``CE/CZ4062 Computer Security''.}
+\cvline{Computer Security}{Spring Semester 2017\quad Lab supervison for ``CE/CZ4024 Cryptography and Network Security''.}
+\cvline{Algorithms}{Autumn Semester 2016\quad Lab supervison for ``CE/CZ2001 Algorithms''.}
+\cvline{Compiler Techniques}{Spring Semester 2016\quad Lab supervison for ``CE/CZ3007 Compiler Techniques''.}
+
+\section{Skills}
+\cvline{\textbf{Proficient}}{Static Analysis, Grey-box Fuzzing, Symbolic Execution, Binary Security, Java, Python, Rust}
+\cvline{\textbf{Familiar}}{Program Language Theory, Compiler Techniques, Linux Programming, Formal Verification, LLVM/GCC, Bash, JVM, C/C++}
+\cvline{\textbf{Knowledgeable}}{OCaml, Haskell, Coq, Isabelle}
 
 \nocite{*}
-
-% you can upload a photo and include it here...
-%\begin{wrapfigure}{l}{0.5\textwidth}
-%	\vspace*{-2em}
-%		\includegraphics[width=0.15\textwidth]{photo}
-%\end{wrapfigure}
-
-\MyName{Hongxu Chen}{}
-% \MyName{Hongxu Chen}{\includegraphics[width=0.24\textwidth] {sigs/xingkai_yuhongliang.png}}
-\MySlogan{{https://hongxuchen.github.io}}
-% \MyName{Hongxu Chen~{}~}
-% \MySlogan{\url{https://hongxuchen.github.io/}}
-
-
-\sepspace
-
-%%% ------------------------------------------------------------
-\NewPart{Personal details}{}
-
-% \PersonalEntry{Birth}{August 6, 1989}
-\PersonalEntry{Address}{Cyber Security Lab, N4-B2C-06, NTU, Singapore}
-\PersonalEntry{Phone}{+65 85476746}
-\PersonalEntry{Email}{\url{hongxuchen@outlook.com}, \url{hongxu.chen@ntu.edu.sg}}
-\PersonalEntry{LinkedIn}{\url{https://www.linkedin.com/in/hongxu-chen-09a97640}}
-
-%%% ------------------------------------------------------------
-\NewPart{Education}{}
-
-\EducationEntry{Ph.D in Computer Engineering}{2015.08 $\sim$ 2019.10 (expected)}{Nanyang Technological University, Singapore}{
-    I mainly focused on Cybersecurity research in mobile applications and C/C++ written software in POSIX systems. For mobile security, I developed a permission-dependent type system which allows for secure information flow analysis in Android. For desktop software security, I developed a grey-box fuzzing framework named Fuzzing Orchestration Toolkit (FOT). Till now, FOT has successfully detected 300+ vulnerabilities in world-famous open source projects such as glibc, GNU Binutils, ImageMagick/GraphicsMagick, FFmpeg, libsass, libjpeg-turbo, etc, among which 61 CVEs have been assigned. On top of FOT, I aslo developed a directed greybox fuzzing technique that targets on fuzzing specific locations of the program. FOT won the first award in the 16th National Software and Application Conference (NASAC 2017) prototype competition (fixed topic).
-}
-\sepspace
-
-\EducationEntry{MSc. in Computer Science}{2011.09 $\sim$ 2014.03}{Shanghai Jiaotong University, China}{
-  I did LLVM based static analysis for C/C++ programs to enhance dynamic symbolic execution, and was also involved in a SOOT based static analysis for Java programs.}
-\sepspace
-
-\EducationEntry{BSc. in Mathematics}{2007.09 $\sim$ 2011.06}{Nanjing University of Science and Technology, China}{}
-
-%%% ------------------------------------------------------------
-\NewPart{Work experience}{}
-
-\EducationEntry{Research Associate}{2014.05 $\sim$ 2015.08}{Nanyang Technological University, Singapore}{
-% I was involved in a project that did symbolic analysis on C/C++ programs and developed a static bug detection tool with precise points-to analysis and loop summarization based on LLVM~\cite{XieLLLC15}.
-}
-\sepspace
-
-\EducationEntry{Research Intern}{2013.02 $\sim$ 2013.11}{Microsoft Research Asia, Beijing}{
-    % I develped a white-box testing framework backed with program slicing and KLEE symbolic executor.
-}
-\sepspace
-
-%%% ------------------------------------------------------------
-\NewPart{Skills}{}
-
-\SkillsEntry{Languages}{Chinese Mandarin (native), English (fluent)}
-\SkillsEntry{Software}{{LLVM, Rust, C/C++, Java, Python}}
-\SkillsEntry{}{Linux Programming, Bash, Radare2}
-\SkillsEntry{}{Scala, OCaml, Haskell, Coq, Isabelle}
-
-\pagebreak
-
-\bibliography{pub} 
-% \bibliographystyle{plain}
 \bibliographystyle{unsrt}
+\bibliography{pubs}
 
-\pagebreak
-
-\NewPart{Discovered Bugs}
-Below are the selected bugs or vulnerabilities discovered by me, several of which have been assigned CVE IDs. Latest list is available at \url{https://hongxuchen.github.io/} and \url{https://github.com/ntu-sec/pocs}.
-% \begin{minipage}[.95\linewidth]
-\begin{enumerate}
-    \item binaryen: 17 bugs
-    \item CImg: 2 bugs
-    \item DjVuLibre: CVE-2019-15142, CVE-2019-15143, CVE-2019-15144, CVE-2019-15145
-    \item Espruino: CVE-2018-11590, CVE-2018-11591, CVE-2018-11592, CVE-2018-11593, CVE-2018-11594, CVE-2018-11595, CVE-2018-11596, CVE-2018-11597, CVE-2018-11598
-    \item Exiv2: CVE-2018-19107, CVE-2018-19108, CVE-2018-19535
-    \item FFmpeg: CVE-2018-15822, CVE-2018-14394, CVE-2018-14395
-    \item FLIF: 2 bugs
-    \item glibc and gnulib: CVE-2009-5155, CVE-2019-9169, CVE-2018-20796
-    \item GNU bc: 18 bugs
-    \item GNU Binutils: CVE-2018-17794
-    \item GNU diffutils: 2 bugs (git fix)
-    \item GNU grep: \#34140
-    \item GNU sed: \#34141, \#34142
-    \item GraphicsMagick: 1 performance issue, CVE-2019-11474
-    \item GPAC: 15 bugs
-    \item gpmf-parser: CVE-2019-15146, CVE-2019-15147, CVE-2019-15148
-    \item JSMN: 1 bug
-    \item imagemagick: CVE-2018-14560, CVE-2018-14561, CVE-2019-11470, CVE-2019-11472, CVE-2019-11473, CVE-2019-15139, CVE-2019-15140, CVE-2019-15141
-    \item Intel XED: 2 categories of bugs
-    \item libheif: CVE-2019-11471
-    \item libjpeg-turbo: CVE-2018-14498
-    \item libtoml: 6 bugs
-    \item lepton: 4 bugs, CVE-2018-20819, CVE-2018-20820,
-    \item liblnk: 19 bugs (most of the root causes are inside its library libfwsi)
-    \item liblouis: 1 bug(CVE-2018-17294)
-    \item libmobi: 4 bugs
-    \item libpff: 3 bugs
-    \item libsass: 10 bugs, CVE-2018-19837, CVE-2018-19838, CVE-2018-19839, CVE-2018-20821, CVE-2018-20822
-\end{enumerate}
-\pagebreak
-\begin{enumerate}[resume]
-    \item libsixel: 5 crashes and 1 performance issue
-    \item libvips: 11 bugs
-    \item libvpx: CVE-2019-11475
-    \item MJS: 33 bugs
-    \item mozjpeg: 1 bug
-    \item mxml: CVE-2018-20592, CVE-2018-20593
-    \item openh264: 1 bug
-    \item poppler: CVE-2018-20662
-    \item radare2: 40+ bugs, CVE-2018-19842, CVE-2018-19843, CVE-2018-20455, CVE-2018-20456, CVE-2018-20457, CVE-2018-20458, CVE-2018-20459, CVE-2018-20460, CVE-2018-20461
-    \item solidity: 2 crashes and 1 performance issue
-    \item Swift: 7 bugs (SR-8467, SR-8468, SR-8476, SR-8483, SR-8576, SR-8577)
-    \item tinyexr: 6 bugs
-    \item WAVM: 2 bugs(CVE-2018-17292, CVE-2018-17293)
-    \item WavPack: CVE-2018-19840, CVE-2018-19841
-    \item WebM: 1 bug
-    \item xdrpp: 1 bug
-    \item yaml-cpp: 2 bugs
-\end{enumerate}
-% \end{minipage}
 
 \end{document}

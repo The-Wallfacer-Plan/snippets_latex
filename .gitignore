@@ -27,3 +27,4 @@ document.pdf
 !fig/
 *.synctex.gz
 .textemp/
+tags
