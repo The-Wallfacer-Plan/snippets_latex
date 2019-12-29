@@ -3,23 +3,14 @@
 \documentclass[11pt,a4paper]{moderncv}
 
 \usepackage{xcolor}
-%\usepackage[
-%%backend=biber, 
-%natbib=true,
-%style=numeric,
-%sorting=none
-%]{biblatex}
-%\addbibresource{pubs.bib}
-%\usepackage{biblatex}
-
 
 \newcommand{\ccfe}{\underline}
 \newcommand{\ptype}[1]{}
 
-\moderncvtheme[blue]{classic}                 % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
+\moderncvtheme[blue]{classic}  % optional argument are 'blue' (default), 'orange', 'red', 'green', 'grey' and 'roman' (for roman fonts, instead of sans serif fonts)
 
 % adjust the page margins
-\usepackage[scale=0.8]{geometry}
+\usepackage[scale=0.83]{geometry}
 %\setlength{\hintscolumnwidth}{3cm}                                             % if you want to change the width of the column with the dates
 %\AtBeginDocument{\setlength{\maketitlenamewidth}{6cm}}  % only for the classic theme, if you want to change the width of your name placeholder (to leave more space for your address details
 \AtBeginDocument{\recomputelengths}                     % required when changes are made to page layout lengths
@@ -35,10 +26,10 @@
 \social[github]{HongxuChen}
 \social[twitter]{hongxuchen}
 \social[linkedin]{hongxu-chen-09a97640}
-\photo[64pt][0pt]{400x514.jpg}                         % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
-%\quote{China\TeX 您的LaTeX乐园，TeX\&\LaTeX 王国}                 % optional, remove the line if not wante
+\photo[64pt][0pt]{400x514.jpg}  % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
+%\quote{}   % optional, remove the line if not wante
 
-%\nopagenumbers{}                             % uncomment to suppress automatic page numbering for CVs longer than one page
+%\nopagenumbers{}          % uncomment to suppress automatic page numbering for CVs longer than one page
 
 \setlength{\hintscolumnwidth}{3.2cm}
 
@@ -52,35 +43,35 @@
 \vspace*{-10mm}
 
 \section{Working Experience}
-\cventry{2019.08-Present}{Nanyang Technological University}{Research Associate}{}{}{I maintain the fuzzing framework FOT, project site:\url{https://sites.google.com/view/fot-the-fuzzer}. Meanwhile, I am also involved in high-performance cross-platform binary fuzzing framework BiFF, as well as a fuzzing technique called MUZZ that aims to boost fuzz testing on multithreaded programs. }
-\cventry{2014.05-2015.08}{Nanyang Technological University}{Research Associate}{}{}{I focused on LLVM based data flow analysis which aims to improve the dynamic fuzzing effectiveness by refining the static analysis.}
-\cventry{2013.02-2014.11}{Microsoft Research Asia}{Research Intern}{}{}{I focused on improve the white-box fuzzing technique on patching programs with the help of static analysis; I implemented a static analysis tool that can slice the underlying program for further testing.}
+\cventry{2019.08$\sim$present}{Nanyang Technological University}{Research Associate}{}{}{I maintain the fuzzing framework FOT, project site:\url{https://sites.google.com/view/fot-the-fuzzer}. Meanwhile, I am also involved in high-performance cross-platform binary fuzzing framework BiFF, as well as a fuzzing technique called MUZZ that aims to boost fuzz testing on multithreaded programs. }
+\cventry{2014.05$\sim$2015.08}{Nanyang Technological University}{Research Associate}{}{}{I focused on LLVM based data flow analysis which aims to improve the dynamic fuzzing effectiveness with the aid of static analysis.}
+\cventry{2013.02$\sim$2014.11}{Microsoft Research Asia}{Research Intern}{}{}{I focused on improve the white-box fuzzing technique on patching programs with the help of static analysis; I implemented a static analysis tool that can slice the underlying program for subsequent white-box testing.}
 
 \section{Education Experience}
-\cventry{2015.08-2019.07}{PhD}{Nanyang Technological University}{Cybersecurity}{Cybersecurity Lab, supervisor: Prof. Yang Liu}{I focused on mobile system security and software security.}
-\cvlistitem{Moible System Security: I designed a permission-dependent type system for information flow verification on which inspires from Android permission mechanism where the potentially requested permission can be statically specified. I proved the soundness of the type system which certifies the underlying system to be free of information leaks as long as it can be checked by our system.}
+\cventry{2015.08$\sim$2019.07}{PhD}{Nanyang Technological University}{Cybersecurity}{Cybersecurity Lab, supervisor: Prof. Yang Liu}{}
+\cvlistitem{Moible System Security: I designed a permission-dependent type system for information flow verification which inspires from Android permission mechanism where the set of runtime requested permission can be statically determined. I proved the soundness of the type system which certifies the underlying system to be free of information leaks as long as it can be checked by our system.}
 \cvlistitem{Software Security: Adapt fuzz testing on C/C++ programs with the help of program analysis.}
-\cventry{2011.09-2014.03}{Master}{Shanghai Jiaotong University}{Computer Science and Technique}{Software High-reliability Lab, Supervisor: Prof. Jianjun Zhao}{I focused on software reliability research based on program analysis, including pointer analysis, program slicing, symbolic execution, etc.}
-\cventry{2007.09-2011.07}{Bachelor}{Nanjing University of Science and Technology}{Computing Mathematics}{}{}
+\cventry{2011.09$\sim$2014.03}{Master}{Shanghai Jiaotong University}{Computer Science and Technique}{Software High-reliability Lab, Supervisor: Prof. Jianjun Zhao}{I focused on software reliability research based on program analysis, including pointer analysis, program slicing, symbolic execution, etc.}
+\cventry{2007.09$\sim$2011.07}{Bachelor}{Nanjing University of Science and Technology}{Computing Mathematics}{}{}
 
 \section{Research Projects}
-\cvline{FOT}{2017.07-Present\quad I develop and maintain the grey-box fuzzing framework FOT (Fuzzing Orchestration Toolkit). This framework faciliates static analysis to improve the the overall fuzzing effectiveness. FOT has integrated several existing and we have proposed new fuzzing techniques based on it. Till now, FOT has been successfully detecting 300+ vulnerabilities in 120+ open source projects. Among the detected 0-day vulnerabilities, 61 have been assigned with CVE IDs, including 10 with critical or high severity according CVSS3.0. The vulnerability details are available at \url{https://hongxuchen.github.io/}和\url{https://github.com/ntu-sec/pocs}. FOT received 1st award in NASAC competition and was accepted by ESEC/FSE 2018; Another two fuzzing work Hawkeye and Cerebro based on FOT have been accepted by CCS 2018 and ESEC/FSE 2019 respectively.}
-% \cvline{BiFF}{2018.11-Present\quad 参与开发高性能跨CPU模糊测试框架BiFF, 该框架致力于改进现有二进制模糊测试技术, 使用轻量级的hooking技术及对``服务型''程序的测试流程优化,提高对不同CPU下IoT设备模糊测试的有效性。该框架获得NASAC2019原型竞赛(自由型)一等奖。}
-% \cvline{Hawkeye}{2017.12-2018.05\quad 设计并提出导向性模糊测试技术Hawkeye, 提出了导向性模糊测试的4个属性及解决方案,并用实验论证了有效性。 该技术被CCF-A类会议CCS 2018接受。}
-% \cvline{STAndroid}{2015.08-2017.06\quad 该项目立足于Android系统的权限系统, 利用类型系统验证依赖于权限的信息流安全; 我设计并完成了对类型系统健壮性的形式化验证, 并实现了基于此的信息泄露检测工具原型。This work was accepted by Computer Security Foundation (CSF) 2018.}
-% \cvline{RBScope}{2013.02-2013.11\quad 该项目主要关注利用静态分析的方法加强对新程序补丁处的白盒测试; 其主要思想是利用程序切片的方法去除和补丁不相关的程序片段, 从而使测试关注于和补丁相关部分并减小测试状态空间爆炸问题。 我实现了基于LLVM的静态分析和对补丁的切片。}
+\cvline{FOT}{2017.07$\sim$present\quad I develop and maintain the grey-box fuzzing framework FOT (Fuzzing Orchestration Toolkit). This framework faciliates static analysis to improve the the overall fuzzing effectiveness. FOT has integrated several existing and we have proposed new fuzzing techniques based on it. Till now, FOT has been successfully detecting 300+ vulnerabilities in 120+ open source projects. Among the detected 0-day vulnerabilities, 61 have been assigned with CVE IDs, including 10 with critical or high severity according CVSS3.0. The vulnerability details are available at \url{https://hongxuchen.github.io/} and \url{https://github.com/ntu-sec/pocs}. FOT received 1st award in NASAC 2017 competition and was accepted by ESEC/FSE 2018; Another two fuzzing techniques based on FOT, Hawkeye and Cerebro, were accepted by CCS 2018 and ESEC/FSE 2019 respectively.}
+\cvline{BiFF}{2018.11$\sim$present\quad I am involved in the development of high-performance cross-CPU binary fuzzing framework BiFF, which aims to improve the existing binary-only fuzzing techniques. BiFF faciliates our self-designed hooking technique and optimizes the fuzzing flow for service-like applications, and boosts the overall performance of fuzzing against IoT devices with different CPU architectures.  BiFF received 1st award in NASAC 2019 competition.}
+\cvline{Hawkeye}{2017.12$\sim$2018.05\quad I designed the directed grey-box fuzzing technique Hawkeye, proposed the four properties a directed fuzzer is supposed to possess and provided our solutions; we experimentally demonstrated the effectivenes of Hawkeye. This work was accepted by CCS 2018.}
+\cvline{STAndroid}{2015.08$\sim$2017.06\quad This project was inspired by the Android permission mechanism and we apply secure type system to stress a category of information security problems. I designed the type system and proved the soundness. I implemented a checking tool to detect information leakage based on this type system. This work was accepted by CSF 2018.}
+\cvline{RBScope}{2013.02$\sim$2013.11\quad This project aimed to apply static analysis to improve the effectivenss of the white-box fuzzing. The idea is to prune irrelevant program segments to reduce the search space of the symbolic execution testing technique. I implemented the program slicing based on LLVM framework.}
 
 \section{Teaching Experience}
-\cvline{Programming}{Autumn Semester 2018\quad Lab supervision for ``Object Oriented Design and Programming, CE/CZ2002''.}
-\cvline{Software Engineering}{Spring Semester 2018\quad Lab supervision for ``CE/CZ2006 Software Engineering''.}
-\cvline{Programming}{Autumn Semester 2017\quad Lab supervision for ``CE/CZ3003 Software Systems Analysis and Design''.}
-\cvline{Computer Security}{Autumn Semester 2017\quad Course designing for ``CE/CZ4062 Computer Security''.}
-\cvline{Computer Security}{Spring Semester 2017\quad Lab supervison for ``CE/CZ4024 Cryptography and Network Security''.}
-\cvline{Algorithms}{Autumn Semester 2016\quad Lab supervison for ``CE/CZ2001 Algorithms''.}
-\cvline{Compiler Techniques}{Spring Semester 2016\quad Lab supervison for ``CE/CZ3007 Compiler Techniques''.}
+\cvline{Object-Oriented Programming}{Autumn Semester 2018, NTU\quad Lab supervision for course ``CE/CZ2002 Object Oriented Design and Programming''.}
+\cvline{Software Engineering}{Spring Semester 2018, NTU\quad Lab supervision for course ``CE/CZ2006 Software Engineering''.}
+\cvline{System Design and Programming}{Autumn Semester 2017, NTU\quad Lab supervision for course ``CE/CZ3003 Software Systems Analysis and Design''.}
+\cvline{Computer Security}{Autumn Semester 2017, NTU\quad Course design for ``CE/CZ4062 Computer Security''.}
+\cvline{Computer Security}{Spring Semester 2017, NTU\quad Lab supervison for course ``CE/CZ4024 Cryptography and Network Security''.}
+\cvline{Algorithms}{Autumn Semester 2016, NTU\quad Lab supervison for course ``CE/CZ2001 Algorithms''.}
+\cvline{Compiler Techniques}{Spring Semester 2016, NTU\quad Lab supervison for course ``CE/CZ3007 Compiler Techniques''.}
 
 \section{Skills}
-\cvline{\textbf{Proficient}}{Static Analysis, Grey-box Fuzzing, Symbolic Execution, Binary Security, Java, Python, Rust}
+\cvline{\textbf{Proficient}}{Static Analysis, Grey-box Fuzzing, Symbolic Execution, Binary Analysis, Java, Python, Rust}
 \cvline{\textbf{Familiar}}{Program Language Theory, Compiler Techniques, Linux Programming, Formal Verification, LLVM/GCC, Bash, JVM, C/C++}
 \cvline{\textbf{Knowledgeable}}{OCaml, Haskell, Coq, Isabelle}
 
