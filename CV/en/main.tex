@@ -25,14 +25,15 @@
 \title{Curriculum Vitae}
 % \title{Cybersecurity, Program Analysis}               % optional, remove the line if not wanted
 % \address{1989/08/06}{}    % optional, remove the line if not wanted
-\mobile{+6585476746}                    % optional, remove the line if not wanted
-\email{hongxu.chen@ntu.edu.sg}                     % optional, remove the line if not wanted
-% \email{hongxuchen@outlook.com}
-\homepage{hongxuchen.github.io} % optional, remove the line if not wanted
-\social[github]{HongxuChen}
+\mobile{+86 13027944806}                    % optional, remove the line if not wanted
+\email{hongxu\_chen@foxmail.com}                     % optional, remove the line if not wanted
+% \homepage{https://github.com/hongxuchen} % optional, remove the line if not wanted
+\social[github]{hongxuchen}
 \social[twitter]{hongxuchen}
 \social[linkedin]{hongxu-chen-09a97640}
-\photo[64pt][0pt]{400x514.jpg}  % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
+\newcommand*{\scholarsocialsymbol}{\includegraphics[height=.7\baselineskip]{google-scholar}}
+\collectionadd[scholar]{socials}{\href{https://scholar.google.com/citations?user=IgLxRM8AAAAJ&hl=en}{\;Hongxu Chen}}
+% \photo[64pt][0pt]{400x514.jpg}  % '64pt' is the height the picture must be resized to and 'picture' is the name of the picture file; optional, remove the line if not wanted
 %\quote{}   % optional, remove the line if not want
 
 %\nopagenumbers{}          % uncomment to suppress automatic page numbering for CVs longer than one page
@@ -119,8 +120,8 @@
 		{}
 \textcolor{blue}{[\#]}}
 
-\newcommand{\yangliuj}[1]{\addtocounter{faajvalue}{1}\ifthenelse{#1 > 2015}{\addtocounter{faajvalue3}{1}}{}\textbf{Yang Liu}}
-\newcommand{\yangliu}[1]{\addtocounter{faavalue}{1}\ifthenelse{#1 > 2015}{\addtocounter{faavalue3}{1}}{}\textbf{Yang Liu}}
+\newcommand{\hongxuchenj}[1]{\addtocounter{faajvalue}{1}\ifthenelse{#1 > 2015}{\addtocounter{faajvalue3}{1}}{}\textbf{Hongxu Chen}}
+\newcommand{\hongxuchen}[1]{\addtocounter{faavalue}{1}\ifthenelse{#1 > 2015}{\addtocounter{faavalue3}{1}}{}\textbf{Hongxu Chen}}
 
 %\newcommand{\asp}{\textcolor{red}{[A+]}~}
 %\newcommand{\ap}{\textcolor{blue}{[A]}~}
@@ -141,23 +142,25 @@
 
 \section{Education}
 \cventry{2015.08~$\sim$~2019.07}{Ph.D.}{Nanyang Technological University}{Singapore}{Major in Cybersecurity, Supervisor: Prof. Yang Liu}{Thesis: Securing Software Systems via Fuzz Testing and Verification}
-\cvlistitem{\textbf{Fuzz Testing}: Grey-box fuzzing on C/C++ programs with the help of program analysis.}
+\cvlistitem{\textbf{Fuzz Testing}: Grey-box fuzzing with the help of program analysis and compiler techniques.}
 \cvlistitem{\textbf{Formal Verification}: Permission-dependent type system for secure information flow analysis.}
 \cventry{2011.09~$\sim$~2014.03}{Master}{Shanghai Jiaotong University}{China}{Major in Program Analysis, Supervisor: Prof. Jianjun Zhao}{Thesis: Program Slicing Enhanced Symbolic Execution}
 \cventry{2007.09~$\sim$~2011.07}{Bachelor}{Nanjing University of Science and Technology}{China}{Major in Computing Mathematics}{}
 
 
 \section{Working Experience}
-\cventry{2020.01~$\sim$Present}{Nanyang Technological University}{Research Fellow}{Singapore}{}{I lead the architecture design of a fuzzing service which provides a general-purpose interface for different testing scenarios, such as embedded systems, the automotive-relevant microcontrollers, stateful protocols, etc. I am also involved in a data-based reverse engineering research to help decompose the functional components of a given project.}
+\cventry{2021.07~$\sim$Present}{Huawei Technologies Co., Ltd.}{Lead Engineer}{China}{}{I transfered to Huawei Technological Co., Ltd. in Shenzhen, due to the department leader's affirmation of my preliminary work. The work is divided into two phrases. First, I continued on the architecture conformance project, where I led the research and the development of the platform that can guard the software architectures of existing software projects written in C/C++, Java. This platform has been adopted by at least three major R\&D development departments in the whole company, one of which is Hisilicon. Second, which is what I am currently working on, is the full-fledged software analysis platform, which provides a basket of solutions to the software qualitiy and development efficiency improvements. The project roots from the previous platform, where I designed the overall architecture consisted of data-model creation service, data lake service, as well as the application service. Till now, A general-purpose data model for all the major programming laguages including C/C++, Java, Python, Javascript, Rust, etc has been developed; and the Java-targeted analysis has been live, C/C++-targeted analysis is on the way.}
+\cventry{2020.10~$\sim$2021.06}{Huawei International Pte Ltd}{Senior Researcher}{Singapore}{}{I joined Huawei Internation Pte. Ltd. as one of the \textbf{Huawei TopMinds}, which is a subsidary of Huawei Technological Co., Ltd. located in Singapore. I worked as a senior researcher in the project \textit{Software Architecture and Conformance Checking}. In this project, I did a comprehensive research survey on the state-of-the-art practice of R\&D efficiency in Tech Giants like Google, Microsoft, Amazon, as well as Huawei and its subsidaries. Based on this, I came up with the solutions that solve Huawei's architectural decay issues and developed a prototype that demonstrated the feasiblity. }
+\cventry{2020.01~$\sim$2020.10}{Nanyang Technological University}{Research Fellow}{Singapore}{}{I lead the architecture design of a fuzzing service which provides a general-purpose interface for different testing scenarios, such as embedded systems, the automotive-relevant microcontrollers, stateful protocols, etc. I am also involved in a data-based reverse engineering research to help decompose the functional components of a given project.}
 \cventry{2019.08~$\sim$~2019.12}{Nanyang Technological University}{Research Associate}{Singapore}{}{I maintain the fuzzing framework FOT. Meanwhile, I am also involved in a high-performance cross-CPU binary fuzzing framework BiFF, as well as a fuzzing technique called MUZZ that aims to boost fuzz testing on multithreaded programs. }
-\cventry{2018.09~$\sim$~2019.05}{Scantist}{Research Intern}{Singapore}{}{I co-designed and built the prototype of a cross-CPU grey-box fuzzer for binaries.}
+\cventry{2018.09~$\sim$~2019.05}{Scantist}{Research Intern}{Singapore}{}{I co-designed and built the prototype of a cross-CPU grey-box fuzzer for binaries. The CPU instruction sets include ARM (32/64) and RISC-V (32).}
 \cventry{2014.05~$\sim$~2015.08}{Nanyang Technological University}{Research Associate}{Singapore}{}{I focused on LLVM based data flow analysis which aims to improve the dynamic fuzzing effectiveness with the aid of static analysis.}
-\cventry{2013.02~$\sim$~2014.11}{Microsoft Research Asia}{Research Intern}{China}{}{I focused on improving the white-box fuzzing technique on patching programs with the help of static analysis; I implemented a static analysis tool that can slice the underlying program for subsequent white-box testing.}
+\cventry{2013.02~$\sim$~2013.11}{Microsoft Research Asia}{Research Intern}{China}{}{I focused on improving the white-box fuzzing technique on patching programs with the help of static analysis; I implemented a static analysis tool that can slice the underlying program for subsequent white-box testing.}
 
 \section{Research Projects}
 \cvline{FOT}{2017.07~$\sim$~present\quad I develop and maintain the grey-box fuzzing framework FOT (Fuzzing Orchestration Toolkit). This framework facilitates static analysis to improve overall fuzzing effectiveness. FOT has integrated several existing and we have proposed new fuzzing techniques based on it.\\
 \cvlistitem{Project site:\quad\url{https://sites.google.com/view/fot-the-fuzzer}.}
-\cvlistitem{FOT has been successfully detecting 300+ vulnerabilities in 120+ open source projects. Among the detected zero-day vulnerabilities, 61 have been assigned with CVE IDs, including 10 with critical or high severity according to CVSS3.0. The vulnerability details are available at \url{https://github.com/ntu-sec/pocs}.}
+\cvlistitem{FOT has been successfully detecting \textbf{300+ vulnerabilities} in 120+ open source projects such as ffmpeg, glibc, libjpeg-turbo. Among the detected zero-day vulnerabilities, \textbf{61 CVEs} have been assigned, including 10 with critical or high severity according to CVSS3.0. The vulnerability details are available at \url{https://github.com/ntu-sec/pocs}.}
 \cvlistitem{
 FOT received 1st award in NASAC 2017 prototype competition (fixed topic) and was accepted by ESEC/FSE 2018; Another two fuzzing techniques based on FOT, Hawkeye and Cerebro, were accepted by CCS 2018 and ESEC/FSE 2019 respectively.}
 }
@@ -183,7 +186,11 @@ FOT received 1st award in NASAC 2017 prototype competition (fixed topic) and was
 
 \item \asp{2018}{1} \textbf{Hongxu Chen}, Yuekang Li, Bihuan Chen\upp, Yinxing Xue\upp and Yang Liu, \emph{FOT: A Versatile, Configurable, Extensible Fuzzing Framework}, The 26th ACM Joint European Software Engineering Conference and Symposium on the Foundations of Software Engineering (ESEC/FSE 2018), pp. 867--870, Lake Buena Vista, Florida, USA, Nov. 2018.
 
-\item \ap{2018}{0} \textbf{Hongxu Chen}, Alwen Tiu, Zhiwu Xu and Yang Liu, \emph{A Permission-Dependent Type System for Secure Information Flow Analysis}, The 31st IEEE Computer Security Foundations Symposium (CSF 2018), pp. 218--232, Oxford, UK, Jul. 2018. (Acceptance rate: 34\% = 25 /72)
+\item \asp{2018}{0} \textbf{Hongxu Chen}, Alwen Tiu, Zhiwu Xu and Yang Liu, \emph{A Permission-Dependent Type System for Secure Information Flow Analysis}, The 31st IEEE Computer Security Foundations Symposium (CSF 2018), pp. 218--232, Oxford, UK, Jul. 2018. (Acceptance rate: 34\% = 25 /72)
+
+\item \asp{2022}{1} Can Yang, Zhengzi Xu, \textbf{Hongxu Chen}, Yang Liu, Xiaorui Gong, Baoxu Liu, ModX: binary level partially imported third-party library detection via program modularization and semantic matching, the 44th International Conference on Software Engineering (ICSE 2022), pp. 1393--1405, May. 2022
+
+\item \asp{2021}{1} Cen Zhang, Yuekang Li, \textbf{Hongxu Chen}, Xiaoxing Luo, Miaohua Li, Anh Quynh Nguyen, Yang Liu, BIFF: PRactical binary fuzzing framework for programs of IoT and mobile devices, 36th IEEE/ACM International Conference on Automated Software Engineering (ASE 2021), pp. 1161--1165, Nov. 2021.
 
 \item \asp{2019}{1} Cheng Wen, Haijun Wang, Yuekang Li, Shengchao Qin, Yang Liu, Zhiwu Xu, \textbf{Hongxu Chen}, Xiaofei Xie, Geguang Pu, and Ting Liu. Memlock: Memory usage guided fuzzing. The 42nd International Conference on Software Engineering (ICSE 2020) (\textit{accepted}), Seoul, South Korea, May 2020.
 
@@ -207,9 +214,9 @@ FOT received 1st award in NASAC 2017 prototype competition (fixed topic) and was
 
 
 \section{Professional Skills}
-\cvline{\textbf{Proficient}}{Static Program Analysis, Grey-box Fuzzing, Symbolic Execution, Binary Analysis, Java, Python, Rust, Scala}
-\cvline{\textbf{Familiar}}{Program Language Theory, Compiler Techniques, Linux System Programming, Formal Verification, LLVM/GCC, Bash, JVM, C/C++}
-\cvline{\textbf{Knowledgeable}}{OCaml, Haskell, Coq, Isabelle}
+\cvline{\textbf{Proficient}}{Program Analysis, Grey-box Fuzzing, Symbolic Execution, Compiler Techniques, Binary Analysis, LLVM/Clang, Java, Python, Rust}
+\cvline{\textbf{Familiar}}{Program Language Theory, Linux System Programming, Formal Verification, Go, Bash, JVM, C/C++, Scala}
+\cvline{\textbf{Knowledgeable}}{Microcontrollers, OCaml, Haskell, Coq, Isabelle}
 
 \section{Teaching Experience}
 \cvline{Object-Oriented Programming}{Autumn Semester 2018, NTU\quad Lab supervision for course ``CE/CZ2002 Object Oriented Design and Programming''.}
